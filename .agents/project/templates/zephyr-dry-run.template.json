@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "mode": "dry-run",
+  "published": false,
+  "card": "{CARD}",
+  "projectKey": "VPOS",
+  "targetFolder": null,
+  "sourceInventory": {
+    "folder": null,
+    "totalCases": null,
+    "readAt": null
+  },
+  "testCycle": {
+    "required": true,
+    "name": "[{CARD}][Automação] {runId}",
+    "key": null,
+    "created": false,
+    "caseKeys": [],
+    "evidenceTarget": "test-execution"
+  },
+  "decisions": []
+}

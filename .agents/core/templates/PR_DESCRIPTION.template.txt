@@ -1,0 +1,27 @@
+Título sugerido: test(<modulo>): <o que passou a ser coberto> (<CARD>)
+
+Objetivo
+<1-2 frases>
+
+Rastreabilidade
+- Card: <CARD>
+- Casos Zephyr Scale: <chaves>
+
+Cenários implementados
+- <cenário> (<chave>)
+
+Arquivos alterados
+- <caminho>
+
+Validação
+- Typecheck: <ok>
+- Execução em <ambiente>: <n> passaram, <n> falharam
+- Evidências: <caminho>
+
+Riscos e limitações
+- <item>
+
+Checklist de revisão
+- [ ] Cenários batem com o BDD aprovado (G1)
+- [ ] Nenhuma assertion relaxada
+- [ ] Nenhum segredo ou dado pessoal no diff

@@ -1,0 +1,65 @@
+name: E2E
+
+on:
+  workflow_dispatch:
+    inputs:
+      projeto:
+        description: Projeto a exercitar
+        type: choice
+        default: erp-academico
+        options:
+          - erp-academico
+      evidencia:
+        description: Gravar vídeo e trace de todos os testes
+        type: boolean
+        default: false
+      custo_alto:
+        description: Incluir os testes @custo-alto (upload e geração por IA)
+        type: boolean
+        default: false
+  schedule:
+    # Toda segunda a sexta às 11h UTC (08h em São Paulo).
+    - cron: '0 11 * * 1-5'
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      E2E_PROJECT: ${{ inputs.projeto || 'erp-academico' }}
+      E2E_EVIDENCE: ${{ inputs.evidencia && '1' || '0' }}
+      # A execução agendada nunca inclui os testes @custo-alto: eles consomem
+      # armazenamento no S3 e uma geração por IA a cada chamada.
+      E2E_QB_EXPENSIVE: ${{ inputs.custo_alto && '1' || '0' }}
+      E2E_RUN_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+      ERP_STAGE_COORD_USERNAME: ${{ secrets.ERP_STAGE_COORD_USERNAME }}
+      ERP_STAGE_COORD_PASSWORD: ${{ secrets.ERP_STAGE_COORD_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      - name: Executar a suíte contra stage
+        run: npm run test:e2e
+
+      - name: Resumo da execução
+        if: always()
+        run: cat "test-results/relatorio-${E2E_PROJECT}.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publicar relatório e evidências
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-${{ env.E2E_PROJECT }}
+          path: |
+            test-results/
+            playwright-report/
+            evidence/
+          retention-days: 30

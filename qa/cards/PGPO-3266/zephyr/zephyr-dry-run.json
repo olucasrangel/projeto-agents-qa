@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "mode": "dry-run",
+  "published": false,
+  "card": "PGPO-3266",
+  "projectKey": "VPOS",
+  "source": {
+    "tool": "zephyr MCP (somente leitura)",
+    "readAt": "2026-11-04",
+    "writes": 0
+  },
+  "folders": {
+    "year": { "name": "2026", "id": 32386988 },
+    "pi": { "name": "PI 26.4", "id": 57265753 },
+    "sprint": { "name": "SP 26.4.3", "id": 59373744 },
+    "cardFolderExisting": {
+      "id": 59374840,
+      "name": "PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar-editar o e-mail de destino",
+      "casesCount": 19
+    },
+    "newCasesFolder": {
+      "parentId": 59373744,
+      "name": "PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar/editar o e-mail de destino (Automação)",
+      "created": false,
+      "decisionPending": "Confirmar se os 2 casos novos ficam nesta pasta com (Automação) ou na pasta existente 59374840"
+    }
+  },
+  "testCycle": {
+    "required": true,
+    "name": "[PGPO-3266][Automação] {runId}",
+    "key": null,
+    "created": false,
+    "caseKeys": [],
+    "evidenceTarget": "test-execution"
+  },
+  "existingCases": {
+    "total": 19,
+    "keys": "VPOS-T2097 a VPOS-T2115",
+    "priorities": "todos Normal",
+    "status": "Approved",
+    "precondition": "vazia em todos",
+    "scriptType": "bdd (Given/When/Then em inglês com texto em português)"
+  },
+  "decisions": [
+    { "scenario": "S01", "operation": "atualizar", "key": "VPOS-T2097", "currentName": "TC01 - Autosserviço de 2ª via não aparece com o serviço desligado", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que o autosserviço não aparece com o serviço desligado no tenant", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S02", "operation": "atualizar", "key": "VPOS-T2098", "currentName": "TC02 - Autosserviço de 2ª via aparece com o serviço ligado", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que o autosserviço aparece com o serviço ligado no tenant", "priority": "Normal", "tag": "@high", "statusAfterG2": "Approved" },
+    { "scenario": "S03", "operation": "atualizar", "key": "VPOS-T2099", "currentName": "TC03 - Competências exibidas são as faturadas do aluno", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que as competências exibidas são as faturadas do aluno, sem limite de histórico", "priority": "Normal", "tag": "@high", "statusAfterG2": "Approved" },
+    { "scenario": "S04", "operation": "atualizar", "key": "VPOS-T2100", "currentName": "TC04 - Envio bloqueado sem competência selecionada", "proposedName": "[PGPO-3266][Web][Falha] Validar que o envio é bloqueado sem competência selecionada", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S05", "operation": "atualizar", "key": "VPOS-T2101", "currentName": "TC05 - Campo de e-mail pré-preenchido com o e-mail do cadastro", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que o campo de e-mail vem preenchido com o e-mail do cadastro e pode ser editado", "priority": "Normal", "tag": "@high", "statusAfterG2": "Approved" },
+    { "scenario": "S06", "operation": "atualizar", "key": "VPOS-T2102", "currentName": "TC06 - Tela informa o destino da nota", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que a tela informa para qual e-mail a nota será enviada", "priority": "Normal", "tag": "@high", "statusAfterG2": "Approved" },
+    { "scenario": "S07", "operation": "atualizar", "key": "VPOS-T2103", "currentName": "TC07 - E-mail em formato inválido bloqueia o envio", "proposedName": "[PGPO-3266][Web][Falha] Validar que e-mail em formato inválido bloqueia o envio sem abrir o modal", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S08", "operation": "atualizar", "key": "VPOS-T2104", "currentName": "TC08 - Envio sem alterar o e-mail cria a solicitação direto, sem modal", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que o envio com o e-mail do cadastro cria a solicitação sem abrir o modal", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S09", "operation": "atualizar", "key": "VPOS-T2105", "currentName": "TC09 - E-mail diferente abre o modal de atualização", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que alterar o e-mail abre o modal de atualização com o e-mail digitado", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S10", "operation": "atualizar", "key": "VPOS-T2106", "currentName": "TC10 - \"Manter e-mail antigo\" cria a solicitação sem alterar o cadastro", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que manter o e-mail antigo cria a solicitação sem alterar o cadastro", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S11", "operation": "atualizar", "key": "VPOS-T2107", "currentName": "TC11 - \"Atualizar E-mail\" cria a solicitação e atualiza o cadastro em todas as matrículas", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que atualizar o e-mail propaga o novo e-mail para a pessoa e todas as matrículas", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S12", "operation": "atualizar", "key": "VPOS-T2108", "currentName": "TC12 - Fechar o modal sem escolher cancela o envio", "proposedName": "[PGPO-3266][Web][Falha] Validar que fechar o modal sem escolher uma opção cancela o envio", "priority": "Normal", "tag": "@high", "statusAfterG2": "Approved" },
+    { "scenario": "S13", "operation": "atualizar", "key": "VPOS-T2109", "currentName": "TC13 - Solicitação bloqueada não altera o cadastro mesmo com \"Atualizar E-mail\"", "proposedName": "[PGPO-3266][Web][Falha] Validar que o cadastro não muda quando a solicitação não é criada", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S14", "operation": "atualizar", "key": "VPOS-T2110", "currentName": "TC14 - Confirmação \"Solicitação enviada\" após o envio", "proposedName": "[PGPO-3266][Web][Sucesso] Validar a confirmação \"Solicitação enviada\" após o envio", "priority": "Normal", "tag": "@high", "statusAfterG2": "Approved" },
+    { "scenario": "S15", "operation": "atualizar", "key": "VPOS-T2111", "currentName": "TC15 - Solicitação gravada com competência e e-mail de destino", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que a solicitação é gravada com a competência e o e-mail de destino", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S16", "operation": "atualizar", "key": "VPOS-T2112", "currentName": "TC16 - Linha na outbox no tópico de solicitação de nota fiscal", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que o envio publica a solicitação na fila de processamento", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S17", "operation": "atualizar", "key": "VPOS-T2113", "currentName": "TC17 - Botões desabilitados durante o envio", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que os botões ficam desabilitados durante o envio", "priority": "Normal", "tag": "@high", "statusAfterG2": "Approved" },
+    { "scenario": "S18", "operation": "atualizar", "key": "VPOS-T2114", "currentName": "TC18 - Bloqueio por solicitação em processamento duplicada", "proposedName": "[PGPO-3266][Web][Falha] Validar que a segunda solicitação em processamento para a mesma competência é bloqueada", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S19", "operation": "atualizar", "key": "VPOS-T2115", "currentName": "TC19 - Nova solicitação permitida para competência já concluída", "proposedName": "[PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência já concluída com sucesso", "priority": "High", "tag": "@critical", "statusAfterG2": "Approved" },
+    { "scenario": "S20", "operation": "criar", "key": null, "proposedName": "[PGPO-3266][Web][Sucesso] Validar que a comparação do e-mail ignora espaços nas pontas e diferença de maiúsculas", "folder": "newCasesFolder", "priority": "High", "tag": "@critical", "status": "Draft", "reason": "RN06 sem caso equivalente" },
+    { "scenario": "S21", "operation": "criar", "key": null, "proposedName": "[PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência cuja solicitação anterior falhou", "folder": "newCasesFolder", "priority": "High", "tag": "@critical", "status": "Draft", "reason": "RN14 cita concluída com sucesso ou não; nenhum caso cobre falha anterior" }
+  ],
+  "notes": [
+    "Os 19 casos existentes têm nomes fora do padrão Confluence e precondição vazia; por isso a operação é atualizar, não reutilizar.",
+    "Nenhum caso será renomeado ou alterado até o G2 ser registrado.",
+    "Após G2, os casos atualizados voltam a Approved somente com aprovação explícita do QA."
+  ]
+}

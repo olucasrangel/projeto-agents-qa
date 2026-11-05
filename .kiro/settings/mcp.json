@@ -1,0 +1,21 @@
+{
+	"mcpServers": {
+		"atlassian": {
+			"url": "https://mcp.atlassian.com/v1/mcp",
+			"disabled": false,
+			"autoApprove": []
+		},
+		"playwright": {
+			"command": "npx",
+			"args": ["-y", "@playwright/mcp@latest"],
+			"disabled": false,
+			"autoApprove": []
+		},
+		"zephyr": {
+			"command": "node",
+			"args": [".agents/project/integrations/start-zephyr-mcp.mjs"],
+			"disabled": false,
+			"autoApprove": []
+		}
+	}
+}

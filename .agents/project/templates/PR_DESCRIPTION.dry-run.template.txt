@@ -1,0 +1,37 @@
+Título sugerido: test(<modulo>): <cobertura> (<CARD>)
+
+MODO DRY-RUN
+Este arquivo simula a abertura do PR. Nenhum commit, push ou PR foi criado.
+
+Objetivo
+<1-2 frases>
+
+Rastreabilidade
+- Card: <CARD>
+- Épico: <EPIC>
+- Casos Zephyr VPOS: <chaves ou propostas>
+- Aprovações: G1 <status> | G2 <status> | decisão de automação <status> | G3 <status>
+
+Cenários previstos
+- <cenário> (<chave ou NOVO>)
+
+Arquivos previstos
+- <caminho>
+
+Validação
+- Typecheck: não executado | passou | falhou
+- Execução remota: não executada no dry-run
+- Evidências previstas: evidence/<CARD>/<runId>/
+
+Riscos e limitações
+- <item>
+
+Exemplo de commit
+- test(<modulo>): <o que passou a ser coberto> (<CARD>)
+
+Checklist de revisão
+- [ ] Cenários correspondem ao BDD aprovado no G1
+- [ ] Plano Zephyr corresponde ao G2
+- [ ] Seleção cenário a cenário corresponde à decisão de automação
+- [ ] Relatório, evidências e entrega correspondem ao G3
+- [ ] Nenhum segredo ou dado pessoal está presente

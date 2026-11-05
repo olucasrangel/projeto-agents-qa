@@ -1,0 +1,159 @@
+# Configuração do opm-qa-automation para o agente de QA.
+# Contrato: .agents/core/schemas/qa-project.schema.json
+# Depois de editar, rode `npm run agents:sync` para atualizar .kiro/ e .agents/skills/.
+
+core_version: 0.1.0
+
+project:
+  name: opm-qa-automation
+  squad: pos-graduacao
+  language: pt-BR
+  context: >-
+    Suíte E2E dos produtos de Pós-Graduação (OPM). O discovery cobre o contexto
+    funcional do Jira e do Confluence antes de propor BDDs. A automação atual
+    exercita PPC e Banco de Questões com IA no Cosmos ERP Acadêmico contra
+    stage, com usuário e registros reais.
+
+stack:
+  id: playwright-typescript
+  root: projects/erp-academico
+  testids_inventory: projects/erp-academico/TESTIDS.md
+  commands:
+    install: npm ci && npx playwright install chromium
+    typecheck: npm run typecheck
+    test_card: npx playwright test --grep @{CARD}
+    testids: npm run testids
+
+environments:
+  default: stage
+  stage:
+    base_url: https://infoprod.stage.platosedu.io/erp-academico
+    api_url: https://infoprod.stage.platosedu.io/api/service-erp-academic
+    credentials_env: [ERP_STAGE_COORD_USERNAME, ERP_STAGE_COORD_PASSWORD]
+  forbidden: [production]
+
+# O agente substitui {CARD}; o módulo fica abaixo de bdd/ para preservar a
+# convenção do núcleo: <features_dir>/<modulo>/<CARD>.feature.
+features_dir: qa/cards/{CARD}/bdd
+
+workflow:
+  mode: dry-run
+  external_writes: false
+  remote_test_execution: false
+  git_delivery: simulation
+  require_explicit_approval: true
+
+artifacts:
+  card_dir: qa/cards/{CARD}
+  context_dir: qa/cards/{CARD}/context
+  bdd_review: qa/cards/{CARD}/bdd/{CARD}-review.md
+  zephyr_dry_run: qa/cards/{CARD}/zephyr/zephyr-dry-run.json
+  automation_plan: qa/cards/{CARD}/automation/automation-plan.md
+  pr_description: qa/cards/{CARD}/PR_DESCRIPTION.txt
+  approvals_dir: qa/approvals/{CARD}
+  executions_dir: qa/approvals/{CARD}/executions/{runId}
+
+jira:
+  project_keys: [PGPO]
+  discovery:
+    current_card: true
+    parent_epic: true
+    direct_links: true
+    link_depth: 1
+    comments: true
+    attachments: true
+    bugs: true
+    subtasks: true
+    linked_confluence: true
+
+confluence:
+  quality_chapter:
+    page_id: '2365980676'
+    url: https://cogna.atlassian.net/wiki/spaces/VP/pages/2365980676/QA+-+Cap+tulo+de+Qualidade+de+Software
+  required_pages:
+    - '2365980783' # Treinamento BDD
+    - '2365980901' # Organização das pastas no Zephyr
+    - '2365980959' # Criação de casos de teste
+    - '3064627241' # Integração Automação ↔ Zephyr Scale
+  include_task_pages: true
+
+zephyr:
+  edition: scale
+  project_key: VPOS
+  folder: /{year}/PI {pi}/SP {sprint}/{CARD} - {summary} (Automação)
+  token_env: ZEPHYR_API_TOKEN
+  mode: dry-run
+  inventory_existing_cases: true
+  case_name: '[{CARD}][{application}][{outcome}] {description}'
+  script_type: BDD-Gherkin
+  initial_status: Draft
+  approved_status: Approved
+  attachment_target: test-execution
+  integration:
+    preferred: smartbear-mcp
+    access_status: pending-verification
+  test_cycle:
+    required: true
+    name: '[{CARD}][Automação] {runId}'
+    include: approved-automation-cases
+    create_before_execution: true
+    attach_evidence_to: test-execution
+  priorities:
+    critical: High
+    high: Normal
+    medium: Low
+
+git:
+  base: main
+  branch: qa/{CARD}-{slug}
+  protected: [main]
+  pr_no_apostrophes: true
+
+evidence:
+  dir: evidence/{CARD}/{runId}
+  approvals_dir: qa/approvals/{CARD}/executions/{runId}
+  screenshot_per_scenario: true
+  split_by_status: true
+  mask_sensitive_fields: true
+  upload_mode: dry-run
+  upload_target: test-execution
+
+grill_me:
+  min_questions: 3
+  max_questions: 5
+  extra_questions: .agents/project/grill-me/perguntas.md
+
+future_code_context:
+  access_status: pending-team-approval
+  repositories:
+    - https://github.com/cogna-platos/cosmos-lms-service
+    - https://github.com/cogna-platos/cosmos-lms-frontend
+  rule: Não clone nem presuma acesso até aprovação explícita do time.
+
+future_remote_execution:
+  application: Ambiente Virtual de Aprendizagem
+  environment: hml
+  homologation_url: https://infoprod.stage.platosedu.io/v2/lms/login
+  credentials_env: [LMS_HML_USERNAME, LMS_HML_PASSWORD]
+  test_data: pending
+  notes:
+    - O fluxo exige massa específica e pode demandar preparação manual.
+    - Confirmar tenant, aluno e matrículas antes de qualquer execução remota.
+
+skills:
+  - .agents/project/skills/e2e-ppc-stage
+  - .agents/project/skills/e2e-banco-questoes-stage
+  - .agents/project/skills/opm-zephyr-governance
+
+# Agentes próprios da equipe (arquivos .md em .agents/project/agents/).
+agents:
+  - .agents/project/agents/a1-opm-discovery.md
+
+extensions:
+  after_discovery: []
+  before_bdd: []
+  before_automation: []
+  after_run: []
+  before_delivery: []
+
+mcp: .agents/project/integrations/mcp.json

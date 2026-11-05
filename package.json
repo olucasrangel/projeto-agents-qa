@@ -1,0 +1,26 @@
+{
+	"name": "opm-qa-automation",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Automação de testes de QA dos produtos de Pós-graduação (OPM)",
+	"scripts": {
+		"test:e2e": "playwright test",
+		"test:e2e:headed": "playwright test --headed",
+		"test:e2e:report": "playwright show-report",
+		"test:ppc": "playwright test ppc",
+		"test:ppc:headed": "playwright test ppc --headed",
+		"testids": "node scripts/listar-testids.mjs",
+		"typecheck": "tsc --noEmit",
+		"qa:state": "node .agents/core/scripts/qa-state.mjs",
+		"qa:card:init": "node .agents/project/scripts/init-card-artifacts.mjs",
+		"agents:sync": "node .agents/core/scripts/agents-sync.mjs",
+		"agents:check": "node .agents/core/scripts/agents-sync.mjs --check"
+	},
+	"devDependencies": {
+		"@playwright/test": "1.62.1",
+		"@types/node": "20.19.9",
+		"dotenv": "^18.0.6",
+		"typescript": "5.8.3",
+		"yaml": "^2.9.1"
+	}
+}

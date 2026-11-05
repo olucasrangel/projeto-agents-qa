@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../../qa-helper"
+		},
+		{
+			"path": "../../../voomp-e2e-main"
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {}
+}
