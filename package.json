@@ -13,6 +13,7 @@
 		"typecheck": "tsc --noEmit",
 		"qa:state": "node .agents/core/scripts/qa-state.mjs",
 		"qa:card:init": "node .agents/project/scripts/init-card-artifacts.mjs",
+		"zephyr:sync": "node .agents/project/scripts/zephyr-sync.mjs",
 		"agents:sync": "node .agents/core/scripts/agents-sync.mjs",
 		"agents:check": "node .agents/core/scripts/agents-sync.mjs --check"
 	},
