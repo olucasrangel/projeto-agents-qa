@@ -47,6 +47,18 @@ Mapeamento de prioridade: High ↔ @critical, Normal ↔ @high, Low ↔ @medium 
 6. **Criticidade.** Pela regra de risco, 14 cenários ficaram como @critical. Se o QA achar excesso, pode rebaixar sem mudar os passos.
 7. **Ambiente de execução.** A massa (aluno com várias matrículas, tenant com serviço ligado e desligado, e competências) ainda não foi confirmada. Os cenários S11, S18, S19 e S21 dependem dela.
 
+## Resolução das pendências G1
+
+Marque cada item somente depois da decisão do QA e registre a decisão ao lado.
+
+- [ ] P1 — Renomeação dos 19 casos:
+- [ ] P2 — Precondições dos casos existentes:
+- [ ] P3 — Pasta dos casos S20 e S21:
+- [ ] P4 — Nome definitivo da pasta:
+- [ ] P5 — Dialeto Gherkin:
+- [ ] P6 — Criticidades aprovadas:
+- [ ] P7 — Massa e ambiente confirmados:
+
 ## Cenários
 
 > Texto dos cenários. Cada bloco usa os nomes que serão publicados no Zephyr.

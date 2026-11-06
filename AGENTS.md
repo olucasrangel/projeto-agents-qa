@@ -15,7 +15,8 @@ As skills e o orquestrador ficam em `.agents/`. Os adaptadores de cada IDE (`.ki
 
 ## Fluxo `#qa-run <CARD>`
 
-O orquestrador (`.agents/core/agents/orchestrator.md`) conduz o fluxo. O estado de cada card
+O orquestrador (`.agents/core/agents/orchestrator.md`) conduz o fluxo. Antes de começar,
+execute `npm run qa:doctor -- --card <CARD>`. O estado de cada card
 fica em `qa/runs/<CARD>/state.json` e é alterado só por `npm run qa:state`.
 
 Ordem: DISCOVERY → ALIGNMENT → BDD → G1 → ZEPHYR → G2 → AUTOMATION_DECISION → AUTOMATION →
@@ -31,7 +32,11 @@ Gate só é registrado com aprovação explícita do QA, com `npm run qa:state -
 
 | Comando | Para que serve |
 |---|---|
+| `npm run qa:doctor -- --card <CARD>` | Verifica ambiente, credenciais por presença, browser, MCP, Git e repositórios opcionais |
+| `npm run qa:validate -- <CARD> G1|G2|G3` | Verifica a prontidão do gate sem aprová-lo |
+| `npm run qa:test` | Executa os testes dos scripts do agente |
 | `npm run qa:card:init -- <CARD>` | Cria a estrutura de artefatos do card |
+| `npm run qa:state -- record-discovery <CARD>` | Valida e grava modo/hash do discovery; alteração posterior força novo alinhamento |
 | `npm run qa:state -- status <CARD>` | Mostra o estado e os gates do card |
 | `npm run zephyr:sync -- <CARD> --preview` | Gera o payload de publicação no Zephyr a partir do `.feature` (dry-run, sem escrita) |
 | `npm run typecheck` | Verifica os tipos da suíte |

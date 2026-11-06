@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "card": "PGPO-3266",
+  "mode": "documental",
+  "recordedAt": "2026-11-05T16:38:06.716Z",
+  "sources": {
+    "jira": {
+      "status": "partial",
+      "artifact": "qa/cards/PGPO-3266/context/jira-context.md",
+      "reason": "Card, épico, vínculos, subtarefas e anexos lidos; a resposta de comentários foi truncada."
+    },
+    "confluence": {
+      "status": "complete",
+      "artifact": "qa/cards/PGPO-3266/context/confluence-context.md",
+      "reason": "Página raiz e páginas obrigatórias consultadas."
+    },
+    "screen": {
+      "status": "not-accessed",
+      "reason": "A tela de NFS-e não foi explorada nesta fase."
+    },
+    "code": {
+      "status": "not-authorized",
+      "repositories": [
+        "cosmos-lms-service",
+        "cosmos-lms-frontend"
+      ],
+      "reason": "Repositórios ainda sem permissão e fora do workspace."
+    }
+  },
+  "limitations": [
+    "Regras visuais, data-testid, rotas e estados da tela não foram confirmados.",
+    "Endpoints, DTOs e regras implícitas do código não foram confirmados.",
+    "A massa para múltiplas matrículas, tenants e competências ainda depende de confirmação."
+  ],
+  "hypotheses": []
+}

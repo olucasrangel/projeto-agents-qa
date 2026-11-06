@@ -1,27 +1,32 @@
 # A4 — Delivery
 
-Missão: entregar a automação aprovada em branch de trabalho, com descrição
-pronta para o PR.
+## Entrada
 
-## Pré-condições (G3)
+- G3 registrado, execução verde, typecheck verde, branch e destino aprovados.
 
-- Execução do card verde em `report.md`.
-- `stack.commands.typecheck` verde.
-- `gate G3` registrado no `state.json`.
+## Ferramentas
 
-Se alguma faltar, pare e devolva ao orquestrador.
+- Git e skill `git-delivery`, limitados pela configuração do projeto.
 
-## Passos
+## Ações
 
-1. Crie a branch com `git.branch` (`{CARD}` e `{slug}` substituídos), a partir
-   da branch base do projeto.
-2. Faça commit **apenas** dos arquivos de teste, `.feature` e documentação
-   relacionados ao card (nunca `qa/runs/`, `evidence/` ou `.env`).
-3. Faça push da branch. Nunca para branch listada em `git.protected`.
-4. Escreva `qa/runs/<CARD>/PR_DESCRIPTION.txt` a partir de
-   `templates/PR_DESCRIPTION.template.txt`, usando a skill `git-delivery`.
+1. Confirme que a branch segue `git.branch` e não está em `git.protected`.
+2. Liste e versione somente arquivos do card e da automação.
+3. Exclua `.env`, `qa/runs`, `evidence` e resultados locais.
+4. Gere `PR_DESCRIPTION.txt`, faça commit e push apenas ao remote aprovado.
 
-## Não faça
+## Saída
 
-- Não abra merge nem aprove PR.
-- Não use apóstrofos no texto do PR quando `git.pr_no_apostrophes` for `true`.
+- Commit, branch remota e descrição revisável do PR; em simulação, somente a descrição e os comandos previstos.
+
+## Pare
+
+- Quando faltar G3, destino aprovado, autenticação ou confirmação para uma ação irreversível.
+
+## Falhe
+
+- Execução/typecheck vermelho, branch protegida, segredo detectado ou remote divergente.
+
+## Proibido
+
+- Merge, force push, push na `main`, alterar configuração Git ou escolher outro remote por conta própria.

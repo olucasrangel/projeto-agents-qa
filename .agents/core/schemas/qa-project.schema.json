@@ -1,97 +1,38 @@
 {
-	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "qa-project.schema.json",
-	"title": "Configuração do projeto para o agente de QA",
-	"type": "object",
-	"required": ["core_version", "project", "stack", "environments", "features_dir", "jira", "zephyr", "git", "evidence", "grill_me"],
-	"properties": {
-		"core_version": { "type": "string", "description": "Versão do núcleo fixada pelo projeto" },
-		"project": {
-			"type": "object",
-			"required": ["name", "squad", "language"],
-			"properties": {
-				"name": { "type": "string" },
-				"squad": { "type": "string" },
-				"language": { "type": "string" },
-				"context": { "type": "string", "description": "Resumo do produto para o steering de contexto" }
-			}
-		},
-		"stack": {
-			"type": "object",
-			"required": ["id", "root", "commands"],
-			"properties": {
-				"id": { "type": "string", "description": "Pasta em .agents/core/stacks" },
-				"root": { "type": "string" },
-				"testids_inventory": { "type": "string" },
-				"commands": {
-					"type": "object",
-					"required": ["typecheck", "test_card"],
-					"additionalProperties": { "type": "string" }
-				}
-			}
-		},
-		"environments": {
-			"type": "object",
-			"required": ["default", "forbidden"],
-			"properties": {
-				"default": { "type": "string" },
-				"forbidden": { "type": "array", "items": { "type": "string" } }
-			}
-		},
-		"features_dir": { "type": "string" },
-		"jira": {
-			"type": "object",
-			"required": ["project_keys"],
-			"properties": { "project_keys": { "type": "array", "items": { "type": "string" }, "minItems": 1 } }
-		},
-		"zephyr": {
-			"type": "object",
-			"required": ["edition", "project_key"],
-			"properties": {
-				"edition": { "enum": ["scale"] },
-				"project_key": { "type": "string" },
-				"folder": { "type": "string" },
-				"token_env": { "type": "string" },
-				"priorities": { "type": "object", "additionalProperties": { "type": "string" } }
-			}
-		},
-		"git": {
-			"type": "object",
-			"required": ["base", "branch", "protected"],
-			"properties": {
-				"base": { "type": "string" },
-				"branch": { "type": "string" },
-				"protected": { "type": "array", "items": { "type": "string" } },
-				"pr_no_apostrophes": { "type": "boolean" }
-			}
-		},
-		"evidence": {
-			"type": "object",
-			"required": ["dir"],
-			"properties": { "dir": { "type": "string" } }
-		},
-		"grill_me": {
-			"type": "object",
-			"required": ["min_questions", "max_questions"],
-			"properties": {
-				"min_questions": { "type": "integer", "minimum": 1 },
-				"max_questions": { "type": "integer", "minimum": 1 },
-				"extra_questions": { "type": "string" }
-			}
-		},
-		"skills": { "type": "array", "items": { "type": "string" } },
-		"agents": { "type": "array", "items": { "type": "string" } },
-		"extensions": {
-			"type": "object",
-			"additionalProperties": false,
-			"properties": {
-				"after_discovery": { "type": "array", "items": { "type": "string" } },
-				"before_bdd": { "type": "array", "items": { "type": "string" } },
-				"before_automation": { "type": "array", "items": { "type": "string" } },
-				"after_run": { "type": "array", "items": { "type": "string" } },
-				"before_delivery": { "type": "array", "items": { "type": "string" } }
-			}
-		},
-		"mcp": { "type": "string", "description": "Modelo de configuração de MCP do projeto" }
-	}
+  "$id": "qa-project.schema.json",
+  "title": "Configuração do projeto para o agente de QA",
+  "type": "object",
+  "required": ["core_version", "project", "stack", "environments", "features_dir", "workflow", "security", "artifacts", "jira", "zephyr", "git", "evidence", "grill_me", "mcp"],
+  "properties": {
+    "core_version": { "type": "string" },
+    "project": { "type": "object", "required": ["name", "squad", "language"], "properties": { "name": { "type": "string" }, "squad": { "type": "string" }, "language": { "type": "string" }, "context": { "type": "string" } } },
+    "stack": { "type": "object", "required": ["id", "root", "commands"], "properties": { "id": { "type": "string" }, "root": { "type": "string" }, "testids_inventory": { "type": "string" }, "commands": { "type": "object", "required": ["typecheck", "test_card"], "additionalProperties": { "type": "string" } } } },
+    "environments": { "type": "object", "required": ["default", "forbidden"], "properties": { "default": { "type": "string" }, "forbidden": { "type": "array", "items": { "type": "string" } } }, "additionalProperties": true },
+    "features_dir": { "type": "string" },
+    "workflow": { "type": "object", "required": ["mode", "external_writes", "git_delivery", "require_explicit_approval"], "properties": { "mode": { "enum": ["dry-run", "real"] }, "external_writes": { "type": "boolean" }, "remote_test_execution": { "type": "boolean" }, "git_delivery": { "enum": ["simulation", "real"] }, "require_explicit_approval": { "type": "boolean" } } },
+    "security": { "type": "object", "required": ["allowed_hosts"], "properties": { "allowed_hosts": { "type": "object", "required": ["atlassian", "zephyr"], "properties": { "atlassian": { "type": "array", "items": { "type": "string" }, "minItems": 1 }, "zephyr": { "type": "array", "items": { "type": "string" }, "minItems": 1 } } } } },
+    "artifacts": { "type": "object", "required": ["card_dir", "context_dir", "discovery_manifest", "bdd_review", "zephyr_dry_run", "zephyr_sync", "automation_plan", "pr_description", "approvals_dir", "executions_dir"], "additionalProperties": { "type": "string" } },
+    "jira": { "type": "object", "required": ["project_keys"], "properties": { "project_keys": { "type": "array", "items": { "type": "string" }, "minItems": 1 } } },
+    "confluence": { "type": "object" },
+    "zephyr": { "type": "object", "required": ["edition", "project_key", "mode"], "properties": { "edition": { "enum": ["scale"] }, "project_key": { "type": "string" }, "folder": { "type": "string" }, "token_env": { "type": "string" }, "token_env_aliases": { "type": "array", "items": { "type": "string" } }, "mode": { "enum": ["dry-run", "real"] }, "priorities": { "type": "object", "additionalProperties": { "type": "string" } } } },
+    "git": { "type": "object", "required": ["base", "branch", "protected"], "properties": { "base": { "type": "string" }, "branch": { "type": "string" }, "protected": { "type": "array", "items": { "type": "string" } }, "expected_repository": { "type": "string" }, "pr_no_apostrophes": { "type": "boolean" } } },
+    "evidence": { "type": "object", "required": ["dir"], "properties": { "dir": { "type": "string" } } },
+    "grill_me": { "type": "object", "required": ["min_questions", "max_questions"], "properties": { "min_questions": { "type": "integer", "minimum": 1 }, "max_questions": { "type": "integer", "minimum": 1 }, "extra_questions": { "type": "string" } } },
+    "skills": { "type": "array", "items": { "type": "string" } },
+    "agents": { "type": "array", "items": { "type": "string" } },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "after_discovery": { "type": "array", "items": { "type": "string" } },
+        "before_bdd": { "type": "array", "items": { "type": "string" } },
+        "before_automation": { "type": "array", "items": { "type": "string" } },
+        "after_run": { "type": "array", "items": { "type": "string" } },
+        "before_delivery": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "future_code_context": { "type": "object" },
+    "future_remote_execution": { "type": "object" },
+    "mcp": { "type": "string" }
+  }
 }

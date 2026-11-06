@@ -2,7 +2,7 @@
 # Contrato: .agents/core/schemas/qa-project.schema.json
 # Depois de editar, rode `npm run agents:sync` para atualizar .kiro/ e .agents/skills/.
 
-core_version: 0.1.0
+core_version: 0.2.0
 
 project:
   name: opm-qa-automation
@@ -21,7 +21,7 @@ stack:
   commands:
     install: npm ci && npx playwright install chromium
     typecheck: npm run typecheck
-    test_card: npx playwright test --grep @{CARD}
+    test_card: npm run typecheck && E2E_TYPECHECK_STATUS=passed npx playwright test --grep @{CARD}
     testids: npm run testids
 
 environments:
@@ -30,7 +30,13 @@ environments:
     base_url: https://infoprod.stage.platosedu.io/erp-academico
     api_url: https://infoprod.stage.platosedu.io/api/service-erp-academic
     credentials_env: [ERP_STAGE_COORD_USERNAME, ERP_STAGE_COORD_PASSWORD]
+    allowed_hosts: [infoprod.stage.platosedu.io]
   forbidden: [production]
+
+security:
+  allowed_hosts:
+    atlassian: [mcp.atlassian.com]
+    zephyr: [api.zephyrscale.smartbear.com]
 
 # O agente substitui {CARD}; o módulo fica abaixo de bdd/ para preservar a
 # convenção do núcleo: <features_dir>/<modulo>/<CARD>.feature.
@@ -46,8 +52,10 @@ workflow:
 artifacts:
   card_dir: qa/cards/{CARD}
   context_dir: qa/cards/{CARD}/context
+  discovery_manifest: qa/cards/{CARD}/context/discovery.json
   bdd_review: qa/cards/{CARD}/bdd/{CARD}-review.md
   zephyr_dry_run: qa/cards/{CARD}/zephyr/zephyr-dry-run.json
+  zephyr_sync: qa/cards/{CARD}/zephyr/zephyr-sync-payload.json
   automation_plan: qa/cards/{CARD}/automation/automation-plan.md
   pr_description: qa/cards/{CARD}/PR_DESCRIPTION.txt
   approvals_dir: qa/approvals/{CARD}
@@ -82,6 +90,7 @@ zephyr:
   project_key: VPOS
   folder: /{year}/PI {pi}/SP {sprint}/{CARD} - {summary} (Automação)
   token_env: ZEPHYR_API_TOKEN
+  token_env_aliases: [ZEPHYR_SCALE_API_TOKEN]
   mode: dry-run
   inventory_existing_cases: true
   case_name: '[{CARD}][{application}][{outcome}] {description}'
@@ -107,6 +116,7 @@ git:
   base: main
   branch: qa/{CARD}-{slug}
   protected: [main]
+  expected_repository: github.com/olucasrangel/projeto-agents-qa.git
   pr_no_apostrophes: true
 
 evidence:

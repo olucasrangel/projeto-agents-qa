@@ -1,37 +1,58 @@
-Título sugerido: test(<modulo>): <cobertura> (<CARD>)
-
-MODO DRY-RUN
-Este arquivo simula a abertura do PR. Nenhum commit, push ou PR foi criado.
+Título sugerido: feat(agente-qa): fortalece fluxo, gates e diagnóstico
 
 Objetivo
-<1-2 frases>
+Transformar regras documentais do agente de QA em validações executáveis e permitir discovery rastreável mesmo sem acesso aos repositórios de frontend e service.
 
 Rastreabilidade
-- Card: <CARD>
-- Épico: <EPIC>
-- Casos Zephyr VPOS: <chaves ou propostas>
-- Aprovações: G1 <status> | G2 <status> | decisão de automação <status> | G3 <status>
+- Card usado na validação: PGPO-3266
+- Projeto Zephyr: VPOS
+- Casos planejados: VPOS-T2097 a VPOS-T2115 e 2 casos novos
+- Aprovações: G1 pendente | G2 pendente | decisão de automação pendente | G3 pendente
+- Escopo desta PR: infraestrutura do agente e dry-run, sem aprovação ou publicação externa
 
-Cenários previstos
-- <cenário> (<chave ou NOVO>)
+Funcionalidades
+- qa:doctor verifica ambiente, credenciais por presença, Chromium, MCPs, HTTPS, allowlists, branch, remote e repositórios opcionais
+- qa:validate verifica prontidão de G1, G2 e G3
+- qa:state registra o modo e hash do discovery, invalida gates obsoletos e revalida artefatos antes de avançar
+- discovery suporta complete, without-code e documental
+- zephyr-sync gera payload idempotente sem escrita externa
+- evidências registram typecheck e passos PASS ou FAIL
+- contratos de A1 a A4 usam entradas, ações, saídas e condições explícitas de parada e falha
+- núcleo atualizado para 0.2.0
 
-Arquivos previstos
-- <caminho>
+Arquivos principais
+- .agents/core/scripts/qa-doctor.mjs
+- .agents/core/scripts/qa-validate.mjs
+- .agents/core/scripts/qa-state.mjs
+- .agents/core/scripts/lib/
+- .agents/core/scripts/tests/qa-flow.test.mjs
+- .agents/core/agents/
+- .agents/project/qa-project.yaml
+- .agents/project/scripts/zephyr-sync.mjs
+- AGENTS.md
+- shared/evidence-reporter.ts
+- qa/cards/PGPO-3266/context/discovery.json
 
 Validação
-- Typecheck: não executado | passou | falhou
-- Execução remota: não executada no dry-run
-- Evidências previstas: evidence/<CARD>/<runId>/
+- npm run agents:check: passou
+- npm run qa:test: 13 de 13 passaram
+- npm run typecheck: passou
+- npm run test:e2e -- --list: 25 testes encontrados em 7 arquivos
+- npm run qa:doctor -- --card PGPO-3266: apto, 0 erros e 4 avisos conhecidos
+- zephyr-sync: 21 cenários, 19 atualizações e 2 criações; duas execuções produziram o mesmo SHA-256
+- G1 do PGPO-3266: corretamente bloqueado e sem alteração do state.json
 
 Riscos e limitações
-- <item>
-
-Exemplo de commit
-- test(<modulo>): <o que passou a ser coberto> (<CARD>)
+- O G1 continua pendente porque há 7 decisões humanas abertas no pacote BDD
+- cosmos-lms-frontend e cosmos-lms-service continuam sem acesso
+- O origin local aponta para vlance-qa, diferente do repositório esperado olucasrangel
+- A suíte completa não foi repetida nesta alteração porque cria registros reais em stage e a falha conhecida de area_conhecimento permanece fora deste escopo
+- Nenhuma escrita foi feita no Jira, Confluence ou Zephyr
 
 Checklist de revisão
-- [ ] Cenários correspondem ao BDD aprovado no G1
-- [ ] Plano Zephyr corresponde ao G2
-- [ ] Seleção cenário a cenário corresponde à decisão de automação
-- [ ] Relatório, evidências e entrega correspondem ao G3
-- [ ] Nenhum segredo ou dado pessoal está presente
+- [ ] Revisar contratos A1 a A4 e modos de discovery
+- [ ] Revisar critérios executáveis de G1, G2 e G3
+- [ ] Confirmar allowlists de hosts e repositório esperado
+- [ ] Confirmar que nenhuma assertion foi relaxada
+- [ ] Confirmar que nenhum segredo ou dado pessoal está no diff
+- [ ] Resolver separadamente as 7 pendências do G1 do PGPO-3266

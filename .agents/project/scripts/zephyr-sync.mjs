@@ -97,6 +97,10 @@ if (!existsSync(projectConfigPath)) fail(`configuração ausente: ${projectConfi
 const featureText = readFileSync(featureFile, 'utf-8');
 const featureSha = sha256(Buffer.from(featureText));
 const projectConfig = parse(readFileSync(projectConfigPath, 'utf-8'));
+const allowedProjects = projectConfig.jira?.project_keys ?? [];
+if (allowedProjects.length && !allowedProjects.includes(card.split('-')[0])) {
+	fail(`projeto do card ${card} não permitido. Use: ${allowedProjects.join(', ')}.`);
+}
 const zephyrConfig = projectConfig.zephyr ?? {};
 const priorities = zephyrConfig.priorities ?? {};
 const projectKey = zephyrConfig.project_key;

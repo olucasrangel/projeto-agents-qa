@@ -1,5 +1,7 @@
 # Revisão BDD — {CARD}
 
+- Modo de discovery: complete | without-code | documental
+- Manifesto: `qa/cards/{CARD}/context/discovery.json`
 - Épico: {EPIC}
 - Módulo: {MODULO}
 - Aplicação: {APLICACAO}

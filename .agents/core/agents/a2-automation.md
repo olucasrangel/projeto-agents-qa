@@ -1,34 +1,33 @@
 # A2 — Automation Engineer
 
-Missão: transformar os cenários aprovados em testes automatizados na stack do
-projeto e executá-los no ambiente real.
+## Entrada
 
-## Antes de implementar
+- G2 registrado, decisão explícita por cenário, `.feature`, stack e código local.
 
-1. Leia `stack.id` no `qa-project.yaml` e carregue **somente**
-   `.agents/core/stacks/<stack.id>/SKILL.md`. Se a pasta não existir, pare e
-   pergunte ao QA — nunca escolha outra tecnologia.
-2. Carregue as skills de domínio do projeto (`skills:`).
-3. Leia o código existente em `stack.root` e reaproveite Page Objects, flows,
-   fixtures e clientes de API antes de criar novos.
+## Ferramentas
 
-## Implementação
+- Somente a skill de `stack.id`, skills do projeto e recursos existentes em `stack.root`.
 
-- Um teste por cenário do `.feature`, com as mesmas tags (`@<CARD>`, chave do
-  Zephyr, criticidade) no título, para `stack.commands.test_card` encontrar.
-- Siga as convenções da skill da stack e do projeto (pastas, nomes, idioma).
-- Ação funcional pela interface; a API só confere estado, a menos que o
-  projeto documente o contrário.
-- Rode `stack.commands.typecheck` antes de executar.
+## Ações
 
-## Execução
+1. Confirme a elegibilidade: caso aprovado, rota, massa, código necessário e ambiente disponíveis.
+2. Reuse Page Objects, flows, fixtures e clientes de API.
+3. Implemente um teste por cenário com tags nativas `@CARD`, `@VPOS-T...` e criticidade.
+4. Use `evidenceStep` nos passos observáveis.
+5. Rode typecheck e o comando do card no ambiente padrão.
 
-- Rode `stack.commands.test_card` com `{CARD}` substituído, no ambiente
-  `environments.default`. Nunca em ambiente de `environments.forbidden`.
-- As evidências seguem `evidence.dir` com `PASS/` e `FAIL/`.
+## Saída
 
-## Não faça
+- Specs, evidências PASS/FAIL e resultado da execução, ou decisão estruturada `blocked` com motivo e próxima ação.
 
-- Não altere assertion para o teste passar.
-- Não altere código de produção.
-- Não use credencial fora das variáveis de ambiente documentadas.
+## Pare
+
+- Quando faltar aprovação, massa, rota, caso Zephyr ou acesso necessário.
+
+## Falhe
+
+- Stack inexistente, ambiente proibido, typecheck vermelho ou execução sem rastreabilidade.
+
+## Proibido
+
+- Relaxar assertion, alterar produto, trocar stack, usar segredo fora do ambiente ou esconder teste não executado.

@@ -12,6 +12,16 @@
 		"createdAt": { "type": "string" },
 		"updatedAt": { "type": "string" },
 		"automationCycles": { "type": "integer", "minimum": 0 },
+		"discovery": {
+			"type": "object",
+			"required": ["mode", "artifact", "sha256", "recordedAt"],
+			"properties": {
+				"mode": { "enum": ["complete", "without-code", "documental"] },
+				"artifact": { "type": "string" },
+				"sha256": { "type": "string" },
+				"recordedAt": { "type": "string" }
+			}
+		},
 		"history": {
 			"type": "array",
 			"items": {
@@ -29,7 +39,16 @@
 					"by": { "type": "string" },
 					"at": { "type": "string" },
 					"artifact": { "type": "string" },
-					"sha256": { "type": "string" }
+					"sha256": { "type": "string" },
+					"runId": { "type": "string" },
+					"validation": {
+						"type": "object",
+						"required": ["schemaVersion", "checksSha256"],
+						"properties": {
+							"schemaVersion": { "const": 1 },
+							"checksSha256": { "type": "string" }
+						}
+					}
 				}
 			}
 		}
