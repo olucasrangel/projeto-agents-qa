@@ -13,7 +13,8 @@
 1. Confirme que a branch segue `git.branch` e não está em `git.protected`.
 2. Liste e versione somente arquivos do card e da automação.
 3. Exclua `.env`, `qa/runs`, `evidence` e resultados locais.
-4. Gere `PR_DESCRIPTION.txt`, faça commit e push apenas ao remote aprovado.
+4. Confirme que a entrega só adiciona arquivos nos diretórios do agente (`G3.ownership`). Qualquer alteração em teste do time, `shared/` ou reporter bloqueia a entrega: mudanças de framework vão em PR própria, aprovada antes.
+5. Gere `PR_DESCRIPTION.txt`, faça commit e push apenas ao remote aprovado.
 
 ## Saída
 

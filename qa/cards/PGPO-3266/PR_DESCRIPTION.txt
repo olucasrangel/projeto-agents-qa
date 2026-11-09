@@ -1,59 +1,58 @@
-Título sugerido: feat(agente-qa): fortalece fluxo, gates e diagnóstico
+Título sugerido: feat(agente-qa): ATDD no agente de automação, propriedade do time e gates executáveis
 
 Objetivo
-Transformar regras documentais do agente de QA em validações executáveis e permitir discovery rastreável mesmo sem acesso aos repositórios de frontend e service.
+Transformar regras documentais do agente de QA em validações executáveis, aplicar ATDD na automação (teste de aceite antes da funcionalidade, guiando o desenvolvimento) e garantir que o agente só escreva o que ele mesmo criou.
 
 Rastreabilidade
 - Card usado na validação: PGPO-3266
 - Projeto Zephyr: VPOS
-- Casos planejados: VPOS-T2097 a VPOS-T2115 e 2 casos novos
 - Aprovações: G1 pendente | G2 pendente | decisão de automação pendente | G3 pendente
 - Escopo desta PR: infraestrutura do agente e dry-run, sem aprovação ou publicação externa
 
 Funcionalidades
-- qa:doctor verifica ambiente, credenciais por presença, Chromium, MCPs, HTTPS, allowlists, branch, remote e repositórios opcionais
-- qa:validate verifica prontidão de G1, G2 e G3
-- qa:state registra o modo e hash do discovery, invalida gates obsoletos e revalida artefatos antes de avançar
-- discovery suporta complete, without-code e documental
-- zephyr-sync gera payload idempotente sem escrita externa
-- evidências registram typecheck e passos PASS ou FAIL
-- contratos de A1 a A4 usam entradas, ações, saídas e condições explícitas de parada e falha
-- BDD usa sempre `Feature/Scenario/Given/When/Then` em inglês, com texto de negócio em pt-BR
-- núcleo atualizado para 0.2.0
+- ATDD: skill atdd, A2 como especialista, novos estados RED e AWAITING_DEV, modos red-first e verify-existing (confirmados pelo QA)
+- qa:atdd com skeleton, run e guide; guia de desenvolvimento para quem implementa a funcionalidade
+- Prova vermelha só vale por expect() num passo Then do BDD aprovado; passo não ligado, seletor, login, ambiente ou falha em Given/When são recusados
+- Prova amarrada ao que rodou: runner oficial, hash de todos os arquivos do agente, ordem no tempo, evidência em disco e manifestos íntegros; execuções dev-* nunca são oficiais
+- qa:state atdd-ack: mudança deliberada nos testes depois do vermelho, só pelo QA, com cadeia de custódia no G3
+- Propriedade: casos do time no Zephyr e testes do time são somente leitura; casos do agente ficam em pasta própria com sufixo (Automação) e seguem o padrão do Confluence; o G3 bloqueia entrega que altere arquivo do time
+- zephyr-sync deixa de atualizar caso do time (21 criar, 19 referências somente leitura no PGPO-3266)
+- BDD usa sempre Feature/Scenario/Given/When/Then em inglês, com texto de negócio em pt-BR
+- qa:doctor, qa:validate e discovery em três modos (complete, without-code, documental)
+- Reporter registra cenário (@Sxx), tipo e passo da falha, fase ATDD, runner e hash dos testes
+- núcleo atualizado para 0.4.0
 
 Arquivos principais
-- .agents/core/scripts/qa-doctor.mjs
-- .agents/core/scripts/qa-validate.mjs
-- .agents/core/scripts/qa-state.mjs
-- .agents/core/scripts/lib/
-- .agents/core/scripts/tests/qa-flow.test.mjs
-- .agents/core/agents/
-- .agents/project/qa-project.yaml
-- .agents/project/scripts/zephyr-sync.mjs
+- .agents/core/skills/atdd/SKILL.md
+- .agents/core/agents/ (A1 a A4 e orquestrador)
+- .agents/core/scripts/qa-atdd.mjs, qa-state.mjs, qa-doctor.mjs, qa-validate.mjs
+- .agents/core/scripts/lib/ (atdd, atdd-feature, ownership, gate-validation)
+- .agents/core/scripts/tests/ (qa-flow e atdd)
+- .agents/project/qa-project.yaml e .agents/project/scripts/zephyr-sync.mjs
+- shared/evidence-reporter.ts e shared/failure-kind.ts
 - AGENTS.md
-- shared/evidence-reporter.ts
-- qa/cards/PGPO-3266/context/discovery.json
 
 Validação
 - npm run agents:check: passou
-- npm run qa:test: 14 de 14 passaram
+- npm run qa:test: 53 de 53 passaram
 - npm run typecheck: passou
-- npm run test:e2e -- --list: 25 testes encontrados em 7 arquivos
 - npm run qa:doctor -- --card PGPO-3266: apto, 0 erros e 4 avisos conhecidos
-- zephyr-sync: 21 cenários, 19 atualizações e 2 criações; duas execuções produziram o mesmo SHA-256
-- G1 do PGPO-3266: corretamente bloqueado e sem alteração do state.json
+- Ciclo ATDD completo com Playwright real em card temporário (removido): esqueleto, vermelho recusado por passo não ligado e por falha em Given, vermelho válido por expect() em Then, guia, verde oficial e G3 conferindo os manifestos
+- Atalhos barrados na prática: teste afrouxado sem o QA, run-id dev-local e DEV-local, execução fora do runner oficial
+- Teste de mutação: quebrar duas regras de propósito faz os testes falharem
 
 Riscos e limitações
-- O G1 continua pendente porque há 7 decisões humanas abertas no pacote BDD
-- cosmos-lms-frontend e cosmos-lms-service continuam sem acesso
-- O origin local aponta para vlance-qa, diferente do repositório esperado olucasrangel
-- A suíte completa não foi repetida nesta alteração porque cria registros reais em stage e a falha conhecida de area_conhecimento permanece fora deste escopo
+- Os controles pegam atalho e erro, não adulteração deliberada por quem tem escrita no repositório; a defesa final é o G3 humano e um CI que rode o card com o runner oficial
+- shared/ (reporter, evidence-step, failure-kind) é do time: precisa de aprovação do time antes de qualquer card usar ATDD, e um card nunca deve incluí-los
+- O PGPO-3266 continua com o G1 pendente e ainda não usa ATDD; a funcionalidade depende dos repositórios de frontend e service, sem acesso
+- A suíte completa contra stage não foi repetida nesta alteração, e a falha conhecida de area_conhecimento permanece fora deste escopo
 - Nenhuma escrita foi feita no Jira, Confluence ou Zephyr
 
 Checklist de revisão
-- [ ] Revisar contratos A1 a A4 e modos de discovery
-- [ ] Revisar critérios executáveis de G1, G2 e G3
-- [ ] Confirmar allowlists de hosts e repositório esperado
+- [ ] Revisar a skill atdd e o contrato do A2
+- [ ] Revisar os critérios do G3 (prova vermelha, runner oficial, hash, ack do QA)
+- [ ] Revisar a política de propriedade e os diretórios do agente
+- [ ] Aprovar as mudanças em shared/ pelo time
 - [ ] Confirmar que nenhuma assertion foi relaxada
 - [ ] Confirmar que nenhum segredo ou dado pessoal está no diff
-- [ ] Resolver separadamente as 7 pendências do G1 do PGPO-3266
+- [ ] Resolver separadamente as pendências do G1 do PGPO-3266

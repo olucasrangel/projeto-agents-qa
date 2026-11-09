@@ -14,6 +14,7 @@
 		"qa:state": "node .agents/core/scripts/qa-state.mjs",
 		"qa:doctor": "node .agents/core/scripts/qa-doctor.mjs",
 		"qa:validate": "node .agents/core/scripts/qa-validate.mjs",
+		"qa:atdd": "node .agents/core/scripts/qa-atdd.mjs",
 		"qa:test": "node --test .agents/core/scripts/tests/*.test.mjs",
 		"qa:card:init": "node .agents/project/scripts/init-card-artifacts.mjs",
 		"zephyr:sync": "node .agents/project/scripts/zephyr-sync.mjs",

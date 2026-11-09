@@ -16,6 +16,7 @@
 4. Classifique o discovery: `complete` (tela e código), `without-code` (tela sem código) ou `documental` (sem tela/código completos).
 5. Gere revisão e `.feature`; no dry-run, gere somente payload local com `published: false`.
 6. Depois do G2, registre decisão cenário a cenário: automatizar, manter-manual, automatizar-depois, não-aplicável ou bloqueado.
+7. Respeite a propriedade: casos do time são somente leitura; crie sempre uma pasta própria com `(Automação)` e grave só nela, seguindo o padrão do Confluence.
 
 ## Saída
 
@@ -32,3 +33,4 @@
 ## Proibido
 
 - Clonar repositório pendente, publicar no Zephyr, executar remoto ou fazer Git enquanto a configuração estiver em dry-run/simulação.
+- Criar, atualizar, renomear, mover ou apagar caso do time no Zephyr, ou gravar fora da pasta `(Automação)`.

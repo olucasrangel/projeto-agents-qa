@@ -7,11 +7,24 @@
 	"properties": {
 		"card": { "type": "string" },
 		"state": {
-			"enum": ["DISCOVERY", "ALIGNMENT", "BDD", "AWAITING_G1", "ZEPHYR", "AWAITING_G2", "AUTOMATION_DECISION", "AUTOMATION", "RUN", "REPORT", "AWAITING_G3", "DELIVERY", "DONE"]
+			"enum": ["DISCOVERY", "ALIGNMENT", "BDD", "AWAITING_G1", "ZEPHYR", "AWAITING_G2", "AUTOMATION_DECISION", "AUTOMATION", "RED", "AWAITING_DEV", "RUN", "REPORT", "AWAITING_G3", "DELIVERY", "DONE"]
 		},
 		"createdAt": { "type": "string" },
 		"updatedAt": { "type": "string" },
 		"automationCycles": { "type": "integer", "minimum": 0 },
+		"atdd": {
+			"type": "object",
+			"required": ["mode", "scenarios", "decidedAt"],
+			"properties": {
+				"mode": { "enum": ["red-first", "verify-existing"] },
+				"reason": { "type": "string" },
+				"scenarios": { "type": "array", "items": { "type": "string" } },
+				"decidedAt": { "type": "string" },
+				"red": { "type": "object" },
+				"green": { "type": "object" },
+				"acknowledgements": { "type": "array", "items": { "type": "object" } }
+			}
+		},
 		"discovery": {
 			"type": "object",
 			"required": ["mode", "artifact", "sha256", "recordedAt"],

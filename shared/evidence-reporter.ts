@@ -7,6 +7,7 @@ import {
 	writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
+import { classifyFailure } from './failure-kind';
 import type {
 	FullResult,
 	Reporter,
@@ -47,6 +48,11 @@ interface EvidenceEntry {
 	retry: number;
 	screenshot: string | null;
 	steps: StepEvidence[];
+	/** Cenário do BDD (tag @S01...), estável antes mesmo de o caso existir no Zephyr. */
+	scenario: string | null;
+	/** `assertion`: comportamento não atendido. `execution`: seletor, timeout, login ou ambiente. */
+	failureKind: 'assertion' | 'execution' | null;
+	failedStep: string | null;
 	captureError: string | null;
 	metadataError: string | null;
 	upload: {
@@ -163,6 +169,10 @@ export default class EvidenceReporter implements Reporter {
 			});
 		}
 
+		const scenarioTags = test.tags.filter((tag) => /^@S\d{2}$/.test(tag));
+		const scenario = scenarioTags.length === 1 ? (scenarioTags[0]?.slice(1) ?? null) : null;
+		if (scenarioTags.length > 1) metadataErrors.push(`esperada no máximo uma tag de cenário; encontradas ${scenarioTags.length}`);
+
 		const entry: EvidenceEntry = {
 			card,
 			zephyrKey,
@@ -175,6 +185,9 @@ export default class EvidenceReporter implements Reporter {
 			retry: result.retry,
 			screenshot,
 			steps,
+			scenario,
+			failureKind: status === 'FAIL' ? classifyFailure(result.error) : null,
+			failedStep: steps.find((step) => step.status === 'FAIL')?.title ?? null,
 			captureError:
 				captureError ?? (!attachment && status !== 'SKIPPED' ? 'screenshot final ausente' : null),
 			metadataError: metadataErrors.length > 0 ? metadataErrors.join('; ') : null,
@@ -218,6 +231,10 @@ export default class EvidenceReporter implements Reporter {
 				testCycle: { required: true, key: null, created: false },
 				uploadMode: this.options.uploadMode ?? 'dry-run',
 				typecheck: process.env.E2E_TYPECHECK_STATUS ?? 'not-recorded',
+				atddPhase: ['red', 'green'].includes(process.env.E2E_ATDD_PHASE ?? '') ? process.env.E2E_ATDD_PHASE : null,
+				// Preenchidos só pelo runner oficial (qa:atdd run): amarram a execução aos testes que rodaram.
+				runner: process.env.E2E_RUNNER ?? null,
+				specsSha256: process.env.E2E_SPECS_SHA256 ?? null,
 				startedAt: this.startedAt,
 				finishedAt: new Date().toISOString(),
 				result: result.status,
@@ -240,6 +257,7 @@ export default class EvidenceReporter implements Reporter {
 				`- Ambiente: ${this.options.environment}`,
 				`- Resultado: ${result.status}`,
 				`- Typecheck: ${process.env.E2E_TYPECHECK_STATUS ?? 'not-recorded'}`,
+				`- Fase ATDD: ${['red', 'green'].includes(process.env.E2E_ATDD_PHASE ?? '') ? process.env.E2E_ATDD_PHASE : 'n/a'}`,
 				`- Ciclo Zephyr: não criado (${this.options.uploadMode ?? 'dry-run'})`,
 				'',
 				'| Cenário | Chave VPOS | Resultado | Screenshot |',

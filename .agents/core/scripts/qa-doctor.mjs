@@ -6,6 +6,7 @@ import process from 'node:process';
 import dotenv from 'dotenv';
 import { parse as parseYaml } from 'yaml';
 import { allowedHttpsUrl } from './lib/doctor-validation.mjs';
+import { ownershipOf } from './lib/ownership.mjs';
 
 const root = process.cwd();
 const json = process.argv.includes('--json');
@@ -118,6 +119,14 @@ if (config) {
 	if (config.git?.expected_repository) {
 		add('git.expected-repository', 'warning', originSafe === config.git.expected_repository, originSafe === config.git.expected_repository ? 'origin corresponde ao repositório esperado' : `origin diverge do esperado: ${config.git.expected_repository}`);
 	}
+
+	const ownershipConfigured = Boolean(ownershipOf(config));
+	add('ownership.policy', 'error', ownershipConfigured, ownershipConfigured ? 'política de propriedade declarada (casos e testes do time são somente leitura)' : 'bloco ownership ausente ou incompleto no qa-project.yaml');
+
+	const specsDir = (config.atdd?.specs_dir ?? '').replaceAll('{CARD}', 'CARD');
+	const ownedPaths = config.ownership?.automation?.owned_paths ?? [];
+	const atddOk = Boolean(config.atdd?.dev_guide && config.atdd?.commands?.run_scenario && specsDir && ownedPaths.some((owned) => specsDir.startsWith(`${owned}/`)));
+	add('atdd.config', 'error', atddOk, atddOk ? 'ATDD configurado: testes de aceite em diretório do agente' : 'bloco atdd ausente, incompleto ou com specs_dir fora dos diretórios do agente');
 
 	for (const repository of config.future_code_context?.repositories ?? []) {
 		const name = String(repository).split('/').pop()?.replace(/\.git$/, '');

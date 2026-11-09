@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
+import { ATDD_MODES, missingEvidence, officialRunProblems, readRunManifest, scanSpecs, specsHash, validateGreenRun, validateRedRun } from './atdd.mjs';
+import { automationFolderOk, checkAutomationOwnership, gitChanges, ownershipOf } from './ownership.mjs';
 
 export const GATE_STATES = { G1: 'AWAITING_G1', G2: 'AWAITING_G2', G3: 'AWAITING_G3' };
 
@@ -123,7 +125,7 @@ export function parseFeature(text, card, priorities = { critical: 'High', high: 
 		if (step && current) {
 			const direct = step[1] === 'Given' ? 'given' : step[1] === 'When' ? 'when' : step[1] === 'Then' ? 'then' : lastKind;
 			if (direct) lastKind = direct;
-			current.steps.push({ kind: direct, text: step[2] });
+			current.steps.push({ kind: direct, keyword: step[1], text: step[2] });
 		}
 	}
 	const issues = [];
@@ -162,6 +164,72 @@ function verifyRecordedGate(root, state, gate) {
 	return checks;
 }
 
+/** Tipo (given, when, then) de cada passo do BDD, indexado por cenário e título do passo. */
+function stepKindsFromFeature(root, card, priorities) {
+	const files = filesNamed(path.join(root, 'qa/cards', card, 'bdd'), `${card}.feature`);
+	if (files.length !== 1) return null;
+	const parsed = parseFeature(readFileSync(files[0], 'utf-8'), card, priorities);
+	if (parsed.issues.length) return null;
+	return new Map(parsed.scenarios.map((scenario, index) => [`S${String(index + 1).padStart(2, '0')}`, new Map(scenario.steps.map((step) => [`${step.keyword} ${step.text}`, step.kind]))]));
+}
+
+/**
+ * Prova do ciclo ATDD exigida no G3. Nada é aceito só porque o estado afirma: os manifestos das
+ * execuções vermelha e verde são relidos do disco e revalidados contra os testes que existem agora.
+ */
+function validateAtddProof({ root, config, card, state, runId, ownership }) {
+	const atdd = state.atdd;
+	const checks = [check('G3.atdd-recorded', Boolean(atdd && ATDD_MODES.includes(atdd.mode)), 'modo ATDD registrado (red-first ou verify-existing)')];
+	if (!atdd || !ATDD_MODES.includes(atdd.mode)) return checks;
+	const ownedPaths = ownership?.automation.owned_paths ?? [];
+	const current = specsHash(root, ownedPaths, card);
+	const specs = scanSpecs(root, ownedPaths, card);
+	const missing = (atdd.scenarios ?? []).filter((id) => !specs.has(id));
+	checks.push(check('G3.atdd-scenarios', (atdd.scenarios?.length ?? 0) > 0 && missing.length === 0, missing.length ? `cenários sem teste de aceite: ${missing.join(', ')}` : 'todo cenário selecionado tem teste de aceite com tag @Sxx'));
+	checks.push(check('G3.atdd-mode-confirmed', Boolean(atdd.confirmedBy?.trim()), atdd.confirmedBy ? `modo ${atdd.mode} confirmado por ${atdd.confirmedBy}` : 'o QA precisa ter confirmado o modo ATDD (--by)'));
+
+	let loadedRed = null;
+	if (atdd.mode === 'verify-existing') {
+		checks.push(check('G3.atdd-reason', Boolean(atdd.reason?.trim()), 'verify-existing registra o motivo de a funcionalidade já existir'));
+	} else {
+		const red = atdd.red;
+		loadedRed = red?.runId ? readRunManifest(root, config, card, red.runId) : { error: 'prova vermelha não registrada' };
+		checks.push(check('G3.atdd-red-manifest', !loadedRed.error && loadedRed.sha256 === red?.manifestSha256, loadedRed.error ?? (loadedRed.sha256 === red?.manifestSha256 ? 'manifesto vermelho íntegro' : 'o manifesto vermelho mudou depois de registrado')));
+		if (!loadedRed.error) {
+			const kinds = stepKindsFromFeature(root, card, config.zephyr?.priorities);
+			const redResult = validateRedRun(loadedRed.manifest, atdd.scenarios ?? [], kinds);
+			checks.push(check('G3.atdd-red-proof', redResult.valid && redResult.red.length > 0, redResult.valid ? `prova vermelha válida: ${redResult.red.join(', ')}` : `prova vermelha inválida: ${redResult.checks.filter((item) => !item.ok).map((item) => item.message).join('; ')}`));
+			const redEvidence = missingEvidence(root, config, card, red.runId, loadedRed.manifest, 'FAIL');
+			checks.push(check('G3.atdd-red-evidence', redEvidence.length === 0, redEvidence.length ? `evidência vermelha ausente: ${redEvidence.join('; ')}` : 'evidência do vermelho presente'));
+			const official = officialRunProblems(loadedRed.manifest, loadedRed.manifest.specsSha256);
+			checks.push(check('G3.atdd-red-official', official.length === 0, official.length ? `vermelho não oficial: ${official.join('; ')}` : 'vermelho feito pelo runner oficial, com typecheck verde'));
+
+			// Cadeia de custódia dos testes: do hash executado no vermelho, passando por cada ack do QA, até o hash atual.
+			let expected = loadedRed.manifest.specsSha256;
+			let chainOk = Boolean(expected);
+			for (const ack of atdd.acknowledgements ?? []) {
+				if (ack.from !== expected || !ack.by?.trim() || !ack.reason?.trim()) chainOk = false;
+				expected = ack.to;
+			}
+			checks.push(check('G3.atdd-specs-chain', chainOk && expected === current.sha256, chainOk && expected === current.sha256 ? `testes de aceite inalterados desde o vermelho${(atdd.acknowledgements?.length ?? 0) ? ` (${atdd.acknowledgements.length} mudança(s) reconhecida(s) pelo QA)` : ''}` : 'os testes de aceite mudaram desde a prova vermelha sem reconhecimento do QA (qa:state atdd-ack)'));
+		}
+	}
+
+	const loadedGreen = atdd.green?.runId ? readRunManifest(root, config, card, atdd.green.runId) : { error: 'execução final não registrada' };
+	checks.push(check('G3.atdd-green-run', !loadedGreen.error && atdd.green.runId === runId, loadedGreen.error ?? (atdd.green.runId === runId ? 'execução final é a do --run-id' : `a execução final registrada (${atdd.green.runId}) não é a do --run-id`)));
+	if (!loadedGreen.error) {
+		checks.push(check('G3.atdd-green-manifest', loadedGreen.sha256 === atdd.green.manifestSha256, loadedGreen.sha256 === atdd.green.manifestSha256 ? 'manifesto verde íntegro' : 'o manifesto verde mudou depois de registrado'));
+		const greenChecks = validateGreenRun(loadedGreen.manifest, atdd.scenarios ?? []);
+		checks.push(check('G3.atdd-green', greenChecks.every((item) => item.ok), greenChecks.every((item) => item.ok) ? 'todos os cenários selecionados passaram' : `execução final inválida: ${greenChecks.filter((item) => !item.ok).map((item) => item.message).join('; ')}`));
+		const official = officialRunProblems(loadedGreen.manifest, current.sha256);
+		checks.push(check('G3.atdd-green-official', official.length === 0, official.length ? `execução final não oficial: ${official.join('; ')}` : 'execução final oficial, com typecheck verde, sobre os testes atuais'));
+		if (atdd.mode === 'red-first' && loadedRed && !loadedRed.error) {
+			checks.push(check('G3.atdd-red-before-green', Date.parse(loadedRed.manifest.finishedAt) < Date.parse(loadedGreen.manifest.startedAt), 'a execução vermelha terminou antes de a verde começar'));
+		}
+	}
+	return checks;
+}
+
 export function canonicalArtifact(root, config, card, gate, runId) {
 	if (gate === 'G1') return path.resolve(root, resolveTemplate(config.artifacts.bdd_review, { CARD: card }));
 	if (gate === 'G2') return path.resolve(root, resolveTemplate(config.artifacts.zephyr_sync ?? `qa/cards/{CARD}/zephyr/zephyr-sync-payload.json`, { CARD: card }));
@@ -169,7 +237,7 @@ export function canonicalArtifact(root, config, card, gate, runId) {
 	return path.resolve(root, resolveTemplate(config.artifacts.executions_dir, { CARD: card, runId }), 'execution.md');
 }
 
-export function validateGate({ root = process.cwd(), card, gate, runId, state: suppliedState }) {
+export function validateGate({ root = process.cwd(), card, gate, runId, state: suppliedState, changes: suppliedChanges }) {
 	const checks = [];
 	const configPath = path.join(root, '.agents/project/qa-project.yaml');
 	const statePath = path.join(root, 'qa/runs', card, 'state.json');
@@ -246,6 +314,30 @@ export function validateGate({ root = process.cwd(), card, gate, runId, state: s
 				checks.push(check('G2.unique-names', new Set(names).size === names.length, 'nomes de casos são únicos'));
 				checks.push(check('G2.unique-keys', new Set(keys).size === keys.length, 'chaves Zephyr são únicas'));
 				checks.push(check('G2.warnings', (payload.warnings?.length ?? 0) === 0, 'payload não possui divergências pendentes'));
+
+				// Política de propriedade: o agente só escreve o que criou.
+				const ownership = ownershipOf(config);
+				checks.push(check('G2.ownership-config', Boolean(ownership), 'qa-project.yaml declara a política de propriedade'));
+				if (ownership) {
+					const registryPath = path.resolve(root, ownership.zephyr.owned_registry.replaceAll('{CARD}', card));
+					let ownedKeys = new Set();
+					if (existsSync(registryPath)) {
+						try { ownedKeys = new Set((readJson(registryPath).cases ?? []).map((entry) => entry.key)); } catch {}
+					}
+					const suffix = ownership.zephyr.automation_folder_suffix;
+					checks.push(check('G2.team-read-only', payload.ownership?.teamCases === 'read-only', 'casos do time declarados como somente leitura'));
+					checks.push(check('G2.own-folder', automationFolderOk(payload.ownership?.automationFolder?.name, suffix), `casos do agente ficam em pasta própria terminada em ${suffix}`));
+					const teamKeys = items.map((item) => item.teamReference?.key).filter(Boolean);
+					const touchesTeam = items.filter((item) => item.operation !== 'criar' && !(item.operation === 'atualizar' && item.owned === true && ownedKeys.has(item.key)));
+					checks.push(check('G2.no-team-write', touchesTeam.length === 0 && items.every((item) => !item.key || !teamKeys.includes(item.key)), 'nenhum caso do time é criado, atualizado, renomeado ou movido'));
+					checks.push(check('G2.team-references-read-only', items.every((item) => !item.teamReference || item.teamReference.access === 'read-only'), 'referências a casos do time são somente leitura'));
+					checks.push(check('G2.items-in-own-folder', items.every((item) => item.folder === 'automation'), 'todo item é gravado na pasta do agente'));
+				}
+
+				// Padrão do Confluence para casos criados pelo agente.
+				const confluenceName = new RegExp(`^\\[${card}\\]\\[[^\\]]+\\]\\[(Sucesso|Falha)\\] Validar \\S`);
+				checks.push(check('G2.confluence-name', items.every((item) => confluenceName.test(item.name)), 'nomes seguem [Chave][Aplicação][Sucesso|Falha] Validar ...'));
+				checks.push(check('G2.confluence-content', items.every((item) => item.objective && item.precondition?.length > 0 && item.steps?.length > 0 && item.priorityName && item.status), 'cada caso tem objetivo, precondição, passos, prioridade e status'));
 			} catch (error) { checks.push(check('G2.payload-json', false, `payload inválido: ${error.message}`)); }
 		}
 		const planPath = path.join(root, 'qa/cards', card, 'zephyr', 'zephyr-dry-run.json');
@@ -257,7 +349,21 @@ export function validateGate({ root = process.cwd(), card, gate, runId, state: s
 
 	if (gate === 'G3') {
 		checks.push(...verifyRecordedGate(root, state, 'G2'));
+
+		// Testes do time são somente leitura: a entrega só pode adicionar arquivos nos diretórios do agente.
+		const ownership = ownershipOf(config);
+		checks.push(check('G3.ownership-config', Boolean(ownership), 'qa-project.yaml declara a política de propriedade'));
+		if (ownership) {
+			const changes = suppliedChanges ?? gitChanges(root, config.git?.base ?? 'main');
+			if (changes === null) {
+				checks.push(check('G3.ownership', false, 'não foi possível comparar a entrega com a branch base para provar que testes do time não foram alterados'));
+			} else {
+				const violations = checkAutomationOwnership(changes, ownership);
+				checks.push(check('G3.ownership', violations.length === 0, violations.length ? `alterações fora dos diretórios do agente: ${violations.slice(0, 5).join('; ')}${violations.length > 5 ? ` (+${violations.length - 5})` : ''}` : 'a entrega só altera arquivos criados pelo agente'));
+			}
+		}
 		checks.push(check('G3.run-id', Boolean(runId && /^[A-Za-z0-9._-]+$/.test(runId)), 'G3 exige --run-id válido'));
+		checks.push(...validateAtddProof({ root, config, card, state, runId, ownership }));
 		const decisionPath = path.join(root, 'qa/approvals', card, 'automation-decision.md');
 		const decisionText = existsSync(decisionPath) ? readFileSync(decisionPath, 'utf-8') : '';
 		checks.push(check('G3.automation-decision', /\*\*Status:\*\* (APROVADO|CONCLUÍDO)/i.test(decisionText), 'decisão de automação exige status APROVADO ou CONCLUÍDO'));

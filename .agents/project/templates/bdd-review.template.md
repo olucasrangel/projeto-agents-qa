@@ -18,8 +18,8 @@
 
 ### {NOME_ZEPHYR}
 
-- **Decisão sugerida:** reutilizar | atualizar | criar | descartar
-- **Caso existente:** {VPOS_OU_NAO_ENCONTRADO}
+- **Operação:** criar (caso próprio na pasta Automação) | atualizar (somente caso criado pelo agente) | descartar
+- **Referência do time (somente leitura):** {VPOS_OU_NENHUM}
 - **Objetivo:** {OBJETIVO}
 - **Precondições:** {PRECONDICOES}
 - **Prioridade:** High | Normal | Low

@@ -25,6 +25,7 @@ import {
 } from 'node:fs';
 import path from 'node:path';
 import { parse } from 'yaml';
+import { ownershipOf } from '../../core/scripts/lib/ownership.mjs';
 
 const PROJECT_ROOT = process.cwd();
 const SCHEMA_VERSION = 1;
@@ -101,6 +102,17 @@ const allowedProjects = projectConfig.jira?.project_keys ?? [];
 if (allowedProjects.length && !allowedProjects.includes(card.split('-')[0])) {
 	fail(`projeto do card ${card} não permitido. Use: ${allowedProjects.join(', ')}.`);
 }
+const ownership = ownershipOf(projectConfig);
+if (!ownership) fail('bloco ownership ausente ou incompleto no qa-project.yaml.');
+const folderSuffix = ownership.zephyr.automation_folder_suffix;
+const ownedRegistryPath = path.join(
+	PROJECT_ROOT,
+	ownership.zephyr.owned_registry.replaceAll('{CARD}', card),
+);
+// Chaves de casos criados pelo próprio agente. Só elas podem ser atualizadas.
+const ownedKeys = new Set(
+	existsSync(ownedRegistryPath) ? (readJson(ownedRegistryPath).cases ?? []).map((entry) => entry.key) : [],
+);
 const zephyrConfig = projectConfig.zephyr ?? {};
 const priorities = zephyrConfig.priorities ?? {};
 const projectKey = zephyrConfig.project_key;
@@ -206,7 +218,8 @@ errors.push(...parseErrors);
 if (!feature.name) errors.push('Feature sem nome.');
 if (scenarios.length === 0) errors.push('Nenhum cenário encontrado.');
 
-const namePattern = new RegExp(`^\\[${card}\\]\\[[A-Za-zÀ-ÿ]+\\]\\[(Sucesso|Falha)\\] \\S`);
+// Padrão do Confluence: [Chave][Aplicação][Sucesso|Falha] e título iniciado por "Validar".
+const namePattern = new RegExp(`^\\[${card}\\]\\[[A-Za-zÀ-ÿ]+\\]\\[(Sucesso|Falha)\\] Validar \\S`);
 const criticalityTags = Object.keys(priorities).map((level) => `@${level}`);
 const names = new Map();
 const keysSeen = new Map();
@@ -222,7 +235,15 @@ const items = scenarios.map((scenario, index) => {
 	}
 
 	if (!namePattern.test(scenario.title)) {
-		errors.push(`${label}: título fora do padrão [${card}][Aplicação][Sucesso|Falha] Descrição.`);
+		errors.push(`${label}: título fora do padrão [${card}][Aplicação][Sucesso|Falha] Validar ...`);
+	}
+	for (const step of scenario.steps) {
+		if (/\b(ou|se)\b/i.test(step.text)) {
+			errors.push(`${label}: o passo "${step.keyword} ${step.text}" usa "ou" ou "se"; o padrão do Confluence pede um comportamento por cenário.`);
+		}
+	}
+	if (!scenario.steps.some((step) => step.kind === 'precondition')) {
+		errors.push(`${label}: precondição obrigatória (pelo menos um Given).`);
 	}
 	if (names.has(scenario.title)) {
 		errors.push(`${label}: título duplicado com o cenário da linha ${names.get(scenario.title)}.`);
@@ -247,15 +268,19 @@ const items = scenarios.map((scenario, index) => {
 	if (tagKey && candidateKey && tagKey !== candidateKey) {
 		errors.push(`${label}: tag ${tagKey} diverge do caso candidato ${candidateKey}.`);
 	}
-	const key = tagKey ?? candidateKey;
-	if (key) {
-		if (keysSeen.has(key)) errors.push(`${label}: chave ${key} já usada no cenário ${keysSeen.get(key)}.`);
-		keysSeen.set(key, index + 1);
+	// "Candidato: VPOS-T..." aponta para um caso do TIME: é só referência de leitura.
+	// A tag @VPOS-T... só vale para caso do próprio agente, registrado em owned-cases.json.
+	if (tagKey && !ownedKeys.has(tagKey)) {
+		errors.push(`${label}: ${tagKey} não é um caso criado pelo agente (fora de owned-cases.json). Casos do time não podem ser alterados.`);
+	}
+	const key = tagKey && ownedKeys.has(tagKey) ? tagKey : null;
+	const teamReference = candidateKey && candidateKey !== key ? candidateKey : null;
+	for (const reference of [key, teamReference].filter(Boolean)) {
+		if (keysSeen.has(reference)) errors.push(`${label}: chave ${reference} já usada no cenário ${keysSeen.get(reference)}.`);
+		keysSeen.set(reference, index + 1);
 	}
 
-	const newCaseComment = scenario.comments.some((comment) => /^NOVO/.test(comment.text));
 	const operation = key ? 'atualizar' : 'criar';
-	if (key && newCaseComment) errors.push(`${label}: marcado como NOVO mas já tem a chave ${key}.`);
 	const criticalityTag = criticality[0] ?? null;
 
 	return {
@@ -263,6 +288,11 @@ const items = scenarios.map((scenario, index) => {
 		name: scenario.title,
 		operation,
 		key,
+		owned: Boolean(key),
+		folder: 'automation',
+		status: zephyrConfig.initial_status ?? 'Draft',
+		objective: feature.name,
+		teamReference: teamReference ? { key: teamReference, access: 'read-only' } : null,
 		tags: [cardTag, criticalityTag].filter(Boolean),
 		priorityName: criticalityTag ? priorities[criticalityTag.slice(1)] : null,
 		precondition: scenario.steps.filter((s) => s.kind === 'precondition').map((s) => `${s.keyword} ${s.text}`),
@@ -297,34 +327,37 @@ function buildSteps(steps) {
 // ------------------------------------------------------------- Dry-run diff ----
 
 const dryRun = readJson(dryRunPath);
-const dryRunByKey = new Map(
-	(dryRun.decisions ?? []).filter((decision) => decision.key).map((decision) => [decision.key, decision]),
-);
-const dryRunNewCount = (dryRun.decisions ?? []).filter((decision) => decision.operation === 'criar').length;
+const plannedByName = new Map((dryRun.decisions ?? []).map((decision) => [decision.proposedName, decision]));
+const automationFolder = dryRun.folders?.newCasesFolder;
+
+if (!automationFolder?.name || !automationFolder.name.trim().endsWith(folderSuffix)) {
+	errors.push(`o plano dry-run precisa de uma pasta própria terminada em "${folderSuffix}".`);
+}
+if (automationFolder?.decisionPending) {
+	errors.push(`pasta do agente com decisão pendente: ${automationFolder.decisionPending}`);
+}
+for (const decision of dryRun.decisions ?? []) {
+	if (decision.operation === 'atualizar' && !ownedKeys.has(decision.key)) {
+		errors.push(`o plano dry-run manda atualizar ${decision.key}, que não é um caso do agente. Casos do time são somente leitura.`);
+	}
+}
 
 for (const item of items) {
-	if (item.key && !dryRunByKey.has(item.key)) {
-		errors.push(`${item.key} (cenário ${item.order}) não existe no plano dry-run.`);
+	const planned = plannedByName.get(item.name);
+	if (!planned) {
+		warnings.push(`cenário "${item.name}" não consta no plano dry-run.`);
 		continue;
 	}
-	if (item.key) {
-		const planned = dryRunByKey.get(item.key);
-		if (planned.proposedName !== item.name) {
-			warnings.push(
-				`${item.key}: nome do .feature diverge do plano dry-run. Plano: "${planned.proposedName}". Feature: "${item.name}".`,
-			);
-		}
-		if (planned.operation !== 'atualizar') {
-			warnings.push(`${item.key}: o plano dry-run marca como "${planned.operation}".`);
-		}
+	if (planned.operation !== item.operation) {
+		warnings.push(`"${item.name}": o plano dry-run marca "${planned.operation}", e o .feature resulta em "${item.operation}".`);
+	}
+	const plannedReference = planned.teamReference?.key ?? null;
+	if (plannedReference !== (item.teamReference?.key ?? null)) {
+		warnings.push(`"${item.name}": referência do time diverge entre plano dry-run e .feature.`);
 	}
 }
 const creates = items.filter((item) => item.operation === 'criar');
-if (creates.length !== dryRunNewCount) {
-	warnings.push(
-		`o .feature tem ${creates.length} caso(s) a criar; o plano dry-run tem ${dryRunNewCount}.`,
-	);
-}
+const updates = items.filter((item) => item.operation === 'atualizar');
 
 // ---------------------------------------------------------------- G1 gate ----
 
@@ -372,10 +405,17 @@ const payload = {
 	},
 	g1: approval,
 	priorities,
+	ownership: {
+		teamCases: ownership.zephyr.team_cases,
+		automationFolder: { name: automationFolder.name, parentId: automationFolder.parentId ?? null, suffix: folderSuffix },
+		ownedRegistry: path.relative(PROJECT_ROOT, ownedRegistryPath),
+		ownedKeys: [...ownedKeys].sort(),
+	},
 	summary: {
 		total: items.length,
-		atualizar: items.filter((item) => item.operation === 'atualizar').length,
+		atualizar: updates.length,
 		criar: creates.length,
+		referenciasDoTime: items.filter((item) => item.teamReference).length,
 	},
 	items,
 	warnings,
@@ -385,7 +425,9 @@ mkdirSync(path.dirname(payloadPath), { recursive: true });
 writeFileSync(payloadPath, `${JSON.stringify(payload, null, 2)}\n`);
 
 const payloadSha = sha256(readFileSync(payloadPath));
-console.log(`zephyr-sync: ${items.length} cenário(s) (${payload.summary.atualizar} atualizar, ${payload.summary.criar} criar).`);
+console.log(`zephyr-sync: ${items.length} cenário(s) (${payload.summary.criar} criar, ${payload.summary.atualizar} atualizar caso do agente).`);
+console.log(`  pasta do agente: ${automationFolder.name}`);
+console.log(`  casos do time referenciados (somente leitura): ${payload.summary.referenciasDoTime}`);
 console.log(`  status: ${payload.status}`);
 console.log(`  feature sha256: ${featureSha}`);
 console.log(`  payload: ${path.relative(PROJECT_ROOT, payloadPath)} (sha256 ${payloadSha})`);

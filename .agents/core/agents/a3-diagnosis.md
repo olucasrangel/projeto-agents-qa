@@ -14,6 +14,9 @@
 2. Para cada falha, registre esperado, observado, mecanismo, evidência, classificação, confiança e próxima ação.
 3. Classifique somente como `bug-produto`, `erro-automacao`, `ambiente`, `dados` ou `dependencia`.
 4. Direcione erro de automação ao A2; demais bloqueios ao QA; execução verde para G3.
+5. Use `failureKind` do manifesto (ATDD): `assertion` é critério não atendido; `execution` é passo não ligado, seletor, timeout, login, massa ou ambiente.
+6. Fase `red`: falha `assertion` é o resultado esperado e não é defeito. Falha `execution` invalida a prova e volta ao A2 (`erro-automacao`, `dados` ou `ambiente`).
+7. Fase `green` com `assertion` no modo `red-first`: implementação incompleta; devolva ao desenvolvimento com o passo que falhou (`REPORT → AWAITING_DEV`). No modo `verify-existing`, é `bug-produto` para o QA.
 
 ## Saída
 

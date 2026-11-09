@@ -7,7 +7,7 @@
   "projectKey": "VPOS",
   "feature": {
     "file": "qa/cards/PGPO-3266/bdd/nfse/PGPO-3266.feature",
-    "sha256": "fbaf3aa6894f098f55e46cece61251ef6c93691ee9c3d75766a8db8361a8739b",
+    "sha256": "e38cae2a897121a491db62ee7039d92b63a2b06a2b08e6ae13e3f7dd73d75d0e",
     "name": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
     "description": [
       "Como aluno",
@@ -24,17 +24,36 @@
     "high": "Normal",
     "medium": "Low"
   },
+  "ownership": {
+    "teamCases": "read-only",
+    "automationFolder": {
+      "name": "PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar/editar o e-mail de destino (Automação)",
+      "parentId": 59373744,
+      "suffix": "(Automação)"
+    },
+    "ownedRegistry": "qa/cards/PGPO-3266/zephyr/owned-cases.json",
+    "ownedKeys": []
+  },
   "summary": {
     "total": 21,
-    "atualizar": 19,
-    "criar": 2
+    "atualizar": 0,
+    "criar": 21,
+    "referenciasDoTime": 19
   },
   "items": [
     {
       "order": 1,
       "name": "[PGPO-3266][Web][Sucesso] Validar que o autosserviço não aparece com o serviço desligado no tenant",
-      "operation": "atualizar",
-      "key": "VPOS-T2097",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2097",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -60,8 +79,16 @@
     {
       "order": 2,
       "name": "[PGPO-3266][Web][Sucesso] Validar que o autosserviço aparece com o serviço ligado no tenant",
-      "operation": "atualizar",
-      "key": "VPOS-T2098",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2098",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@high"
@@ -87,8 +114,16 @@
     {
       "order": 3,
       "name": "[PGPO-3266][Web][Sucesso] Validar que as competências exibidas são as faturadas do aluno, sem limite de histórico",
-      "operation": "atualizar",
-      "key": "VPOS-T2099",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2099",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@high"
@@ -115,8 +150,16 @@
     {
       "order": 4,
       "name": "[PGPO-3266][Web][Falha] Validar que o envio é bloqueado sem competência selecionada",
-      "operation": "atualizar",
-      "key": "VPOS-T2100",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2100",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -143,8 +186,16 @@
     {
       "order": 5,
       "name": "[PGPO-3266][Web][Sucesso] Validar que o campo de e-mail vem preenchido com o e-mail do cadastro e pode ser editado",
-      "operation": "atualizar",
-      "key": "VPOS-T2101",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2101",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@high"
@@ -171,8 +222,16 @@
     {
       "order": 6,
       "name": "[PGPO-3266][Web][Sucesso] Validar que a tela informa para qual e-mail a nota será enviada",
-      "operation": "atualizar",
-      "key": "VPOS-T2102",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2102",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@high"
@@ -198,8 +257,16 @@
     {
       "order": 7,
       "name": "[PGPO-3266][Web][Falha] Validar que e-mail em formato inválido bloqueia o envio sem abrir o modal",
-      "operation": "atualizar",
-      "key": "VPOS-T2103",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2103",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -229,8 +296,16 @@
     {
       "order": 8,
       "name": "[PGPO-3266][Web][Sucesso] Validar que o envio com o e-mail do cadastro cria a solicitação sem abrir o modal",
-      "operation": "atualizar",
-      "key": "VPOS-T2104",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2104",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -259,8 +334,16 @@
     {
       "order": 9,
       "name": "[PGPO-3266][Web][Sucesso] Validar que alterar o e-mail abre o modal de atualização com o e-mail digitado",
-      "operation": "atualizar",
-      "key": "VPOS-T2105",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2105",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -289,8 +372,16 @@
     {
       "order": 10,
       "name": "[PGPO-3266][Web][Sucesso] Validar que manter o e-mail antigo cria a solicitação sem alterar o cadastro",
-      "operation": "atualizar",
-      "key": "VPOS-T2106",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2106",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -318,8 +409,16 @@
     {
       "order": 11,
       "name": "[PGPO-3266][Web][Sucesso] Validar que atualizar o e-mail propaga o novo e-mail para a pessoa e todas as matrículas",
-      "operation": "atualizar",
-      "key": "VPOS-T2107",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2107",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -349,8 +448,16 @@
     {
       "order": 12,
       "name": "[PGPO-3266][Web][Falha] Validar que fechar o modal sem escolher uma opção cancela o envio",
-      "operation": "atualizar",
-      "key": "VPOS-T2108",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2108",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@high"
@@ -378,8 +485,16 @@
     {
       "order": 13,
       "name": "[PGPO-3266][Web][Falha] Validar que o cadastro não muda quando a solicitação não é criada",
-      "operation": "atualizar",
-      "key": "VPOS-T2109",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2109",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -408,8 +523,16 @@
     {
       "order": 14,
       "name": "[PGPO-3266][Web][Sucesso] Validar a confirmação \"Solicitação enviada\" após o envio",
-      "operation": "atualizar",
-      "key": "VPOS-T2110",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2110",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@high"
@@ -436,8 +559,16 @@
     {
       "order": 15,
       "name": "[PGPO-3266][Web][Sucesso] Validar que a solicitação é gravada com a competência e o e-mail de destino",
-      "operation": "atualizar",
-      "key": "VPOS-T2111",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2111",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -467,8 +598,16 @@
     {
       "order": 16,
       "name": "[PGPO-3266][Web][Sucesso] Validar que o envio publica a solicitação na fila de processamento",
-      "operation": "atualizar",
-      "key": "VPOS-T2112",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2112",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -495,8 +634,16 @@
     {
       "order": 17,
       "name": "[PGPO-3266][Web][Sucesso] Validar que os botões ficam desabilitados durante o envio",
-      "operation": "atualizar",
-      "key": "VPOS-T2113",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2113",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@high"
@@ -523,8 +670,16 @@
     {
       "order": 18,
       "name": "[PGPO-3266][Web][Falha] Validar que a segunda solicitação em processamento para a mesma competência é bloqueada",
-      "operation": "atualizar",
-      "key": "VPOS-T2114",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2114",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -551,8 +706,16 @@
     {
       "order": 19,
       "name": "[PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência já concluída com sucesso",
-      "operation": "atualizar",
-      "key": "VPOS-T2115",
+      "operation": "criar",
+      "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": {
+        "key": "VPOS-T2115",
+        "access": "read-only"
+      },
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -580,6 +743,11 @@
       "name": "[PGPO-3266][Web][Sucesso] Validar que a comparação do e-mail ignora espaços nas pontas e diferença de maiúsculas",
       "operation": "criar",
       "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": null,
       "tags": [
         "@PGPO-3266",
         "@critical"
@@ -610,6 +778,11 @@
       "name": "[PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência cuja solicitação anterior falhou",
       "operation": "criar",
       "key": null,
+      "owned": false,
+      "folder": "automation",
+      "status": "Draft",
+      "objective": "Autosserviço de 2ª via de NFS-e com e-mail de destino",
+      "teamReference": null,
       "tags": [
         "@PGPO-3266",
         "@critical"

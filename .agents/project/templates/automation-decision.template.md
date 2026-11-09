@@ -7,7 +7,13 @@
 
 | Cenário | Chave VPOS | Decisão | Justificativa |
 |---|---|---|---|
-| | | automatizar / manter-manual / automatizar-depois / não-aplicável / bloqueado | |
+| S01 | | automatizar / manter-manual / automatizar-depois / não-aplicável / bloqueado | |
+
+## Como preencher
+
+- Na coluna Cenário use o id do BDD (`S01`, `S02`...), na mesma ordem do `.feature`. O ATDD usa esse id para ligar o teste de aceite ao critério.
+- A chave VPOS é a do caso criado pelo agente; pode ficar vazia enquanto o Zephyr estiver em dry-run.
+- Só os cenários marcados como `automatizar` entram no ciclo ATDD.
 
 ## Observações
 
