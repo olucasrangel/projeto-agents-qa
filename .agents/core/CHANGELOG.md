@@ -1,5 +1,10 @@
 # Changelog do núcleo do agente de QA
 
+## 0.2.1
+
+- Padroniza BDD com palavras-chave `Feature/Scenario/Given/When/Then` em inglês e texto de negócio em pt-BR, conforme Cogna e Zephyr.
+- Validadores e `zephyr-sync` rejeitam `.feature` com dialeto em português.
+
 ## 0.2.0
 
 - Adiciona `qa:doctor` para validar ambiente, segredos por presença, browser, MCP, Git, allowlists HTTPS e adaptadores sem exibir valores.

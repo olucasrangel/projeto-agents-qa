@@ -18,6 +18,7 @@ Funcionalidades
 - zephyr-sync gera payload idempotente sem escrita externa
 - evidências registram typecheck e passos PASS ou FAIL
 - contratos de A1 a A4 usam entradas, ações, saídas e condições explícitas de parada e falha
+- BDD usa sempre `Feature/Scenario/Given/When/Then` em inglês, com texto de negócio em pt-BR
 - núcleo atualizado para 0.2.0
 
 Arquivos principais
@@ -35,7 +36,7 @@ Arquivos principais
 
 Validação
 - npm run agents:check: passou
-- npm run qa:test: 13 de 13 passaram
+- npm run qa:test: 14 de 14 passaram
 - npm run typecheck: passou
 - npm run test:e2e -- --list: 25 testes encontrados em 7 arquivos
 - npm run qa:doctor -- --card PGPO-3266: apto, 0 erros e 4 avisos conhecidos

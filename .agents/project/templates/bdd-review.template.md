@@ -29,12 +29,12 @@
 - **Automação:** candidato | manual | a definir
 
 ```gherkin
-# language: pt
+# language: en
 @{CARD} @critical
-Cenário: Validar {RESULTADO}
-  Dado {ESTADO_INICIAL}
-  Quando {ACAO_DE_NEGOCIO}
-  Então {RESULTADO_OBSERVAVEL}
+Scenario: Validar {RESULTADO}
+  Given {ESTADO_INICIAL}
+  When {ACAO_DE_NEGOCIO}
+  Then {RESULTADO_OBSERVAVEL}
 ```
 
 ## Decisão do QA — G1

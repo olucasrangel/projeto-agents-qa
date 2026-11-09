@@ -2,7 +2,7 @@
 # Contrato: .agents/core/schemas/qa-project.schema.json
 # Depois de editar, rode `npm run agents:sync` para atualizar .kiro/ e .agents/skills/.
 
-core_version: 0.2.0
+core_version: 0.2.1
 
 project:
   name: opm-qa-automation

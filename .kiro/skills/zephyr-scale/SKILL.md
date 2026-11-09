@@ -11,10 +11,10 @@ description: Como publicar e manter casos de teste no Zephyr Scale a partir dos 
 
 | Gherkin | Caso no Zephyr Scale |
 |---|---|
-| `Cenário` (título) | `name` |
-| `Funcionalidade` + descrição | `objective` |
-| `Dado` | `precondition` |
-| `Quando` / `Então` | passos do `testScript` (ação → resultado esperado) |
+| `Scenario` (título) | `name` |
+| `Feature` + descrição | `objective` |
+| `Given` | `precondition` |
+| `When` / `Then` | passos do `testScript` (ação → resultado esperado) |
 | Criticidade (`@critical`/`@high`/`@medium`) | `priorityName` (mapeamento em `zephyr.priorities`) |
 | `@<CARD>` | link com a issue do Jira |
 | `zephyr.folder` (com `{modulo}`) | pasta do caso |

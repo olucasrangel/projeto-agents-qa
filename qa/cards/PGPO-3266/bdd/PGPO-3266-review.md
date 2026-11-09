@@ -43,7 +43,7 @@ Mapeamento de prioridade: High ↔ @critical, Normal ↔ @high, Low ↔ @medium 
 2. **Precondições vazias.** Os 19 casos não têm precondição. A proposta preenche com os passos Dado.
 3. **Pasta dos casos novos.** S20 e S21 podem ficar na pasta existente ou em uma nova `PGPO-3266 - ... (Automação)` dentro de SP 26.4.3. Recomendo a pasta nova, conforme a regra de identificar o que o agente criou.
 4. **Nome da pasta.** A pasta existente diz "confirmar-editar", e o Jira diz "confirmar/editar". Confirmar qual nome manter.
-5. **Palavras-chave do Gherkin.** Os casos atuais usam `Given/When/Then` em inglês com texto em português. A skill `bdd-gherkin` diz o contrário. Este pacote segue o Zephyr, porque é onde o QA trabalha.
+5. **Palavras-chave do Gherkin.** Padrão confirmado: usar sempre `Feature/Scenario/Given/When/Then` em inglês, com títulos e passos de negócio em português, conforme Zephyr e Cogna.
 6. **Criticidade.** Pela regra de risco, 14 cenários ficaram como @critical. Se o QA achar excesso, pode rebaixar sem mudar os passos.
 7. **Ambiente de execução.** A massa (aluno com várias matrículas, tenant com serviço ligado e desligado, e competências) ainda não foi confirmada. Os cenários S11, S18, S19 e S21 dependem dela.
 
@@ -55,7 +55,7 @@ Marque cada item somente depois da decisão do QA e registre a decisão ao lado.
 - [ ] P2 — Precondições dos casos existentes:
 - [ ] P3 — Pasta dos casos S20 e S21:
 - [ ] P4 — Nome definitivo da pasta:
-- [ ] P5 — Dialeto Gherkin:
+- [x] P5 — Dialeto Gherkin: `Feature/Scenario/Given/When/Then`, com texto de negócio em pt-BR, confirmado pelo QA.
 - [ ] P6 — Criticidades aprovadas:
 - [ ] P7 — Massa e ambiente confirmados:
 

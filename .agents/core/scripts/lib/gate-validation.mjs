@@ -111,7 +111,7 @@ export function parseFeature(text, card, priorities = { critical: 'High', high: 
 			tags = line.split(/\s+/).filter((tag) => tag.startsWith('@'));
 			continue;
 		}
-		const scenario = line.match(/^(?:Scenario|Cenário):\s*(.+)$/);
+		const scenario = line.match(/^Scenario(?: Outline)?:\s*(.+)$/);
 		if (scenario) {
 			current = { line: index + 1, name: scenario[1], tags, steps: [] };
 			scenarios.push(current);
@@ -119,14 +119,16 @@ export function parseFeature(text, card, priorities = { critical: 'High', high: 
 			lastKind = null;
 			continue;
 		}
-		const step = line.match(/^(Given|Dado|When|Quando|Then|Então|And|E|But|Mas)\s+(.+)$/);
+		const step = line.match(/^(Given|When|Then|And|But)\s+(.+)$/);
 		if (step && current) {
-			const direct = ['Given', 'Dado'].includes(step[1]) ? 'given' : ['When', 'Quando'].includes(step[1]) ? 'when' : ['Then', 'Então'].includes(step[1]) ? 'then' : lastKind;
+			const direct = step[1] === 'Given' ? 'given' : step[1] === 'When' ? 'when' : step[1] === 'Then' ? 'then' : lastKind;
 			if (direct) lastKind = direct;
 			current.steps.push({ kind: direct, text: step[2] });
 		}
 	}
 	const issues = [];
+	if (!/^# language: en\s*$/m.test(text)) issues.push('primeira diretiva deve ser # language: en');
+	if (/^\s*(Funcionalidade|Contexto|Cenário|Esquema do Cenário|Exemplos|Dado|Quando|Então|E|Mas)(?:\s|:)/m.test(text)) issues.push('use somente palavras-chave Gherkin em inglês');
 	const names = new Set();
 	for (const scenario of scenarios) {
 		const prefix = `linha ${scenario.line}`;

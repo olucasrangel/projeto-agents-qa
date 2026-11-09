@@ -113,15 +113,10 @@ if (zephyrConfig.mode !== 'dry-run') {
 
 const STEP_KINDS = {
 	Given: 'precondition',
-	Dado: 'precondition',
 	When: 'action',
-	Quando: 'action',
 	Then: 'expected',
-	Então: 'expected',
 	And: null,
 	But: null,
-	E: null,
-	Mas: null,
 };
 
 function parseFeature(text) {
@@ -154,7 +149,7 @@ function parseFeature(text) {
 			pendingTags = [];
 			return;
 		}
-		const scenarioMatch = line.match(/^(Scenario|Cenário):\s*(.+)$/);
+		const scenarioMatch = line.match(/^(Scenario|Scenario Outline):\s*(.+)$/);
 		if (scenarioMatch) {
 			inHeader = false;
 			current = {
@@ -170,13 +165,13 @@ function parseFeature(text) {
 			lastKind = null;
 			return;
 		}
-		const stepMatch = line.match(/^(Given|When|Then|And|But|Dado|Quando|Então|E|Mas)\s+(.+)$/);
+		const stepMatch = line.match(/^(Given|When|Then|And|But)\s+(.+)$/);
 		if (stepMatch && current) {
 			const keyword = stepMatch[1];
 			const direct = STEP_KINDS[keyword];
 			const kind = direct === undefined || direct === null ? lastKind : direct;
 			if (!kind) {
-				errors.push(`linha ${lineNo}: "${keyword}" sem Dado, Quando ou Então antes.`);
+				errors.push(`linha ${lineNo}: "${keyword}" sem Given, When ou Then antes.`);
 			}
 			if (direct) lastKind = direct;
 			current.steps.push({ keyword, kind, text: stepMatch[2].trim(), lineNo });
@@ -197,6 +192,13 @@ function parseFeature(text) {
 
 const errors = [];
 const warnings = [];
+
+if (!/^# language: en\s*$/m.test(featureText)) {
+	errors.push('a primeira diretiva deve ser # language: en.');
+}
+if (/^\s*(Funcionalidade|Contexto|Cenário|Esquema do Cenário|Exemplos|Dado|Quando|Então|E|Mas)(?:\s|:)/m.test(featureText)) {
+	errors.push('use somente palavras-chave Gherkin em inglês: Feature/Scenario/Given/When/Then.');
+}
 
 const { feature, scenarios, errors: parseErrors } = parseFeature(featureText);
 errors.push(...parseErrors);

@@ -53,6 +53,7 @@ Gate só é registrado com aprovação explícita do QA, com `npm run qa:state -
 5. Nada é publicado no Zephyr sem G1 e sem G2. Nada é entregue sem G3.
 6. Nunca faça push na `main`. Trabalhe em branch `qa/<CARD>-<slug>` e deixe o merge para um humano.
 7. Não rode `--publish` do `zephyr:sync`. Essa escrita ainda não está implementada e exige G2 e aprovação explícita.
+8. BDD usa sempre `# language: en` e palavras-chave `Feature/Scenario/Given/When/Then`; títulos e passos permanecem em pt-BR.
 
 ## Onde estão as coisas
 

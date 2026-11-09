@@ -1,27 +1,27 @@
-# language: pt
+# language: en
 # Card: {CARD} · Gerado pelo agente de QA · Aprovado no G1 por: {APROVADOR} em {DATA}
 
 @{CARD}
-Funcionalidade: {título da funcionalidade}
+Feature: {título da funcionalidade}
   Como {perfil}
   Quero {objetivo}
   Para {benefício}
 
-  Contexto:
-    Dado {estado comum a todos os cenários}
+  Background:
+    Given {estado comum a todos os cenários}
 
-  @critical
-  Cenário: {resultado esperado do caminho feliz}
-    Dado {estado}
-    Quando {ação de negócio}
-    Então {resultado observável}
+  @{CARD} @critical
+  Scenario: {resultado esperado do caminho feliz}
+    Given {estado}
+    When {ação de negócio}
+    Then {resultado observável}
 
-  @high
-  Esquema do Cenário: {regra com variações}
-    Dado {estado}
-    Quando {ação} com "<valor>"
-    Então {resultado} "<resultado>"
+  @{CARD} @high
+  Scenario Outline: {regra com variações}
+    Given {estado}
+    When {ação} com "<valor>"
+    Then {resultado} "<resultado>"
 
-    Exemplos:
+    Examples:
       | valor | resultado |
       |       |           |

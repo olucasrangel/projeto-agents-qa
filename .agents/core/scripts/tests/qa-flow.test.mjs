@@ -52,6 +52,7 @@ evidence:
 	};
 	const discoveryFile = write(root, 'qa/cards/TEST-1/context/discovery.json', discovery);
 	write(root, 'qa/cards/TEST-1/bdd/modulo/TEST-1.feature', `
+# language: en
 @TEST-1
 Feature: Fluxo
   @TEST-1 @critical
@@ -81,6 +82,23 @@ test('aceita discovery without-code completo e rejeita template não preenchido'
 	manifest.recordedAt = null;
 	manifest.limitations = ['preencher'];
 	assert.equal(validateDiscoveryManifest(manifest, 'TEST-1', root).every((item) => item.ok), false);
+});
+
+test('G1 rejeita palavras-chave Gherkin em português', () => {
+	const root = workspace();
+	write(root, 'qa/cards/TEST-1/bdd/modulo/TEST-1.feature', `
+# language: pt
+@TEST-1
+Funcionalidade: Fluxo
+  @TEST-1 @critical
+  Cenário: [TEST-1][Web][Sucesso] Validar fluxo mínimo
+    Dado existe uma condição
+    Quando o usuário age
+    Então o resultado aparece
+`);
+	const result = validateGate({ root, card: 'TEST-1', gate: 'G1' });
+	assert.equal(result.valid, false);
+	assert.match(result.checks.find((item) => item.id === 'G1.feature-valid')?.message ?? '', /inglês|language: en/);
 });
 
 test('G1 passa com manifesto íntegro, feature e aprovação', () => {
