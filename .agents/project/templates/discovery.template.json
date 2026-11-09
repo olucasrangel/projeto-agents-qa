@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "card": "{CARD}",
+  "mode": "documental",
+  "recordedAt": null,
+  "sources": {
+    "jira": { "status": "partial", "artifact": "qa/cards/{CARD}/context/jira-context.md", "reason": "preencher" },
+    "confluence": { "status": "partial", "artifact": "qa/cards/{CARD}/context/confluence-context.md", "reason": "preencher" },
+    "screen": { "status": "not-accessed", "reason": "preencher" },
+    "code": { "status": "not-authorized", "repositories": [], "reason": "preencher" }
+  },
+  "limitations": ["preencher"],
+  "hypotheses": []
+}

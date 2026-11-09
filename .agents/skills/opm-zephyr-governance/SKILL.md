@@ -40,18 +40,27 @@ Zephyr. O padrão do projeto é:
 Não crie uma segunda hierarquia quando a pasta do ano ou da PI já existir.
 Registre divergências com o Confluence e pare para confirmação.
 
-## Reconciliação com casos existentes
+## Propriedade: o agente só escreve o que criou
 
-Antes de publicar, compare chave, nome, objetivo, precondições, BDD, status e
-prioridade. Para cada cenário, escolha exatamente uma operação:
+Casos que já existem no Zephyr são do time e ficam **somente leitura**. O agente
+nunca cria, atualiza, renomeia, move, reordena ou apaga um caso do time, nem
+mexe na pasta dele.
 
-- `reutilizar`: o caso já representa o comportamento;
-- `atualizar`: é o mesmo comportamento, mas o conteúdo diverge;
-- `criar`: não existe equivalente;
-- `descartar`: duplicado, fora de escopo ou sem requisito confirmado.
-
-Use chave VPOS existente quando houver. Sem chave, procure por nome normalizado
-mais vínculo Jira. Reexecutar nunca pode criar duplicados.
+- O agente cria sempre uma **pasta própria** com o sufixo `(Automação)` e grava
+  somente nela.
+- Caso do time equivalente ao cenário entra como `teamReference` (chave e nome),
+  apenas para rastreabilidade. Não é alvo de nenhuma operação.
+- O agente cria o próprio caso seguindo o padrão do Confluence: nome
+  `[{CARD}][{aplicação}][Sucesso|Falha] Validar ...`, objetivo, precondição,
+  `BDD-Gherkin`, prioridade e status `Draft`.
+- Operações permitidas: `criar` e, só para caso do próprio agente, `atualizar`.
+  Não existem `reutilizar` nem `atualizar` sobre caso do time.
+- Um caso é do agente somente se a chave estiver em `owned-cases.json`
+  (`ownership.zephyr.owned_registry`), gravado quando o agente o cria.
+- Reexecutar nunca duplica: caso já registrado em `owned-cases.json` é
+  atualizado pelo agente; os demais são criados uma única vez.
+- Duplicidade com caso do time é aceita e registrada. Quem decide eliminá-la é o
+  time, fora do fluxo do agente.
 
 ## Gates e estados
 

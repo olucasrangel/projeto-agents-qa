@@ -1,5 +1,7 @@
 # Revisão BDD — {CARD}
 
+- Modo de discovery: complete | without-code | documental
+- Manifesto: `qa/cards/{CARD}/context/discovery.json`
 - Épico: {EPIC}
 - Módulo: {MODULO}
 - Aplicação: {APLICACAO}
@@ -16,8 +18,8 @@
 
 ### {NOME_ZEPHYR}
 
-- **Decisão sugerida:** reutilizar | atualizar | criar | descartar
-- **Caso existente:** {VPOS_OU_NAO_ENCONTRADO}
+- **Operação:** criar (caso próprio na pasta Automação) | atualizar (somente caso criado pelo agente) | descartar
+- **Referência do time (somente leitura):** {VPOS_OU_NENHUM}
 - **Objetivo:** {OBJETIVO}
 - **Precondições:** {PRECONDICOES}
 - **Prioridade:** High | Normal | Low
@@ -27,12 +29,12 @@
 - **Automação:** candidato | manual | a definir
 
 ```gherkin
-# language: pt
+# language: en
 @{CARD} @critical
-Cenário: Validar {RESULTADO}
-  Dado {ESTADO_INICIAL}
-  Quando {ACAO_DE_NEGOCIO}
-  Então {RESULTADO_OBSERVAVEL}
+Scenario: Validar {RESULTADO}
+  Given {ESTADO_INICIAL}
+  When {ACAO_DE_NEGOCIO}
+  Then {RESULTADO_OBSERVAVEL}
 ```
 
 ## Decisão do QA — G1

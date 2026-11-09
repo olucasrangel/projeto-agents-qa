@@ -9,31 +9,31 @@
 
 ## Resumo
 
-O Zephyr já tem 19 casos para este card (VPOS-T2097 a VPOS-T2115), e todos cobrem o comportamento proposto. A revisão propõe **atualizar os 19** para o padrão do Confluence (nome `[Chave][Web][Sucesso/Falha]`, precondição preenchida) e **criar 2 cenários** que não têm caso equivalente.
+O Zephyr já tem 19 casos do time para este card (VPOS-T2097 a VPOS-T2115). **Eles ficam intactos e somente leitura.** O agente cria os 21 casos próprios na pasta nova com sufixo (Automação), seguindo o padrão do Confluence (nome `[Chave][Web][Sucesso/Falha] Validar ...`, objetivo, precondição, BDD-Gherkin, status Draft). Os 19 casos do time aparecem apenas como referência de rastreabilidade.
 
 | # | Cenário | Operação | Caso VPOS | Prioridade | Criticidade |
 |---|---|---|---|---|---|
-| S01 | Autosserviço não aparece com o serviço desligado no tenant | atualizar | VPOS-T2097 | High | @critical |
-| S02 | Autosserviço aparece com o serviço ligado no tenant | atualizar | VPOS-T2098 | Normal | @high |
-| S03 | Competências são as faturadas do aluno, sem limite de histórico | atualizar | VPOS-T2099 | Normal | @high |
-| S04 | Envio bloqueado sem competência selecionada | atualizar | VPOS-T2100 | High | @critical |
-| S05 | Campo de e-mail pré-preenchido e editável | atualizar | VPOS-T2101 | Normal | @high |
-| S06 | Tela informa para qual e-mail a nota será enviada | atualizar | VPOS-T2102 | Normal | @high |
-| S07 | E-mail inválido bloqueia o envio sem abrir o modal | atualizar | VPOS-T2103 | High | @critical |
-| S08 | E-mail do cadastro cria a solicitação sem modal | atualizar | VPOS-T2104 | High | @critical |
-| S09 | E-mail diferente abre o modal de atualização | atualizar | VPOS-T2105 | High | @critical |
-| S10 | Manter e-mail antigo não altera o cadastro | atualizar | VPOS-T2106 | High | @critical |
-| S11 | Atualizar e-mail propaga para pessoa e todas as matrículas | atualizar | VPOS-T2107 | High | @critical |
-| S12 | Fechar o modal cancela o envio | atualizar | VPOS-T2108 | Normal | @high |
-| S13 | Cadastro não muda quando a solicitação não é criada | atualizar | VPOS-T2109 | High | @critical |
-| S14 | Confirmação "Solicitação enviada" | atualizar | VPOS-T2110 | Normal | @high |
-| S15 | Solicitação gravada com competência e e-mail de destino | atualizar | VPOS-T2111 | High | @critical |
-| S16 | Envio publica a solicitação na fila de processamento | atualizar | VPOS-T2112 | High | @critical |
-| S17 | Botões desabilitados durante o envio | atualizar | VPOS-T2113 | Normal | @high |
-| S18 | Segunda solicitação em processamento para a mesma competência é bloqueada | atualizar | VPOS-T2114 | High | @critical |
-| S19 | Nova solicitação permitida após conclusão com sucesso | atualizar | VPOS-T2115 | High | @critical |
-| S20 | Comparação do e-mail ignora espaços e maiúsculas (RN06) | **criar** | novo | High | @critical |
-| S21 | Nova solicitação permitida após falha anterior (RN14) | **criar** | novo | High | @critical |
+| S01 | Autosserviço não aparece com o serviço desligado no tenant | criar | VPOS-T2097 (time, não alterado) | High | @critical |
+| S02 | Autosserviço aparece com o serviço ligado no tenant | criar | VPOS-T2098 (time, não alterado) | Normal | @high |
+| S03 | Competências são as faturadas do aluno, sem limite de histórico | criar | VPOS-T2099 (time, não alterado) | Normal | @high |
+| S04 | Envio bloqueado sem competência selecionada | criar | VPOS-T2100 (time, não alterado) | High | @critical |
+| S05 | Campo de e-mail pré-preenchido e editável | criar | VPOS-T2101 (time, não alterado) | Normal | @high |
+| S06 | Tela informa para qual e-mail a nota será enviada | criar | VPOS-T2102 (time, não alterado) | Normal | @high |
+| S07 | E-mail inválido bloqueia o envio sem abrir o modal | criar | VPOS-T2103 (time, não alterado) | High | @critical |
+| S08 | E-mail do cadastro cria a solicitação sem modal | criar | VPOS-T2104 (time, não alterado) | High | @critical |
+| S09 | E-mail diferente abre o modal de atualização | criar | VPOS-T2105 (time, não alterado) | High | @critical |
+| S10 | Manter e-mail antigo não altera o cadastro | criar | VPOS-T2106 (time, não alterado) | High | @critical |
+| S11 | Atualizar e-mail propaga para pessoa e todas as matrículas | criar | VPOS-T2107 (time, não alterado) | High | @critical |
+| S12 | Fechar o modal cancela o envio | criar | VPOS-T2108 (time, não alterado) | Normal | @high |
+| S13 | Cadastro não muda quando a solicitação não é criada | criar | VPOS-T2109 (time, não alterado) | High | @critical |
+| S14 | Confirmação "Solicitação enviada" | criar | VPOS-T2110 (time, não alterado) | Normal | @high |
+| S15 | Solicitação gravada com competência e e-mail de destino | criar | VPOS-T2111 (time, não alterado) | High | @critical |
+| S16 | Envio publica a solicitação na fila de processamento | criar | VPOS-T2112 (time, não alterado) | High | @critical |
+| S17 | Botões desabilitados durante o envio | criar | VPOS-T2113 (time, não alterado) | Normal | @high |
+| S18 | Segunda solicitação em processamento para a mesma competência é bloqueada | criar | VPOS-T2114 (time, não alterado) | High | @critical |
+| S19 | Nova solicitação permitida após conclusão com sucesso | criar | VPOS-T2115 (time, não alterado) | High | @critical |
+| S20 | Comparação do e-mail ignora espaços e maiúsculas (RN06) | criar | sem referência | High | @critical |
+| S21 | Nova solicitação permitida após falha anterior (RN14) | criar | sem referência | High | @critical |
 
 Mapeamento de prioridade: High ↔ @critical, Normal ↔ @high, Low ↔ @medium (`zephyr.priorities` em `qa-project.yaml`).
 
@@ -43,9 +43,21 @@ Mapeamento de prioridade: High ↔ @critical, Normal ↔ @high, Low ↔ @medium 
 2. **Precondições vazias.** Os 19 casos não têm precondição. A proposta preenche com os passos Dado.
 3. **Pasta dos casos novos.** S20 e S21 podem ficar na pasta existente ou em uma nova `PGPO-3266 - ... (Automação)` dentro de SP 26.4.3. Recomendo a pasta nova, conforme a regra de identificar o que o agente criou.
 4. **Nome da pasta.** A pasta existente diz "confirmar-editar", e o Jira diz "confirmar/editar". Confirmar qual nome manter.
-5. **Palavras-chave do Gherkin.** Os casos atuais usam `Given/When/Then` em inglês com texto em português. A skill `bdd-gherkin` diz o contrário. Este pacote segue o Zephyr, porque é onde o QA trabalha.
+5. **Palavras-chave do Gherkin.** Padrão confirmado: usar sempre `Feature/Scenario/Given/When/Then` em inglês, com títulos e passos de negócio em português, conforme Zephyr e Cogna.
 6. **Criticidade.** Pela regra de risco, 14 cenários ficaram como @critical. Se o QA achar excesso, pode rebaixar sem mudar os passos.
 7. **Ambiente de execução.** A massa (aluno com várias matrículas, tenant com serviço ligado e desligado, e competências) ainda não foi confirmada. Os cenários S11, S18, S19 e S21 dependem dela.
+
+## Resolução das pendências G1
+
+Marque cada item somente depois da decisão do QA e registre a decisão ao lado.
+
+- [x] P1 — Renomeação dos 19 casos: não haverá renomeação. Casos do time são somente leitura; o agente cria os próprios casos (regra de propriedade).
+- [x] P2 — Precondições dos casos existentes: os casos do time não são alterados; os casos do agente nascem com precondição (padrão do Confluence).
+- [x] P3 — Pasta dos casos S20 e S21: pasta nova com sufixo (Automação); os 21 casos do agente ficam nela.
+- [x] P4 — Nome definitivo da pasta: `PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar/editar o e-mail de destino (Automação)`, conforme o nome completo do card no Jira. A pasta do time não é tocada.
+- [x] P5 — Dialeto Gherkin: `Feature/Scenario/Given/When/Then`, com texto de negócio em pt-BR, confirmado pelo QA.
+- [x] P6 — Criticidades aprovadas:
+- [x] P7 — Massa e ambiente confirmados:
 
 ## Cenários
 
@@ -214,11 +226,11 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
 ## Decisão do QA (G1)
 
 - [ ] Aprovar todos os cenários
-- [ ] Aprovar parcialmente (listar os números abaixo)
+- [ x] Aprovar parcialmente (listar os números abaixo)
 - [ ] Solicitar ajustes
 
 **Cenários aprovados:**
-
+S20 e S21
 **Cenários rejeitados ou ajustados:**
 
 **Respostas aos pontos 1 a 7 acima:**

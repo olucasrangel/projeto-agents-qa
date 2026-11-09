@@ -5,6 +5,7 @@
  *
  * Uso:
  *   npm run qa:state -- init <CARD>
+ *   npm run qa:state -- record-discovery <CARD>
  *   npm run qa:state -- status <CARD>
  *   npm run qa:state -- advance <CARD> <ESTADO> [--note "texto"]
  *   npm run qa:state -- gate <CARD> <G1|G2|G3> --by "Nome" [--artifact caminho]
@@ -12,7 +13,31 @@
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { parse as parseYaml } from 'yaml';
+import {
+	ATDD_MODES,
+	automatedScenarios,
+	missingEvidence,
+	officialRunProblems,
+	readRunManifest,
+	scanSpecs,
+	specsHash,
+	validateGreenRun,
+	validateRedRun,
+} from './lib/atdd.mjs';
+import { loadFeatureScenarios, stepKindsOf } from './lib/atdd-feature.mjs';
+import {
+	canonicalArtifact,
+	formatValidation,
+	GATE_STATES,
+	invalidatedGatesForTransition,
+	sha256,
+	validateDiscoveryManifest,
+	validateGate,
+} from './lib/gate-validation.mjs';
 
+const PROJECT_ROOT = process.cwd();
+const PROJECT_CONFIG = path.join(PROJECT_ROOT, '.agents/project/qa-project.yaml');
 const RUNS_DIR = path.join('qa', 'runs');
 const MAX_AUTOMATION_CYCLES = 3;
 
@@ -24,9 +49,13 @@ const TRANSITIONS = {
 	ZEPHYR: ['AWAITING_G2'],
 	AWAITING_G2: ['AUTOMATION_DECISION', 'ZEPHYR'],
 	AUTOMATION_DECISION: ['AUTOMATION', 'DONE'],
-	AUTOMATION: ['RUN'],
+	// ATDD: red-first passa por RED (prova vermelha) e AWAITING_DEV (dev implementa).
+	// verify-existing (funcionalidade já entregue) vai direto para RUN.
+	AUTOMATION: ['RED', 'RUN'],
+	RED: ['AWAITING_DEV', 'AUTOMATION'],
+	AWAITING_DEV: ['RUN'],
 	RUN: ['REPORT'],
-	REPORT: ['AWAITING_G3', 'AUTOMATION', 'DONE'],
+	REPORT: ['AWAITING_G3', 'AUTOMATION', 'AWAITING_DEV', 'DONE'],
 	AWAITING_G3: ['DELIVERY', 'AUTOMATION'],
 	DELIVERY: ['DONE'],
 	DONE: [],
@@ -38,8 +67,6 @@ const REQUIRED_GATE = {
 	'AWAITING_G2->AUTOMATION_DECISION': 'G2',
 	'AWAITING_G3->DELIVERY': 'G3',
 };
-
-const GATE_STATE = { G1: 'AWAITING_G1', G2: 'AWAITING_G2', G3: 'AWAITING_G3' };
 
 function fail(message) {
 	console.error(`qa-state: ${message}`);
@@ -54,6 +81,11 @@ function option(args, name) {
 function validateCard(card) {
 	if (!card || !/^[A-Z][A-Z0-9]+-\d+$/.test(card)) {
 		fail(`card inválido: ${card ?? '(vazio)'}. Use o formato PROJ-123.`);
+	}
+	if (existsSync(PROJECT_CONFIG)) {
+		const config = parseYaml(readFileSync(PROJECT_CONFIG, 'utf-8'));
+		const allowed = config.jira?.project_keys ?? [];
+		if (allowed.length && !allowed.includes(card.split('-')[0])) fail(`projeto do card ${card} não permitido. Use: ${allowed.join(', ')}.`);
 	}
 }
 
@@ -80,6 +112,115 @@ function print(state) {
 	console.log(`  próximos: ${TRANSITIONS[state.state].join(', ') || '(fim)'}`);
 	console.log(`  gates: ${gates || 'nenhum'}`);
 	console.log(`  ciclos de automação: ${state.automationCycles}/${MAX_AUTOMATION_CYCLES}`);
+	if (state.atdd) {
+		const red = state.atdd.red ? `vermelho ${state.atdd.red.runId} (${state.atdd.red.red.length} cenário(s))` : 'sem prova vermelha';
+		const green = state.atdd.green ? `verde ${state.atdd.green.runId} (${state.atdd.green.passed ? 'ok' : 'falhou'})` : 'sem execução final';
+		console.log(`  ATDD: ${state.atdd.mode}; cenários ${state.atdd.scenarios.join(', ')}; ${red}; ${green}`);
+	}
+}
+
+function projectConfig() {
+	return parseYaml(readFileSync(PROJECT_CONFIG, 'utf-8'));
+}
+
+/** Regras do ciclo ATDD aplicadas a cada transição. Falha antes de qualquer gravação. */
+function advanceAtdd(state, target, args) {
+	const from = state.state;
+	const config = projectConfig();
+	const ownedPaths = config.ownership?.automation?.owned_paths ?? [];
+	const runId = option(args, 'run-id');
+	const now = new Date().toISOString();
+	const currentSpecs = () => specsHash(PROJECT_ROOT, ownedPaths, state.card).sha256;
+
+	if (from === 'AUTOMATION_DECISION' && target === 'AUTOMATION') {
+		const mode = option(args, 'atdd-mode');
+		if (!ATDD_MODES.includes(mode)) {
+			fail(`informe --atdd-mode ${ATDD_MODES.join(' | ')}. red-first: testes de aceite escritos antes da funcionalidade; verify-existing: funcionalidade já entregue.`);
+		}
+		const confirmedBy = option(args, 'by')?.trim();
+		if (!confirmedBy) fail('informe --by "Nome do QA" que confirmou o modo ATDD.');
+		const reason = option(args, 'reason')?.trim();
+		if (mode === 'verify-existing' && !reason) fail('verify-existing exige --reason explicando por que a funcionalidade já existe.');
+		const decisionPath = path.join(PROJECT_ROOT, 'qa', 'approvals', state.card, 'automation-decision.md');
+		const scenarios = existsSync(decisionPath) ? automatedScenarios(readFileSync(decisionPath, 'utf-8')) : [];
+		if (scenarios.length === 0) fail('nenhum cenário marcado como "automatizar" em automation-decision.md (use S01, S02... na primeira coluna).');
+		state.atdd = { mode, confirmedBy, ...(reason ? { reason } : {}), scenarios, decidedAt: now };
+		return;
+	}
+
+	if (from === 'AUTOMATION' && (target === 'RED' || target === 'RUN')) {
+		if (!state.atdd) fail('modo ATDD não definido. Entre em AUTOMATION com --atdd-mode.');
+		if (target === 'RED' && state.atdd.mode !== 'red-first') fail('RED só existe no modo red-first.');
+		if (target === 'RUN' && state.atdd.mode === 'red-first') {
+			if (!state.atdd.red) fail('no modo red-first a prova vermelha oficial (RED) precisa existir antes da execução final.');
+			if (state.atdd.red.specsSha256 !== currentSpecs()) {
+				fail('os testes de aceite mudaram depois da prova vermelha. O QA precisa reconhecer a mudança: qa:state atdd-ack <CARD> --by "Nome" --reason "motivo".');
+			}
+		}
+		const specs = scanSpecs(PROJECT_ROOT, ownedPaths, state.card);
+		const missing = state.atdd.scenarios.filter((id) => !specs.has(id));
+		if (missing.length) fail(`cenários sem teste de aceite com a tag @Sxx em ${ownedPaths.join(', ')}: ${missing.join(', ')}`);
+		return;
+	}
+
+	if (from === 'RED' && target === 'AWAITING_DEV') {
+		const loaded = readRunManifest(PROJECT_ROOT, config, state.card, runId);
+		if (loaded.error) fail(`prova vermelha: ${loaded.error}. Informe --run-id da execução vermelha oficial.`);
+		const problems = officialRunProblems(loaded.manifest, currentSpecs());
+		if (problems.length) fail(`prova vermelha não é oficial:\n  - ${problems.join('\n  - ')}`);
+		const feature = loadFeatureScenarios(PROJECT_ROOT, state.card, config.zephyr?.priorities);
+		if (feature.error) fail(feature.error);
+		const result = validateRedRun(loaded.manifest, state.atdd.scenarios, stepKindsOf(feature.items));
+		if (!result.valid) {
+			fail(`prova vermelha inválida:\n  - ${result.checks.filter((item) => !item.ok).map((item) => item.message).join('\n  - ')}`);
+		}
+		const noEvidence = missingEvidence(PROJECT_ROOT, config, state.card, runId, loaded.manifest, 'FAIL');
+		if (noEvidence.length) fail(`prova vermelha sem evidência em disco:\n  - ${noEvidence.join('\n  - ')}`);
+		const guide = path.join(PROJECT_ROOT, (config.atdd?.dev_guide ?? '').replaceAll('{CARD}', state.card));
+		if (!config.atdd?.dev_guide || !existsSync(guide)) fail('guia de desenvolvimento ausente. Gere com: npm run qa:atdd -- guide <CARD> --run-id <runId>');
+		state.atdd.red = {
+			runId,
+			at: now,
+			startedAt: loaded.manifest.startedAt,
+			finishedAt: loaded.manifest.finishedAt,
+			manifestSha256: loaded.sha256,
+			red: result.red,
+			alreadySatisfied: result.alreadySatisfied,
+			specsSha256: currentSpecs(),
+		};
+		return;
+	}
+
+	if (from === 'AWAITING_DEV' && target === 'RUN' && state.atdd?.red && state.atdd.red.specsSha256 !== currentSpecs()) {
+		fail('os testes de aceite mudaram durante o desenvolvimento. O QA precisa reconhecer a mudança: qa:state atdd-ack <CARD> --by "Nome" --reason "motivo".');
+	}
+
+	if (from === 'REPORT' && target === 'AWAITING_DEV' && state.atdd?.mode !== 'red-first') {
+		fail('devolver ao desenvolvimento só faz sentido no modo red-first. Em verify-existing, falha de comportamento é bug de produto para o QA.');
+	}
+
+	if (from === 'RUN' && target === 'REPORT') {
+		if (!state.atdd) fail('modo ATDD não definido para este card.');
+		const loaded = readRunManifest(PROJECT_ROOT, config, state.card, runId);
+		if (loaded.error) fail(`execução final: ${loaded.error}. Informe --run-id.`);
+		if (loaded.manifest.atddPhase !== 'green') fail('a execução final deve declarar a fase green (E2E_ATDD_PHASE=green).');
+		const problems = officialRunProblems(loaded.manifest, currentSpecs());
+		if (problems.length) fail(`execução final não é oficial:\n  - ${problems.join('\n  - ')}`);
+		if (state.atdd.mode === 'red-first' && !(Date.parse(state.atdd.red?.finishedAt) < Date.parse(loaded.manifest.startedAt))) {
+			fail('a execução verde precisa ter começado depois do fim da execução vermelha.');
+		}
+		const green = validateGreenRun(loaded.manifest, state.atdd.scenarios);
+		state.atdd.green = {
+			runId,
+			at: now,
+			startedAt: loaded.manifest.startedAt,
+			finishedAt: loaded.manifest.finishedAt,
+			manifestSha256: loaded.sha256,
+			result: loaded.manifest.result,
+			passed: green.every((item) => item.ok),
+			specsSha256: currentSpecs(),
+		};
+	}
 }
 
 const [command, card, ...rest] = process.argv.slice(2);
@@ -106,6 +247,44 @@ switch (command) {
 		print(state);
 		break;
 	}
+	case 'record-discovery': {
+		const state = load(card);
+		const discoveryFile = path.join(PROJECT_ROOT, 'qa', 'cards', card, 'context', 'discovery.json');
+		if (!existsSync(discoveryFile)) fail(`manifesto de discovery ausente: ${path.relative(PROJECT_ROOT, discoveryFile)}`);
+		let manifest;
+		try { manifest = JSON.parse(readFileSync(discoveryFile, 'utf-8')); }
+		catch (error) { fail(`discovery.json inválido: ${error.message}`); }
+		const invalid = validateDiscoveryManifest(manifest, card, PROJECT_ROOT).filter((item) => !item.ok);
+		if (invalid.length) fail(`discovery inválido:\n  - ${invalid.map((item) => item.message).join('\n  - ')}`);
+		const currentHash = sha256(readFileSync(discoveryFile));
+		if (state.discovery?.sha256 && state.discovery.sha256 !== currentHash && state.state !== 'DISCOVERY') {
+			state.history.push({ from: state.state, to: 'ALIGNMENT', at: new Date().toISOString(), note: 'discovery alterado; novo alinhamento obrigatório' });
+			state.state = 'ALIGNMENT';
+			state.gates = {};
+		}
+		state.discovery = { mode: manifest.mode, artifact: path.relative(PROJECT_ROOT, discoveryFile), sha256: currentHash, recordedAt: new Date().toISOString() };
+		save(state);
+		print(state);
+		break;
+	}
+	case 'atdd-ack': {
+		// Mudança deliberada nos testes de aceite depois da prova vermelha. Só o QA registra; o G3 lista cada ack.
+		const state = load(card);
+		const by = option(rest, 'by')?.trim();
+		const reason = option(rest, 'reason')?.trim();
+		if (!state.atdd?.red) fail('não há prova vermelha registrada para reconhecer mudança nos testes.');
+		if (!['AUTOMATION', 'AWAITING_DEV'].includes(state.state)) fail(`atdd-ack só vale em AUTOMATION ou AWAITING_DEV (estado atual: ${state.state}).`);
+		if (!by || !reason) fail('informe --by "Nome do QA" e --reason "motivo da mudança nos testes de aceite".');
+		const ownedPaths = projectConfig().ownership?.automation?.owned_paths ?? [];
+		const current = specsHash(PROJECT_ROOT, ownedPaths, card).sha256;
+		if (current === state.atdd.red.specsSha256) fail('os testes não mudaram desde a prova vermelha; não há o que reconhecer.');
+		state.atdd.acknowledgements = [...(state.atdd.acknowledgements ?? []), { by, reason, at: new Date().toISOString(), from: state.atdd.red.specsSha256, to: current }];
+		state.atdd.red.specsSha256 = current;
+		delete state.atdd.green;
+		save(state);
+		print(state);
+		break;
+	}
 	case 'status':
 		print(load(card));
 		break;
@@ -117,11 +296,41 @@ switch (command) {
 				`transição ${state.state} -> ${target ?? '(vazio)'} não permitida. Próximos: ${TRANSITIONS[state.state].join(', ') || '(fim)'}`,
 			);
 		}
+		if (state.state === 'DISCOVERY' && target === 'ALIGNMENT') {
+			const discoveryFile = path.join(PROJECT_ROOT, 'qa', 'cards', card, 'context', 'discovery.json');
+			if (!existsSync(discoveryFile)) {
+				fail(`manifesto de discovery ausente: ${path.relative(PROJECT_ROOT, discoveryFile)}`);
+			}
+			let manifest;
+			try {
+				manifest = JSON.parse(readFileSync(discoveryFile, 'utf-8'));
+			} catch (error) {
+				fail(`discovery.json inválido: ${error.message}`);
+			}
+			const invalid = validateDiscoveryManifest(manifest, card, PROJECT_ROOT).filter((item) => !item.ok);
+			if (invalid.length) {
+				fail(`discovery inválido:\n  - ${invalid.map((item) => item.message).join('\n  - ')}`);
+			}
+			state.discovery = {
+				mode: manifest.mode,
+				artifact: path.relative(PROJECT_ROOT, discoveryFile),
+				sha256: sha256(readFileSync(discoveryFile)),
+				recordedAt: new Date().toISOString(),
+			};
+		}
+		advanceAtdd(state, target, rest);
 		const gate = REQUIRED_GATE[`${state.state}->${target}`];
 		if (gate && !state.gates[gate]) {
 			fail(`${gate} não registrado. O QA precisa aprovar antes: gate ${card} ${gate} --by "Nome"`);
 		}
-		if (state.state === 'REPORT' && target === 'AUTOMATION') {
+		if (gate) {
+			const validation = validateGate({ root: PROJECT_ROOT, card, gate, runId: state.gates[gate].runId, state });
+			if (!validation.valid) fail(`gate ${gate} ficou obsoleto:\n${formatValidation(validation)}`);
+		}
+		for (const invalidatedGate of invalidatedGatesForTransition(state.state, target)) delete state.gates[invalidatedGate];
+		// Voltar ao desenvolvimento ou à automação descarta a execução final anterior: ela deixou de valer.
+		if (state.state === 'REPORT' && ['AWAITING_DEV', 'AUTOMATION'].includes(target) && state.atdd) delete state.atdd.green;
+		if ((state.state === 'REPORT' || state.state === 'RED') && target === 'AUTOMATION') {
 			if (state.automationCycles >= MAX_AUTOMATION_CYCLES) {
 				fail(`limite de ${MAX_AUTOMATION_CYCLES} ciclos de automação atingido; devolva ao QA com o diagnóstico.`);
 			}
@@ -142,23 +351,38 @@ switch (command) {
 		const state = load(card);
 		const gate = rest[0];
 		const by = option(rest, 'by');
-		if (!GATE_STATE[gate]) fail(`gate inválido: ${gate}. Use G1, G2 ou G3.`);
-		if (state.state !== GATE_STATE[gate]) {
-			fail(`${gate} só pode ser registrado em ${GATE_STATE[gate]} (estado atual: ${state.state}).`);
+		const runId = option(rest, 'run-id');
+		if (!GATE_STATES[gate]) fail(`gate inválido: ${gate}. Use G1, G2 ou G3.`);
+		if (state.state !== GATE_STATES[gate]) {
+			fail(`${gate} só pode ser registrado em ${GATE_STATES[gate]} (estado atual: ${state.state}).`);
 		}
-		if (!by) fail('informe quem aprovou: --by "Nome"');
-		const artifact = option(rest, 'artifact');
-		const record = { by, at: new Date().toISOString() };
-		if (artifact) {
-			if (!existsSync(artifact)) fail(`artefato não encontrado: ${artifact}`);
-			record.artifact = artifact;
-			record.sha256 = createHash('sha256').update(readFileSync(artifact)).digest('hex');
+		if (!by?.trim()) fail('informe quem aprovou: --by "Nome"');
+
+		const validation = validateGate({ root: PROJECT_ROOT, card, gate, runId, state });
+		if (!validation.valid) fail(`gate bloqueado pela validação:\n${formatValidation(validation)}`);
+
+		const config = parseYaml(readFileSync(PROJECT_CONFIG, 'utf-8'));
+		const canonical = canonicalArtifact(PROJECT_ROOT, config, card, gate, runId);
+		if (!canonical || !existsSync(canonical)) fail(`artefato canônico de ${gate} não encontrado.`);
+		const requested = option(rest, 'artifact');
+		if (requested && path.resolve(PROJECT_ROOT, requested) !== canonical) {
+			fail(`--artifact deve apontar para o artefato canônico: ${path.relative(PROJECT_ROOT, canonical)}`);
 		}
-		state.gates[gate] = record;
+		const checksSha256 = createHash('sha256')
+			.update(JSON.stringify(validation.checks))
+			.digest('hex');
+		state.gates[gate] = {
+			by: by.trim(),
+			at: new Date().toISOString(),
+			artifact: path.relative(PROJECT_ROOT, canonical),
+			sha256: sha256(readFileSync(canonical)),
+			validation: { schemaVersion: 1, checksSha256 },
+			...(runId ? { runId } : {}),
+		};
 		save(state);
 		print(state);
 		break;
 	}
 	default:
-		fail('comando inválido. Use init, status, advance ou gate.');
+		fail('comando inválido. Use init, record-discovery, status, advance ou gate.');
 }

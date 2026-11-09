@@ -40,28 +40,41 @@ function fail(message) {
 // ── Configuração ─────────────────────────────────────────────
 
 function validate(value, schema, where) {
+	if (schema.const !== undefined && value !== schema.const) problems.push(`${where} deve ser ${schema.const}`);
+	if (schema.enum && !schema.enum.includes(value)) problems.push(`${where} deve ser um de: ${schema.enum.join(', ')}`);
 	if (schema.type === 'object' || schema.properties) {
 		if (typeof value !== 'object' || value === null || Array.isArray(value)) {
 			problems.push(`${where} deve ser um objeto`);
 			return;
 		}
-		for (const key of schema.required ?? []) {
-			if (value[key] === undefined) problems.push(`${where}.${key} é obrigatório`);
-		}
+		for (const key of schema.required ?? []) if (value[key] === undefined) problems.push(`${where}.${key} é obrigatório`);
 		for (const [key, child] of Object.entries(schema.properties ?? {})) {
 			if (value[key] !== undefined) validate(value[key], child, `${where}.${key}`);
 		}
+		const known = new Set(Object.keys(schema.properties ?? {}));
+		for (const [key, childValue] of Object.entries(value)) {
+			if (known.has(key)) continue;
+			if (schema.additionalProperties === false) problems.push(`${where}.${key} não é permitido`);
+			else if (typeof schema.additionalProperties === 'object') validate(childValue, schema.additionalProperties, `${where}.${key}`);
+		}
 		return;
 	}
-	if (schema.enum && !schema.enum.includes(value)) {
-		problems.push(`${where} deve ser um de: ${schema.enum.join(', ')}`);
+	if (schema.type === 'array') {
+		if (!Array.isArray(value)) {
+			problems.push(`${where} deve ser uma lista`);
+			return;
+		}
+		if (schema.minItems && value.length < schema.minItems) problems.push(`${where} precisa de pelo menos ${schema.minItems} item`);
+		if (schema.items) value.forEach((item, index) => validate(item, schema.items, `${where}[${index}]`));
+		return;
 	}
-	if (schema.type === 'array' && !Array.isArray(value)) problems.push(`${where} deve ser uma lista`);
 	if (schema.type === 'string' && typeof value !== 'string') problems.push(`${where} deve ser texto`);
-	if (schema.type === 'integer' && !Number.isInteger(value)) problems.push(`${where} deve ser inteiro`);
-	if (schema.minItems && Array.isArray(value) && value.length < schema.minItems) {
-		problems.push(`${where} precisa de pelo menos ${schema.minItems} item`);
+	if (schema.type === 'boolean' && typeof value !== 'boolean') problems.push(`${where} deve ser booleano`);
+	if (schema.type === 'integer') {
+		if (!Number.isInteger(value)) problems.push(`${where} deve ser inteiro`);
+		else if (schema.minimum !== undefined && value < schema.minimum) problems.push(`${where} deve ser no mínimo ${schema.minimum}`);
 	}
+	if (schema.pattern && typeof value === 'string' && !new RegExp(schema.pattern).test(value)) problems.push(`${where} não segue o padrão esperado`);
 }
 
 if (!existsSync(PROJECT_CONFIG)) fail(`${PROJECT_CONFIG} não encontrado`);

@@ -3,7 +3,7 @@
 # Épico: PGPO-3284 · Sprint: SP 26.4.3 · Projeto Zephyr: VPOS
 # Status: RASCUNHO (dry-run). Aguardando G1. Nada publicado no Zephyr.
 # Palavras-chave em inglês e texto em português, como nos casos já existentes na VPOS.
-# Cada comentário "Candidato" indica o caso existente que o cenário substitui após G1.
+# Cada comentário "Candidato" indica o caso do time que serve de referência. Ele nunca é alterado; o agente cria o próprio caso em pasta própria.
 
 @PGPO-3266
 Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
@@ -11,21 +11,21 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
   Quero solicitar a 2ª via da minha nota fiscal escolhendo a competência e informando o e-mail de destino
   Para receber a nota onde preferir
 
-  # Candidato: VPOS-T2097 (atualizar)
+  # Candidato: VPOS-T2097 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que o autosserviço não aparece com o serviço desligado no tenant
     Given o serviço de 2ª via de NFS-e está desligado no tenant do aluno
     When o aluno acessa a lista de autosserviços
     Then o autosserviço de 2ª via de NFS-e não é exibido
 
-  # Candidato: VPOS-T2098 (atualizar)
+  # Candidato: VPOS-T2098 (referência do time, somente leitura)
   @PGPO-3266 @high
   Scenario: [PGPO-3266][Web][Sucesso] Validar que o autosserviço aparece com o serviço ligado no tenant
     Given o serviço de 2ª via de NFS-e está ligado no tenant do aluno
     When o aluno acessa a lista de autosserviços
     Then o autosserviço de 2ª via de NFS-e é exibido
 
-  # Candidato: VPOS-T2099 (atualizar)
+  # Candidato: VPOS-T2099 (referência do time, somente leitura)
   @PGPO-3266 @high
   Scenario: [PGPO-3266][Web][Sucesso] Validar que as competências exibidas são as faturadas do aluno, sem limite de histórico
     Given o aluno possui competências faturadas em anos anteriores
@@ -33,7 +33,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then todas as competências faturadas do aluno são listadas
     And nenhuma competência não faturada é listada
 
-  # Candidato: VPOS-T2100 (atualizar)
+  # Candidato: VPOS-T2100 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Falha] Validar que o envio é bloqueado sem competência selecionada
     Given o aluno está na tela de 2ª via de NFS-e sem competência selecionada
@@ -41,7 +41,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then a solicitação não é criada
     And o sistema exige a escolha de mês e ano de competência
 
-  # Candidato: VPOS-T2101 (atualizar)
+  # Candidato: VPOS-T2101 (referência do time, somente leitura)
   @PGPO-3266 @high
   Scenario: [PGPO-3266][Web][Sucesso] Validar que o campo de e-mail vem preenchido com o e-mail do cadastro e pode ser editado
     Given o aluno possui um e-mail cadastrado
@@ -49,14 +49,14 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then o campo de e-mail exibe o e-mail atual do cadastro
     And o campo de e-mail permite edição
 
-  # Candidato: VPOS-T2102 (atualizar)
+  # Candidato: VPOS-T2102 (referência do time, somente leitura)
   @PGPO-3266 @high
   Scenario: [PGPO-3266][Web][Sucesso] Validar que a tela informa para qual e-mail a nota será enviada
     Given o aluno está na tela de 2ª via de NFS-e com um e-mail no campo
     When o aluno visualiza o formulário
     Then a tela informa que a nota será enviada para o e-mail do campo
 
-  # Candidato: VPOS-T2103 (atualizar)
+  # Candidato: VPOS-T2103 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Falha] Validar que e-mail em formato inválido bloqueia o envio sem abrir o modal
     Given o aluno informou uma competência
@@ -66,7 +66,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     And nenhuma solicitação é criada
     And o cadastro do aluno não é alterado
 
-  # Candidato: VPOS-T2104 (atualizar)
+  # Candidato: VPOS-T2104 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que o envio com o e-mail do cadastro cria a solicitação sem abrir o modal
     Given o aluno informou uma competência
@@ -75,7 +75,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then a solicitação é criada sem exibir o modal de atualização
     And o cadastro do aluno não é alterado
 
-  # Candidato: VPOS-T2105 (atualizar)
+  # Candidato: VPOS-T2105 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que alterar o e-mail abre o modal de atualização com o e-mail digitado
     Given o aluno informou uma competência
@@ -84,7 +84,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then o modal "Você deseja atualizar seu e-mail?" é exibido
     And o modal mostra o e-mail digitado
 
-  # Candidato: VPOS-T2106 (atualizar)
+  # Candidato: VPOS-T2106 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que manter o e-mail antigo cria a solicitação sem alterar o cadastro
     Given o modal de atualização está aberto com um e-mail diferente do cadastro
@@ -93,7 +93,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     And o e-mail do cadastro da pessoa não é alterado
     And o e-mail das matrículas não é alterado
 
-  # Candidato: VPOS-T2107 (atualizar)
+  # Candidato: VPOS-T2107 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que atualizar o e-mail propaga o novo e-mail para a pessoa e todas as matrículas
     Given o modal de atualização está aberto com um e-mail diferente do cadastro
@@ -103,7 +103,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     And o e-mail do cadastro da pessoa passa a ser o digitado
     And o e-mail de todas as matrículas da pessoa passa a ser o digitado
 
-  # Candidato: VPOS-T2108 (atualizar)
+  # Candidato: VPOS-T2108 (referência do time, somente leitura)
   @PGPO-3266 @high
   Scenario: [PGPO-3266][Web][Falha] Validar que fechar o modal sem escolher uma opção cancela o envio
     Given o modal de atualização de e-mail está aberto
@@ -112,7 +112,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     And o cadastro do aluno não é alterado
     And o aluno permanece na tela de 2ª via com os dados preenchidos
 
-  # Candidato: VPOS-T2109 (atualizar)
+  # Candidato: VPOS-T2109 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Falha] Validar que o cadastro não muda quando a solicitação não é criada
     Given o modal de atualização está aberto com um e-mail diferente do cadastro
@@ -121,7 +121,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then nenhuma solicitação é criada
     And o e-mail do cadastro não é alterado
 
-  # Candidato: VPOS-T2110 (atualizar)
+  # Candidato: VPOS-T2110 (referência do time, somente leitura)
   @PGPO-3266 @high
   Scenario: [PGPO-3266][Web][Sucesso] Validar a confirmação "Solicitação enviada" após o envio
     Given a solicitação foi criada com sucesso
@@ -129,7 +129,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then a tela exibe a mensagem "Solicitação enviada"
     And a tela não exibe erro de processamento
 
-  # Candidato: VPOS-T2111 (atualizar)
+  # Candidato: VPOS-T2111 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que a solicitação é gravada com a competência e o e-mail de destino
     Given o aluno escolheu a competência 03/2026
@@ -139,7 +139,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     And a solicitação é criada com o e-mail de destino "nota@exemplo.com"
     And a solicitação é criada com o status "Em processamento"
 
-  # Candidato: VPOS-T2112 (atualizar)
+  # Candidato: VPOS-T2112 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que o envio publica a solicitação na fila de processamento
     Given o aluno escolheu uma competência e informou um e-mail de destino
@@ -147,7 +147,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then a solicitação é publicada na fila de processamento na mesma transação de criação
     And a mensagem publicada contém a competência e o identificador da solicitação
 
-  # Candidato: VPOS-T2113 (atualizar)
+  # Candidato: VPOS-T2113 (referência do time, somente leitura)
   @PGPO-3266 @high
   Scenario: [PGPO-3266][Web][Sucesso] Validar que os botões ficam desabilitados durante o envio
     Given o aluno clicou em "Enviar Solicitação"
@@ -155,7 +155,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then o botão "Enviar Solicitação" fica desabilitado
     And o botão de cancelamento fica desabilitado
 
-  # Candidato: VPOS-T2114 (atualizar)
+  # Candidato: VPOS-T2114 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Falha] Validar que a segunda solicitação em processamento para a mesma competência é bloqueada
     Given existe uma solicitação "Em processamento" para a matrícula e a competência 03/2026
@@ -163,14 +163,14 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then nenhuma nova solicitação é criada
     And a tela informa que já existe uma solicitação em andamento
 
-  # Candidato: VPOS-T2115 (atualizar)
+  # Candidato: VPOS-T2115 (referência do time, somente leitura)
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência já concluída com sucesso
     Given existe uma solicitação concluída com sucesso para a matrícula e a competência 03/2026
     When o aluno envia nova solicitação para a competência 03/2026
     Then a nova solicitação é criada com o status "Em processamento"
 
-  # NOVO: não existe caso equivalente (criar)
+  # NOVO: sem caso equivalente do time
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que a comparação do e-mail ignora espaços nas pontas e diferença de maiúsculas
     Given o e-mail atual do cadastro é "aluno@exemplo.com"
@@ -179,7 +179,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then o modal de atualização de e-mail não é exibido
     And a solicitação é criada sem alterar o cadastro
 
-  # NOVO: não existe caso equivalente (criar)
+  # NOVO: sem caso equivalente do time
   @PGPO-3266 @critical
   Scenario: [PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência cuja solicitação anterior falhou
     Given existe uma solicitação com falha no processamento para a matrícula e a competência 03/2026

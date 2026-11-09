@@ -30,7 +30,7 @@
 1. Os 19 casos existentes na VPOS usam `TC01 - ...`, sem chave nem tipo de aplicação. Diverge do padrão de nome.
 2. Os 19 casos existentes têm precondição vazia. Diverge do padrão de criação.
 3. A pasta existente se chama "confirmar-editar", e o Jira diz "confirmar/editar". Diverge do padrão de nome completo.
-4. A skill `bdd-gherkin` do projeto pede palavras-chave em português, mas o Confluence e os casos existentes usam Given/When/Then. Este pacote segue o Zephyr.
+4. O padrão Cogna e Zephyr usa `Feature/Scenario/Given/When/Then` em inglês, com títulos e passos de negócio em português. A skill `bdd-gherkin` foi alinhada a esse padrão.
 5. A estrutura de pastas do Zephyr (2026 → PI 26.4 → SP 26.4.3) segue o padrão Ano → PI → SP.
 
 ## Itens não aplicáveis

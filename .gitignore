@@ -8,3 +8,5 @@ blob-report/
 # Execuções do agente de QA (estado e evidências locais)
 qa/runs/
 evidence/
+# Execuções locais de quem desenvolve (run-id dev-*): nunca são evidência oficial
+qa/approvals/*/executions/[dD][eE][vV][-_.]*/

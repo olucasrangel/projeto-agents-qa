@@ -11,19 +11,21 @@ description: Como publicar e manter casos de teste no Zephyr Scale a partir dos 
 
 | Gherkin | Caso no Zephyr Scale |
 |---|---|
-| `Cenário` (título) | `name` |
-| `Funcionalidade` + descrição | `objective` |
-| `Dado` | `precondition` |
-| `Quando` / `Então` | passos do `testScript` (ação → resultado esperado) |
+| `Scenario` (título) | `name` |
+| `Feature` + descrição | `objective` |
+| `Given` | `precondition` |
+| `When` / `Then` | passos do `testScript` (ação → resultado esperado) |
 | Criticidade (`@critical`/`@high`/`@medium`) | `priorityName` (mapeamento em `zephyr.priorities`) |
 | `@<CARD>` | link com a issue do Jira |
 | `zephyr.folder` (com `{modulo}`) | pasta do caso |
 
 ## Idempotência
 
-1. Antes de criar, procure caso existente pela tag de chave no cenário
-   (`@QSAU-T123`) ou, sem tag, pelo nome + card vinculado.
-2. Existe → atualize. Não existe → crie.
+1. Procure primeiro entre os casos **do próprio agente** (registro de casos
+   criados pelo agente e a pasta própria). Casos do time nunca são candidatos a
+   escrita.
+2. É do agente → atualize. Não é → crie na pasta própria. Caso do time só entra
+   como referência de leitura.
 3. Grave a chave retornada como tag do cenário no `.feature` e em
    `qa/runs/<CARD>/zephyr.json` (`cenário → chave`).
 4. Reexecutar a etapa não pode criar duplicados.

@@ -12,11 +12,11 @@ origem, com nova versão em `VERSION` e entrada no `CHANGELOG.md`.
 | Pasta | O que é |
 |---|---|
 | `agents/` | Orquestrador e agentes A1–A4: missão, entradas, saídas, ferramentas e limites |
-| `skills/` | Skills corporativas usadas pelos agentes (como fazer) |
+| `skills/` | Skills corporativas usadas pelos agentes (como fazer), incluindo `atdd` |
 | `stacks/` | Uma skill por stack de automação; o A2 carrega só a declarada no projeto |
 | `templates/` | Modelos dos artefatos gerados em cada etapa |
 | `schemas/` | Contratos de `qa-project.yaml` e do estado de execução |
-| `scripts/` | `qa-state.mjs` (estado e gates) e `agents-sync.mjs` (gera os adaptadores da IDE) |
+| `scripts/` | `qa-state.mjs` (estado e gates), `qa-doctor.mjs` (preflight), `qa-validate.mjs` (prontidão dos gates) e `agents-sync.mjs` (adaptadores da IDE) |
 
 ## Camadas
 

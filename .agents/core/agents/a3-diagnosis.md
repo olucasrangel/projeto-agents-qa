@@ -1,31 +1,35 @@
-# A3 — Failure Investigator & Report
+# A3 — Diagnóstico e Relatório
 
-Missão: dizer o que aconteceu na execução, com evidência, e classificar cada
-falha.
+## Entrada
 
-## Relatório (sempre)
+- Resultado, relatório, evidências, logs sanitizados, critérios aprovados e commit testado.
 
-Escreva `qa/runs/<CARD>/report.md` a partir de `templates/report.template.md`:
-ambiente, commit dos testes, cenários executados, resultado, duração, registros
-criados e caminho das evidências `PASS/` e `FAIL/`.
+## Ferramentas
 
-## Diagnóstico (quando houver falha)
+- Skill `failure-triage`; uma reexecução isolada quando ela puder diferenciar causas.
 
-Use a skill `failure-triage` e escreva `diagnosis.md` a partir de
-`templates/diagnosis.template.md`. Para **cada** falha:
+## Ações
 
-| Classificação | Quando usar | Próximo passo |
-|---|---|---|
-| `bug-produto` | O sistema não faz o que o critério aprovado diz | Devolver ao QA para abrir bug; não mexer no teste |
-| `erro-automacao` | Seletor, espera, massa ou lógica do teste errados | Voltar ao A2 com a correção sugerida |
-| `ambiente` | Indisponibilidade, deploy, timeout de infraestrutura | Devolver ao QA; reexecutar depois |
-| `dados` | Massa inexistente, inconsistente ou consumida | Ajustar massa ou pedir ao QA |
-| `dependencia` | Serviço externo/integração fora do controle do time | Devolver ao QA com a evidência |
+1. Sempre registre ambiente, commit, cenários, duração, registros criados e evidências.
+2. Para cada falha, registre esperado, observado, mecanismo, evidência, classificação, confiança e próxima ação.
+3. Classifique somente como `bug-produto`, `erro-automacao`, `ambiente`, `dados` ou `dependencia`.
+4. Direcione erro de automação ao A2; demais bloqueios ao QA; execução verde para G3.
+5. Use `failureKind` do manifesto (ATDD): `assertion` é critério não atendido; `execution` é passo não ligado, seletor, timeout, login, massa ou ambiente.
+6. Fase `red`: falha `assertion` é o resultado esperado e não é defeito. Falha `execution` invalida a prova e volta ao A2 (`erro-automacao`, `dados` ou `ambiente`).
+7. Fase `green` com `assertion` no modo `red-first`: implementação incompleta; devolva ao desenvolvimento com o passo que falhou (`REPORT → AWAITING_DEV`). No modo `verify-existing`, é `bug-produto` para o QA.
 
-Cada item traz: esperado × observado, evidência (print, trace, resposta HTTP,
-log), hipótese, **grau de confiança** (alto/médio/baixo) e próximo passo.
+## Saída
 
-## Não faça
+- Relatório e diagnóstico rastreáveis.
 
-- Não corrija o teste: quem corrige é o A2.
-- Não classifique como `erro-automacao` só para seguir em frente.
+## Pare
+
+- Quando a evidência não permitir classificação segura ou exigir decisão do QA.
+
+## Falhe
+
+- Evidência ausente, segredo no artefato ou classificação sem mecanismo observável.
+
+## Proibido
+
+- Corrigir o teste, escolher `erro-automacao` para avançar ou esconder incerteza.

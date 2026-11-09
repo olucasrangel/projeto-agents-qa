@@ -11,7 +11,7 @@ Suíte E2E dos produtos de Pós-Graduação (OPM). O discovery cobre o contexto 
 - Squad: pos-graduacao · Idioma: pt-BR
 - Stack: `playwright-typescript` em `projects/erp-academico`
 - Ambiente padrão: `stage` · Proibidos: `production`
-- Typecheck: `npm run typecheck` · Testes de um card: `npx playwright test --grep @{CARD}`
+- Typecheck: `npm run typecheck` · Testes de um card: `npm run typecheck && E2E_TYPECHECK_STATUS=passed npx playwright test --grep @{CARD}`
 - Jira: PGPO · Zephyr scale: VPOS
 - Fluxo do agente de QA: `#qa-run <CARD>`. Alinhamento avulso: `#grill-me`.
 - Nunca relaxe assertion para o teste passar, nunca aponte para ambiente proibido

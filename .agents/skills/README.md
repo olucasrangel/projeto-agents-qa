@@ -4,6 +4,7 @@ Gerado por `npm run agents:sync` a partir de `.agents/core` e `.agents/project`.
 
 Para mudar uma skill, edite a origem:
 
+- `atdd` ← `.agents/core/skills/atdd`
 - `bdd-gherkin` ← `.agents/core/skills/bdd-gherkin`
 - `failure-triage` ← `.agents/core/skills/failure-triage`
 - `git-delivery` ← `.agents/core/skills/git-delivery`

@@ -2,7 +2,7 @@
 # Contrato: .agents/core/schemas/qa-project.schema.json
 # Depois de editar, rode `npm run agents:sync` para atualizar .kiro/ e .agents/skills/.
 
-core_version: 0.1.0
+core_version: 0.4.0
 
 project:
   name: opm-qa-automation
@@ -21,7 +21,7 @@ stack:
   commands:
     install: npm ci && npx playwright install chromium
     typecheck: npm run typecheck
-    test_card: npx playwright test --grep @{CARD}
+    test_card: npm run typecheck && E2E_TYPECHECK_STATUS=passed npx playwright test --grep @{CARD}
     testids: npm run testids
 
 environments:
@@ -30,7 +30,32 @@ environments:
     base_url: https://infoprod.stage.platosedu.io/erp-academico
     api_url: https://infoprod.stage.platosedu.io/api/service-erp-academic
     credentials_env: [ERP_STAGE_COORD_USERNAME, ERP_STAGE_COORD_PASSWORD]
+    allowed_hosts: [infoprod.stage.platosedu.io]
   forbidden: [production]
+
+# Política de propriedade: o agente só escreve o que ele mesmo criou.
+# Casos e testes do time são somente leitura.
+ownership:
+  zephyr:
+    # Casos do agente ficam sempre em pasta própria com este sufixo, conforme o padrão do Confluence.
+    automation_folder_suffix: '(Automação)'
+    # Casos existentes do time nunca são criados, atualizados, renomeados, movidos ou apagados.
+    team_cases: read-only
+    # Atualização só é permitida para chaves registradas em qa/cards/{CARD}/zephyr/owned-cases.json.
+    owned_registry: qa/cards/{CARD}/zephyr/owned-cases.json
+  automation:
+    # Nestes diretórios só entram arquivos novos dentro de owned_paths.
+    protected_roots: [projects/erp-academico, shared]
+    owned_paths:
+      - projects/erp-academico/tests/agent
+      - projects/erp-academico/pages/agent
+      - projects/erp-academico/flows/agent
+      - projects/erp-academico/data/agent
+
+security:
+  allowed_hosts:
+    atlassian: [mcp.atlassian.com]
+    zephyr: [api.zephyrscale.smartbear.com]
 
 # O agente substitui {CARD}; o módulo fica abaixo de bdd/ para preservar a
 # convenção do núcleo: <features_dir>/<modulo>/<CARD>.feature.
@@ -46,8 +71,10 @@ workflow:
 artifacts:
   card_dir: qa/cards/{CARD}
   context_dir: qa/cards/{CARD}/context
+  discovery_manifest: qa/cards/{CARD}/context/discovery.json
   bdd_review: qa/cards/{CARD}/bdd/{CARD}-review.md
   zephyr_dry_run: qa/cards/{CARD}/zephyr/zephyr-dry-run.json
+  zephyr_sync: qa/cards/{CARD}/zephyr/zephyr-sync-payload.json
   automation_plan: qa/cards/{CARD}/automation/automation-plan.md
   pr_description: qa/cards/{CARD}/PR_DESCRIPTION.txt
   approvals_dir: qa/approvals/{CARD}
@@ -82,6 +109,7 @@ zephyr:
   project_key: VPOS
   folder: /{year}/PI {pi}/SP {sprint}/{CARD} - {summary} (Automação)
   token_env: ZEPHYR_API_TOKEN
+  token_env_aliases: [ZEPHYR_SCALE_API_TOKEN]
   mode: dry-run
   inventory_existing_cases: true
   case_name: '[{CARD}][{application}][{outcome}] {description}'
@@ -107,6 +135,7 @@ git:
   base: main
   branch: qa/{CARD}-{slug}
   protected: [main]
+  expected_repository: github.com/olucasrangel/projeto-agents-qa.git
   pr_no_apostrophes: true
 
 evidence:
@@ -122,6 +151,16 @@ grill_me:
   min_questions: 3
   max_questions: 5
   extra_questions: .agents/project/grill-me/perguntas.md
+
+# ATDD: depois do BDD aprovado (G1) e dos casos no Zephyr (G2), o teste de aceite é escrito e
+# executado ANTES da funcionalidade (vermelho), guia o desenvolvimento e fica verde no fim.
+atdd:
+  specs_dir: projects/erp-academico/tests/agent/{CARD}
+  dev_guide: qa/cards/{CARD}/automation/atdd-dev-guide.md
+  commands:
+    # Ciclo rápido de quem desenvolve. run-id dev-* nunca vale como evidência oficial.
+    run_scenario: 'E2E_RUN_ID=dev-local E2E_ATDD_PHASE={PHASE} npx playwright test projects/erp-academico/tests/agent/{CARD} --grep @{SCENARIO}'
+    run_card: 'npm run qa:atdd -- run {CARD} --phase {PHASE} --run-id {RUN_ID}'
 
 future_code_context:
   access_status: pending-team-approval

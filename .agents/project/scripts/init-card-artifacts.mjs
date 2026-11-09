@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { parse as parseYaml } from 'yaml';
 
 const card = process.argv[2]?.toUpperCase();
 if (!card || !/^[A-Z][A-Z0-9]+-\d+$/.test(card)) {
@@ -9,6 +10,12 @@ if (!card || !/^[A-Z][A-Z0-9]+-\d+$/.test(card)) {
 }
 
 const projectRoot = process.cwd();
+const projectConfig = parseYaml(readFileSync(path.join(projectRoot, '.agents/project/qa-project.yaml'), 'utf-8'));
+const allowedProjects = projectConfig.jira?.project_keys ?? [];
+if (allowedProjects.length && !allowedProjects.includes(card.split('-')[0])) {
+	console.error(`Card ${card} fora dos projetos permitidos: ${allowedProjects.join(', ')}.`);
+	process.exit(1);
+}
 const templateRoot = path.join(projectRoot, '.agents', 'project', 'templates');
 const cardRoot = path.join(projectRoot, 'qa', 'cards', card);
 const approvalRoot = path.join(projectRoot, 'qa', 'approvals', card);
@@ -36,6 +43,10 @@ const directories = [
 for (const directory of directories) mkdirSync(directory, { recursive: true });
 
 const files = [
+	[
+		'discovery.template.json',
+		path.join(cardRoot, 'context', 'discovery.json'),
+	],
 	[
 		'jira-context.template.md',
 		path.join(cardRoot, 'context', 'jira-context.md'),
