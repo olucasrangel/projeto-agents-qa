@@ -1,5 +1,5 @@
 {
-	"uuid": "a059a730-bfac-42b7-a2f2-9f4ad0e62cfb",
+	"uuid": "afcde0b0-8a07-4045-64eb-864bc285463e",
 	"historyId": "1130549de57f185995fa22f3f1c54e712b78a54d",
 	"testCaseId": "ba79d12fc9f9510e7c4aa70210ee8f51",
 	"name": "S10 — Validar que manter o e-mail antigo cria a solicitação sem alterar o cadastro",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

@@ -1,5 +1,5 @@
 {
-	"uuid": "c1ac96ec-215f-4418-a16d-e16a9f45e6e0",
+	"uuid": "acb2e334-bc48-6a96-d632-af6011afc196",
 	"historyId": "a628c425cc7d1f376293bab058cf82b531ce63e2",
 	"testCaseId": "1b1545d4543988791b4d3520fee61050",
 	"name": "S21 — Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha",
@@ -65,7 +65,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

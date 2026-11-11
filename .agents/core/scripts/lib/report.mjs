@@ -1,4 +1,7 @@
-import { createHash, randomUUID } from 'node:crypto';
+import { createHash } from 'node:crypto';
+
+/** UUID estável por cenário e execução, para que gerar de novo não troque o nome de todos os arquivos versionados. */
+const stableUuid = (seed) => createHash('sha1').update(seed).digest('hex').replace(/^(.{8})(.{4})(.{4})(.{4})(.{12}).*$/, '$1-$2-$3-$4-$5');
 import { DECISION_OPTIONS } from './approvals.mjs';
 
 /**
@@ -223,7 +226,7 @@ export function buildAllure({ card, cardTitle, epic, featureName, items, manifes
 	const start = manifest ? Date.parse(manifest.startedAt) : Date.now();
 	let cursor = start;
 	const results = items.map((item) => {
-		const uuid = randomUUID();
+		const uuid = stableUuid(`${card}:${item.id}:${manifest?.runId ?? ''}`);
 		const entry = item.entry;
 		const duration = entry?.durationMs ?? 0;
 		const testStart = cursor;

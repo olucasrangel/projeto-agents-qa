@@ -1,5 +1,5 @@
 {
-	"uuid": "ed0ba144-6afc-499f-b718-2a356a99d98e",
+	"uuid": "4a6e29b1-7053-2631-ff97-397a2304198e",
 	"historyId": "6bb3f0f856860cfbb0219454941ba4e0cd08b25e",
 	"testCaseId": "59f98613a75f0b46a82e14b184415a89",
 	"name": "S04 — Validar que o envio é bloqueado sem competência selecionada",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

@@ -12,14 +12,14 @@ a{color:#2f6fed}code{background:#f1f5fa;padding:1px 5px;border-radius:4px}
 </style></head><body>
 <h1>PGPO-3266 — resumo executivo</h1>
 <p class="muted">[NFS-e] Solicitar a 2ª via e confirmar/editar o e-mail de destino · Autosserviço de 2ª via de NFS-e com e-mail de destino</p>
-<p><a href="https://cogna.atlassian.net/browse/PGPO-3266">Card no Jira</a> · <a href="index.html">Relatório detalhado (Allure)</a> · <a href="https://github.com/olucasrangel/projeto-agents-qa/tree/qa/aprovacoes-centralizadas">Branch no GitHub</a></p>
+<p><a href="https://cogna.atlassian.net/browse/PGPO-3266">Card no Jira</a> · <a href="index.html">Relatório detalhado (Allure)</a> · <a href="https://github.com/olucasrangel/projeto-agents-qa/tree/qa/PGPO-3266-automacao-nfse-2via">Branch no GitHub</a></p>
 
 <div class="cards">
 <div class="card"><b>15 de 21</b>cenários automatizados (71.4%)</div>
 <div class="card"><b>71.4% → 90.5%</b>cobertura hoje → com a massa pendente</div>
 <div class="card"><b>15/15</b>passando na execução oficial</div>
-<div class="card"><b>22 h 16 min</b>tempo de trabalho, sem as esperas dos gates (prazo do card: 6 d 4 h)</div>
-<div class="card"><b>11/12</b>gates de qualidade atendidos</div>
+<div class="card"><b>22 h 12 min</b>tempo de trabalho, sem as esperas dos gates (prazo do card: 6 d 4 h)</div>
+<div class="card"><b>12/12</b>gates de qualidade atendidos</div>
 </div>
 
 <h2>1. O que foi entregue</h2>
@@ -49,26 +49,26 @@ a{color:#2f6fed}code{background:#f1f5fa;padding:1px 5px;border-radius:4px}
 <h2>5. Tempo</h2>
 <table>
 <tr><td>Prazo total do card no fluxo</td><td>6 d 4 h</td></tr>
-<tr><td>Tempo de trabalho (prazo menos as esperas dos gates)</td><td>22 h 16 min</td></tr>
+<tr><td>Tempo de trabalho (prazo menos as esperas dos gates)</td><td>22 h 12 min</td></tr>
 <tr><td>Espera pelas decisões do QA nos gates</td><td>5 d 6 h</td></tr>
 <tr><td>Da liberação da automação até o relatório</td><td>2 h 04 min</td></tr>
 <tr><td>Duração da execução oficial</td><td>3 min</td></tr>
 </table>
-<table><tr><th>Fase</th><th>Duração</th></tr><tr><td>DISCOVERY</td><td>20 h 06 min</td></tr><tr><td>AWAITING_G1</td><td>5 d 6 h</td></tr><tr><td>ZEPHYR</td><td>8 s</td></tr><tr><td>AWAITING_G2</td><td>8 s</td></tr><tr><td>AUTOMATION_DECISION</td><td>5 min</td></tr><tr><td>AUTOMATION</td><td>1 h 34 min</td></tr><tr><td>RUN</td><td>3 min</td></tr><tr><td>REPORT</td><td>17 min</td></tr><tr><td>RUN</td><td>11 min</td></tr><tr><td>REPORT</td><td>11 h 14 min</td></tr></table>
+<table><tr><th>Fase</th><th>Duração</th></tr><tr><td>DISCOVERY</td><td>20 h 06 min</td></tr><tr><td>AWAITING_G1</td><td>5 d 6 h</td></tr><tr><td>ZEPHYR</td><td>8 s</td></tr><tr><td>AWAITING_G2</td><td>8 s</td></tr><tr><td>AUTOMATION_DECISION</td><td>5 min</td></tr><tr><td>AUTOMATION</td><td>1 h 34 min</td></tr><tr><td>RUN</td><td>3 min</td></tr><tr><td>REPORT</td><td>17 min</td></tr><tr><td>RUN</td><td>11 min</td></tr><tr><td>REPORT</td><td>11 h 21 min</td></tr><tr><td>AWAITING_G3</td><td>3 min</td></tr><tr><td>DELIVERY</td><td>4 min</td></tr></table>
 <p class="muted">Para estimar a economia de horas manuais, informe <code>report.manual_minutes_per_scenario</code> no <code>qa-project.yaml</code>.</p>
 
 <h2>6. Gates de qualidade</h2>
-<table><tr><th></th><th>Gate</th><th>Detalhe</th></tr><tr><td><span class="ok">✔</span></td><td>BDD aprovado pelo QA (G1)</td><td>por Victor Lance</td></tr><tr><td><span class="ok">✔</span></td><td>Plano do Zephyr aprovado pelo QA (G2)</td><td>por Victor Lance</td></tr><tr><td><span class="ok">✔</span></td><td>Typecheck verde</td><td>typecheck passed</td></tr><tr><td><span class="ok">✔</span></td><td>Execução oficial verde sobre os testes atuais</td><td>execução run-2026-11-11-03: passed</td></tr><tr><td><span class="ok">✔</span></td><td>Todos os cenários automatizados passam</td><td>15 de 15</td></tr><tr><td><span class="ok">✔</span></td><td>Sem retentativas (sem instabilidade escondida)</td><td>retries = 0</td></tr><tr><td><span class="ok">✔</span></td><td>Cada cenário automatizado ligado a um caso do Zephyr</td><td>15 de 15</td></tr><tr><td><span class="ok">✔</span></td><td>Evidência (print) em todos os passos</td><td>um print por passo, registrado no manifesto</td></tr><tr><td><span class="ok">✔</span></td><td>A entrega só altera o que o agente criou</td><td>testes e casos do time intactos</td></tr><tr><td><span class="ok">✔</span></td><td>Todo cenário aprovado tem decisão do QA</td><td>21 de 21</td></tr><tr><td><span class="ok">✔</span></td><td>Execuções oficiais aprovadas</td><td>2 de 3 execuções oficiais passaram</td></tr><tr><td><span class="wait">…</span></td><td>Execução e entrega aprovadas pelo QA (G3)</td><td>aguardando o QA</td></tr></table>
+<table><tr><th></th><th>Gate</th><th>Detalhe</th></tr><tr><td><span class="ok">✔</span></td><td>BDD aprovado pelo QA (G1)</td><td>por Victor Lance</td></tr><tr><td><span class="ok">✔</span></td><td>Plano do Zephyr aprovado pelo QA (G2)</td><td>por Victor Lance</td></tr><tr><td><span class="ok">✔</span></td><td>Typecheck verde</td><td>typecheck passed</td></tr><tr><td><span class="ok">✔</span></td><td>Execução oficial verde sobre os testes atuais</td><td>execução run-2026-11-11-03: passed</td></tr><tr><td><span class="ok">✔</span></td><td>Todos os cenários automatizados passam</td><td>15 de 15</td></tr><tr><td><span class="ok">✔</span></td><td>Sem retentativas (sem instabilidade escondida)</td><td>retries = 0</td></tr><tr><td><span class="ok">✔</span></td><td>Cada cenário automatizado ligado a um caso do Zephyr</td><td>15 de 15</td></tr><tr><td><span class="ok">✔</span></td><td>Evidência (print) em todos os passos</td><td>um print por passo, registrado no manifesto</td></tr><tr><td><span class="ok">✔</span></td><td>A entrega só altera o que o agente criou</td><td>testes e casos do time intactos</td></tr><tr><td><span class="ok">✔</span></td><td>Todo cenário aprovado tem decisão do QA</td><td>21 de 21</td></tr><tr><td><span class="ok">✔</span></td><td>Execuções oficiais aprovadas</td><td>2 de 3 execuções oficiais passaram</td></tr><tr><td><span class="ok">✔</span></td><td>Execução e entrega aprovadas pelo QA (G3)</td><td>por Victor Lance</td></tr></table>
 <p class="muted">✔ atendido · ✘ falhou · … aguarda a decisão do QA.</p>
 <h3>Execuções oficiais</h3>
 <table><tr><th>Run</th><th>Resultado</th><th>Duração</th></tr><tr><td>run-2026-11-11-01</td><td><span class="ok">passou</span></td><td>3 min</td></tr><tr><td>run-2026-11-11-02</td><td><span class="bad">falhou</span></td><td>4 min</td></tr><tr><td>run-2026-11-11-03</td><td><span class="ok">passou</span></td><td>3 min</td></tr></table>
 
 <h2>7. Entrega</h2>
 <table>
-<tr><td>Branch</td><td><code>qa/aprovacoes-centralizadas</code> (<a href="https://github.com/olucasrangel/projeto-agents-qa/tree/qa/aprovacoes-centralizadas">abrir</a>)</td></tr>
-<tr><td>Commit</td><td><code>b797eb6</code> <span class="wait">com alterações ainda não commitadas</span></td></tr>
-<tr><td>Abrir a PR</td><td><a href="https://github.com/olucasrangel/projeto-agents-qa/pull/new/qa/aprovacoes-centralizadas">https://github.com/olucasrangel/projeto-agents-qa/pull/new/qa/aprovacoes-centralizadas</a></td></tr>
-<tr><td>Relatório gerado em</td><td>11/11/2026, 09:45:12</td></tr>
+<tr><td>Branch</td><td><code>qa/PGPO-3266-automacao-nfse-2via</code> (<a href="https://github.com/olucasrangel/projeto-agents-qa/tree/qa/PGPO-3266-automacao-nfse-2via">abrir</a>)</td></tr>
+<tr><td>Commit</td><td><code>ecc1765</code> <span class="wait">com alterações ainda não commitadas</span></td></tr>
+<tr><td>Abrir a PR</td><td><a href="https://github.com/olucasrangel/projeto-agents-qa/pull/new/qa/PGPO-3266-automacao-nfse-2via">https://github.com/olucasrangel/projeto-agents-qa/pull/new/qa/PGPO-3266-automacao-nfse-2via</a></td></tr>
+<tr><td>Relatório gerado em</td><td>11/11/2026, 09:59:10</td></tr>
 </table>
 <p class="muted">Gerado por <code>npm run qa:report -- generate PGPO-3266</code> a partir do BDD aprovado, do estado do fluxo, do manifesto de evidências e do Git. Os prints ficam fora do Git (contêm dados dos alunos de teste).</p>
 </body></html>

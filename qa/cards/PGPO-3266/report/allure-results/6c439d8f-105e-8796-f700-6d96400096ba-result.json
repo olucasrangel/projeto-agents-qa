@@ -1,5 +1,5 @@
 {
-	"uuid": "242eb434-1bc5-4460-906b-e5e6512e007d",
+	"uuid": "6c439d8f-105e-8796-f700-6d96400096ba",
 	"historyId": "9ce8fecb2d69e07cae80c6dd436351278d40a12e",
 	"testCaseId": "49bb4564451634d591beb309f0f53dfb",
 	"name": "S11 — Validar que atualizar o e-mail propaga o novo e-mail para a pessoa e todas as matrículas",
@@ -65,7 +65,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

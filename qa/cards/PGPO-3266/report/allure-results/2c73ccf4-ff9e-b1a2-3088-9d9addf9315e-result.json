@@ -1,5 +1,5 @@
 {
-	"uuid": "094cd820-e31f-41a6-beb3-11b178488631",
+	"uuid": "2c73ccf4-ff9e-b1a2-3088-9d9addf9315e",
 	"historyId": "4019c695630ae5a525e38fd0d0b76ae62df98bc7",
 	"testCaseId": "420bc850d209ee263e5d20c270ea0032",
 	"name": "S15 — Validar que a solicitação é gravada com a competência e o e-mail de destino",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

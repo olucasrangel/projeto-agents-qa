@@ -1,5 +1,5 @@
 {
-	"uuid": "95617fc2-1f34-4df1-a489-c455d1f0c289",
+	"uuid": "3b6c47f1-577f-b746-ae9a-734b11903fa3",
 	"historyId": "43b950f359135ef1b83fe5728a8b677deaaf6267",
 	"testCaseId": "cb8459d222267eb995cf3d4444c5d814",
 	"name": "S16 — Validar que o envio publica a solicitação na fila de processamento",
@@ -65,7 +65,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

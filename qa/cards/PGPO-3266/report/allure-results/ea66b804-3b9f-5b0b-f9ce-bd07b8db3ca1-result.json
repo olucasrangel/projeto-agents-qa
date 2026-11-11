@@ -1,5 +1,5 @@
 {
-	"uuid": "fcabfa8d-4632-4469-8bf7-ae3bdf48d020",
+	"uuid": "ea66b804-3b9f-5b0b-f9ce-bd07b8db3ca1",
 	"historyId": "e0f0f2047d6b71c7bd7897b85ac03fd2d62f23fa",
 	"testCaseId": "ff727decb52fa9eec7cb405735725f16",
 	"name": "S07 — Validar que e-mail em formato inválido bloqueia o envio sem abrir o modal",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

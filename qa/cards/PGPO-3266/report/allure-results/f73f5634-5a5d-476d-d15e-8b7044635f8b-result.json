@@ -1,13 +1,13 @@
 {
-	"uuid": "d69f9cda-88bd-4af2-83ad-c7caa249a1a7",
-	"historyId": "47eacf1ba0773161fcb5dacfea787914f35f655f",
-	"testCaseId": "e4ec88acbf67b97943c5c93bf32349c3",
-	"name": "S06 — Validar que a tela informa para qual e-mail a nota será enviada",
-	"fullName": "PGPO-3266.S06",
+	"uuid": "f73f5634-5a5d-476d-d15e-8b7044635f8b",
+	"historyId": "1d1dbe498320b164430c665959751666b8fc78d3",
+	"testCaseId": "eff3a9ce571e576c3b80309b6d3e7621",
+	"name": "S02 — Validar que o autosserviço aparece com o serviço ligado no tenant",
+	"fullName": "PGPO-3266.S02",
 	"status": "passed",
 	"stage": "finished",
-	"start": 1794360496993,
-	"stop": 1794360504639,
+	"start": 1794360471620,
+	"stop": 1794360480741,
 	"labels": [
 		{
 			"name": "parentSuite",
@@ -35,7 +35,7 @@
 		},
 		{
 			"name": "tag",
-			"value": "S06"
+			"value": "S02"
 		},
 		{
 			"name": "tag",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [
@@ -69,8 +69,8 @@
 			"type": "issue"
 		},
 		{
-			"name": "VPOS-T2102 (caso do time, referência)",
-			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2102",
+			"name": "VPOS-T2098 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2098",
 			"type": "tms"
 		}
 	],
@@ -85,33 +85,33 @@
 		},
 		{
 			"name": "Caso Zephyr",
-			"value": "VPOS-T2102"
+			"value": "VPOS-T2098"
 		}
 	],
-	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que a tela informa para qual e-mail a nota será enviada\n  Given o aluno está na tela de 2ª via de NFS-e com um e-mail no campo\n  When o aluno visualiza o formulário\n  Then a tela informa que a nota será enviada para o e-mail do campo</pre>",
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que o autosserviço aparece com o serviço ligado no tenant\n  Given o serviço de 2ª via de NFS-e está ligado no tenant do aluno\n  When o aluno acessa a lista de autosserviços\n  Then o autosserviço de 2ª via de NFS-e é exibido</pre>",
 	"steps": [
 		{
-			"name": "Given o aluno está na tela de 2ª via de NFS-e com um e-mail no campo",
+			"name": "Given o serviço de 2ª via de NFS-e está ligado no tenant do aluno",
 			"status": "passed",
 			"stage": "finished",
-			"start": 1794360496993,
-			"stop": 1794360499542,
+			"start": 1794360471620,
+			"stop": 1794360474660,
 			"attachments": []
 		},
 		{
-			"name": "When o aluno visualiza o formulário",
+			"name": "When o aluno acessa a lista de autosserviços",
 			"status": "passed",
 			"stage": "finished",
-			"start": 1794360499542,
-			"stop": 1794360502091,
+			"start": 1794360474660,
+			"stop": 1794360477700,
 			"attachments": []
 		},
 		{
-			"name": "Then a tela informa que a nota será enviada para o e-mail do campo",
+			"name": "Then o autosserviço de 2ª via de NFS-e é exibido",
 			"status": "passed",
 			"stage": "finished",
-			"start": 1794360502090,
-			"stop": 1794360504639,
+			"start": 1794360477701,
+			"stop": 1794360480741,
 			"attachments": []
 		}
 	],

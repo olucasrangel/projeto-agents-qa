@@ -1,5 +1,5 @@
 {
-	"uuid": "5547e234-263b-4371-8710-f0829c2669e6",
+	"uuid": "1acaec1c-f7dc-c8dc-e36f-38d0786d6515",
 	"historyId": "ed8a24a9ea66da81724744e344a1ba1b56255ecb",
 	"testCaseId": "2234915c5553335db7db307793265bbc",
 	"name": "S18 — Validar que a segunda solicitação em processamento para a mesma competência é bloqueada",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

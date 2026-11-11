@@ -1,5 +1,5 @@
 {
-	"uuid": "5d72015e-7f0c-4bea-9bc4-320921e1fd87",
+	"uuid": "31f7f311-ed08-d8aa-c289-59bf7e6b140a",
 	"historyId": "a5a5295e6b739caa278439bd5d7406ac7bf9d9f1",
 	"testCaseId": "2b15e0bc87d066a427c678dc14b2d3bb",
 	"name": "S03 — Validar que as competências exibidas são as faturadas do aluno, sem limite de histórico",
@@ -65,7 +65,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

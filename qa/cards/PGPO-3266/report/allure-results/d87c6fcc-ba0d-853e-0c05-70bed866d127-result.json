@@ -1,5 +1,5 @@
 {
-	"uuid": "686c61fb-e968-438d-9685-79376f0e5659",
+	"uuid": "d87c6fcc-ba0d-853e-0c05-70bed866d127",
 	"historyId": "b1cc3c144adc5f950dd3b025d62d9d69974a2692",
 	"testCaseId": "207692873a72bce433659db934e9205a",
 	"name": "S19 — Validar que nova solicitação é permitida para competência já concluída com sucesso",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

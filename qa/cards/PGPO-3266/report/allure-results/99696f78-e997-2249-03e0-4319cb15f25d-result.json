@@ -1,5 +1,5 @@
 {
-	"uuid": "cff7cd08-d67d-47cd-b95b-d3e4afc2ab67",
+	"uuid": "99696f78-e997-2249-03e0-4319cb15f25d",
 	"historyId": "c1db90be42afa7dbb6c52cc8ca4b28ee82a624ca",
 	"testCaseId": "ae9e1e99ae2c9c90df577b80eb8467fe",
 	"name": "S05 — Validar que o campo de e-mail vem preenchido com o e-mail do cadastro e pode ser editado",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

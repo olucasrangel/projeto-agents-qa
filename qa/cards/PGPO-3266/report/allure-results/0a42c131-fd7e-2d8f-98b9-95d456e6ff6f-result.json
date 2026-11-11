@@ -1,5 +1,5 @@
 {
-	"uuid": "40050bae-0fe6-445b-8921-03638f12e759",
+	"uuid": "0a42c131-fd7e-2d8f-98b9-95d456e6ff6f",
 	"historyId": "347539ae71b473c582b7af05189875443177b32a",
 	"testCaseId": "ca89b143d617910479d51ba38695eb46",
 	"name": "S14 — Validar a confirmação \"Solicitação enviada\" após o envio",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [

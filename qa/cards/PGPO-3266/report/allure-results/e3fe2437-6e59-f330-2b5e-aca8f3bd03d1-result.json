@@ -1,5 +1,5 @@
 {
-	"uuid": "909dcfc0-932c-4976-8309-662f44107d1e",
+	"uuid": "e3fe2437-6e59-f330-2b5e-aca8f3bd03d1",
 	"historyId": "1bf43165fdb13b6494d953c7fa6ecdfd1dea1871",
 	"testCaseId": "4645927e5c1a8ff193050309157d8c5c",
 	"name": "S17 — Validar que os botões ficam desabilitados durante o envio",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "host",
-			"value": "qa/aprovacoes-centralizadas"
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
 		}
 	],
 	"links": [
