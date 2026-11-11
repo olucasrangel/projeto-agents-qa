@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
+import { approvedScope, DECISIONS, inScope, publishScope, readApprovals, selectedScenarioIds } from './approvals.mjs';
 import { ATDD_MODES, missingEvidence, officialRunProblems, readRunManifest, scanSpecs, specsHash, validateGreenRun, validateRedRun } from './atdd.mjs';
 import { automationFolderOk, checkAutomationOwnership, gitChanges, ownershipOf } from './ownership.mjs';
 
@@ -269,27 +270,29 @@ export function validateGate({ root = process.cwd(), card, gate, runId, state: s
 		}
 		const review = canonicalArtifact(root, config, card, gate, runId);
 		checks.push(check('G1.review-exists', existsSync(review), 'revisão BDD existe'));
-		if (existsSync(review)) {
-			const text = readFileSync(review, 'utf-8');
-			const approveAll = /^- \[x\] Aprovar todos os cenários/gim.test(text);
-			const approvePartial = /^- \[x\] Aprovar parcialmente/gim.test(text);
-			const requestChanges = /^- \[x\] Solicitar ajustes/gim.test(text);
-			const approvalCount = [approveAll, approvePartial].filter(Boolean).length;
-			checks.push(check('G1.human-decision', approvalCount === 1 && !requestChanges, requestChanges ? 'Solicitar ajustes bloqueia G1' : `revisão precisa marcar uma aprovação total ou parcial (${approvalCount})`));
-			if (approvePartial) {
-				const approvedSection = text.match(/(?:Cenários aprovados|Itens aprovados)\*{0,2}:?([\s\S]*?)(?:\n#{2,6}\s|\n\*\*Cenários rejeitados|$)/i)?.[1] ?? '';
-				checks.push(check('G1.partial-selection', /(?:S\d{2}|VPOS-T\d+|\[[A-Z][A-Z0-9]+-\d+\])/i.test(approvedSection), 'aprovação parcial exige cenários aprovados explicitamente'));
+		const approvals = readApprovals(root, config, card);
+		checks.push(check('G1.approvals-file', Boolean(approvals), 'arquivo único de aprovações existe (<CARD>-APROVACOES.md)'));
+		if (approvals) {
+			const { approver, g1 } = approvals.data;
+			checks.push(check('G1.approver', Boolean(approver), 'o QA preencheu o Nome do aprovador em <CARD>-APROVACOES.md'));
+			const approvalCount = [g1.all, g1.partial].filter(Boolean).length;
+			checks.push(check('G1.human-decision', approvalCount === 1 && !g1.changes, g1.changes ? 'Solicitar ajustes bloqueia o G1' : `o QA precisa marcar exatamente uma aprovação (total ou parcial) no G1 (${approvalCount} marcada(s))`));
+			if (g1.partial) checks.push(check('G1.partial-selection', g1.approvedScenarios.length > 0, 'aprovação parcial exige marcar "Aprovado no G1" em ao menos um cenário'));
+			if (existsSync(review)) {
+				const pendingSection = readFileSync(review, 'utf-8').match(/## Pontos para decidir antes do G1([\s\S]*?)(?:\n##|$)/i)?.[1] ?? '';
+				const openItems = (pendingSection.match(/^\d+\. \*\*/gm) ?? []).length;
+				const resolved = g1.pendencies.filter((item) => item.done).length;
+				checks.push(check('G1.open-decisions', openItems === 0 || resolved >= openItems, openItems ? `o QA precisa marcar a opção de cada uma das ${openItems} pendência(s) do review no arquivo de aprovações (aceitas: ${resolved})` : 'não há decisões abertas'));
+				const rejected = g1.pendencies.filter((item) => item.rejected).map((item) => item.id);
+				checks.push(check('G1.rejected-decisions', rejected.length === 0, rejected.length ? `pendência(s) não aceita(s) pelo QA: ${rejected.join(', ')}. O BDD precisa de ajuste antes do G1` : 'nenhuma pendência foi rejeitada'));
 			}
-			const pendingSection = text.match(/## Pontos para decidir antes do G1([\s\S]*?)(?:\n##|$)/i)?.[1] ?? '';
-			const openItems = (pendingSection.match(/^\d+\. \*\*/gm) ?? []).length;
-			const resolutionSection = text.match(/## Resolução das pendências G1([\s\S]*?)(?:\n##|$)/i)?.[1] ?? '';
-			const resolvedItems = (resolutionSection.match(/^- \[x\]/gim) ?? []).length;
-			checks.push(check('G1.open-decisions', openItems === 0 || resolvedItems >= openItems, openItems ? `${openItems} pendência(s) exigem ${openItems} resoluções marcadas; encontradas ${resolvedItems}` : 'não há decisões abertas'));
 		}
 	}
 
 	if (gate === 'G2') {
 		checks.push(...verifyRecordedGate(root, state, 'G1'));
+		const g2Approvals = readApprovals(root, config, card);
+		checks.push(check('G2.human-approval', Boolean(g2Approvals?.data.approver && g2Approvals.data.g2.plan), 'o QA precisa preencher o Nome e marcar "Aprovo o plano do Zephyr" em <CARD>-APROVACOES.md'));
 		const payloadPath = canonicalArtifact(root, config, card, gate, runId);
 		checks.push(check('G2.payload-exists', existsSync(payloadPath), 'zephyr-sync-payload.json existe'));
 		if (existsSync(payloadPath)) {
@@ -308,9 +311,12 @@ export function validateGate({ root = process.cwd(), card, gate, runId, state: s
 				const items = Array.isArray(payload.items) ? payload.items : [];
 				const names = items.map((item) => item.name);
 				const keys = items.map((item) => item.key).filter(Boolean);
-				const featureNames = parsedFeature.scenarios.map((item) => item.name);
+				const publish = g2Approvals ? publishScope(g2Approvals.data) : [];
+				const outsideG1 = g2Approvals ? g2Approvals.data.g2.publish.filter((id) => !inScope(approvedScope(g2Approvals.data), id)) : [];
+				const expected = parsedFeature.scenarios.map((scenario, index) => ({ id: `S${String(index + 1).padStart(2, '0')}`, name: scenario.name })).filter((entry) => publish.includes(entry.id));
 				checks.push(check('G2.items', items.length > 0 && items.every((item) => ['criar', 'atualizar', 'reutilizar'].includes(item.operation)), 'todos os cenários têm operação válida'));
-				checks.push(check('G2.feature-parity', parsedFeature.issues.length === 0 && JSON.stringify(names) === JSON.stringify(featureNames), 'payload contém os mesmos cenários da feature, na mesma ordem'));
+				checks.push(check('G2.approved-scope', publish.length > 0 && outsideG1.length === 0, outsideG1.length ? `cenário(s) a publicar sem aprovação no G1: ${outsideG1.join(', ')}` : 'o QA listou os cenários a publicar no Zephyr, todos aprovados no G1'));
+				checks.push(check('G2.feature-parity', parsedFeature.issues.length === 0 && expected.length > 0 && JSON.stringify(names) === JSON.stringify(expected.map((entry) => entry.name)) && items.every((item, index) => item.scenario === expected[index]?.id), 'o payload contém exatamente os cenários a publicar no Zephyr, na ordem do .feature'));
 				checks.push(check('G2.unique-names', new Set(names).size === names.length, 'nomes de casos são únicos'));
 				checks.push(check('G2.unique-keys', new Set(keys).size === keys.length, 'chaves Zephyr são únicas'));
 				checks.push(check('G2.warnings', (payload.warnings?.length ?? 0) === 0, 'payload não possui divergências pendentes'));
@@ -364,26 +370,17 @@ export function validateGate({ root = process.cwd(), card, gate, runId, state: s
 		}
 		checks.push(check('G3.run-id', Boolean(runId && /^[A-Za-z0-9._-]+$/.test(runId)), 'G3 exige --run-id válido'));
 		checks.push(...validateAtddProof({ root, config, card, state, runId, ownership }));
-		const decisionPath = path.join(root, 'qa/approvals', card, 'automation-decision.md');
-		const decisionText = existsSync(decisionPath) ? readFileSync(decisionPath, 'utf-8') : '';
-		checks.push(check('G3.automation-decision', /\*\*Status:\*\* (APROVADO|CONCLUÍDO)/i.test(decisionText), 'decisão de automação exige status APROVADO ou CONCLUÍDO'));
-		const allowedDecisions = new Set(['automatizar', 'manter-manual', 'automatizar-depois', 'não-aplicável', 'bloqueado']);
-		const decisionRows = decisionText.split(/\r?\n/)
-			.filter((line) => line.startsWith('|'))
-			.map((line) => line.split('|').map((cell) => cell.trim()))
-			.filter((cells) => allowedDecisions.has(cells[3]?.toLowerCase()));
-		const automatedKeys = decisionRows.filter((cells) => cells[3].toLowerCase() === 'automatizar').map((cells) => cells[2]).filter(Boolean);
-		let g2Items = [];
-		const g2Artifact = state.gates?.G2?.artifact ? path.resolve(root, state.gates.G2.artifact) : null;
-		if (g2Artifact && withinRoot(root, g2Artifact) && existsSync(g2Artifact)) {
-			try { g2Items = readJson(g2Artifact).items ?? []; } catch {}
-		}
-		const everyItemDecided = g2Items.length > 0 && decisionRows.length === g2Items.length && g2Items.every((item, index) => {
-			const label = `S${String(item.order ?? index + 1).padStart(2, '0')}`;
-			return decisionRows.some((cells) => cells[1] === label || cells[1] === item.name);
-		});
-		checks.push(check('G3.decision-coverage', everyItemDecided, 'cada item do payload G2 possui exatamente uma decisão válida'));
-		checks.push(check('G3.automated-selection', automatedKeys.length > 0 && automatedKeys.every((key) => /^VPOS-T\d+$/.test(key)), 'G3 exige pelo menos um caso VPOS selecionado para automatizar'));
+		const approvals = readApprovals(root, config, card);
+		checks.push(check('G3.approvals-file', Boolean(approvals), 'arquivo único de aprovações existe (<CARD>-APROVACOES.md)'));
+		const data = approvals?.data;
+		checks.push(check('G3.human-approval', Boolean(data?.approver && data.g3.approved && data.g3.runId === runId), 'o QA precisa preencher o Nome, o Run-id igual ao informado e marcar "Aprovo a execução e a entrega" em <CARD>-APROVACOES.md'));
+		const decided = (data?.scenarios ?? []).filter((row) => DECISIONS.includes(row.decision));
+		const g1Scope = data ? approvedScope(data) : [];
+		const inG1 = (data?.scenarios ?? []).filter((row) => inScope(g1Scope, row.id));
+		const everyItemDecided = inG1.length > 0 && inG1.every((row) => DECISIONS.includes(row.decision));
+		checks.push(check('G3.decision-coverage', everyItemDecided, 'cada cenário aprovado no G1 tem uma decisão válida em <CARD>-APROVACOES.md'));
+		const selectedIds = data ? selectedScenarioIds(data) : [];
+		checks.push(check('G3.automated-selection', selectedIds.length > 0 && selectedIds.every((id) => inScope(g1Scope, id)), 'há cenário marcado como "automatizar" e todos foram aprovados no G1'));
 		const artifact = canonicalArtifact(root, config, card, gate, runId);
 		checks.push(check('G3.execution', Boolean(artifact && existsSync(artifact) && statSync(artifact).size > 0), 'execution.md do run existe e não está vazio'));
 		if (artifact && existsSync(artifact)) {
@@ -412,9 +409,8 @@ export function validateGate({ root = process.cwd(), card, gate, runId, state: s
 						return Boolean(entry.zephyrKey && allPass && hasEvidence);
 					});
 					checks.push(check('G3.traceability', traceable, 'cada cenário e passo deve estar PASS, com chave Zephyr e arquivo de evidência'));
-					const manifestKeys = entries.map((entry) => entry.zephyrKey).sort();
-					const selectedKeys = [...automatedKeys].sort();
-					checks.push(check('G3.coverage', selectedKeys.length > 0 && JSON.stringify(selectedKeys) === JSON.stringify(manifestKeys), 'casos executados correspondem exatamente aos selecionados para automatizar'));
+					const manifestScenarios = [...new Set(entries.map((entry) => entry.scenario).filter(Boolean))].sort();
+					checks.push(check('G3.coverage', selectedIds.length > 0 && JSON.stringify([...selectedIds].sort()) === JSON.stringify(manifestScenarios), 'cenários executados correspondem exatamente aos marcados como "automatizar"'));
 				} catch (error) { checks.push(check('G3.manifest-json', false, `manifesto inválido: ${error.message}`)); }
 			}
 		}

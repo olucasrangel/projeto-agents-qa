@@ -1,0 +1,149 @@
+{
+	"uuid": "6c439d8f-105e-8796-f700-6d96400096ba",
+	"historyId": "9ce8fecb2d69e07cae80c6dd436351278d40a12e",
+	"testCaseId": "49bb4564451634d591beb309f0f53dfb",
+	"name": "S11 — Validar que atualizar o e-mail propaga o novo e-mail para a pessoa e todas as matrículas",
+	"fullName": "PGPO-3266.S11",
+	"status": "skipped",
+	"statusDetails": {
+		"message": "Fica para depois (falta massa ou acesso) (decisão do QA: automatizar-depois). altera o e-mail do cadastro de um usuário compartilhado e exige aluno com várias matrículas e conferência por API",
+		"known": false,
+		"muted": false,
+		"flaky": false
+	},
+	"stage": "finished",
+	"start": 1794360550612,
+	"stop": 1794360550612,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Fica para depois (falta massa ou acesso)"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S11"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "automatizar-depois"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2107 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2107",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar-depois"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2107"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar-depois — altera o e-mail do cadastro de um usuário compartilhado e exige aluno com várias matrículas e conferência por API</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que atualizar o e-mail propaga o novo e-mail para a pessoa e todas as matrículas\n  Given o modal de atualização está aberto com um e-mail diferente do cadastro\n  And o aluno possui mais de uma matrícula\n  When o aluno escolhe &quot;Atualizar E-mail&quot;\n  Then a solicitação é criada com o e-mail digitado como destino\n  And o e-mail do cadastro da pessoa passa a ser o digitado\n  And o e-mail de todas as matrículas da pessoa passa a ser o digitado</pre>",
+	"steps": [
+		{
+			"name": "Given o modal de atualização está aberto com um e-mail diferente do cadastro",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360550612,
+			"stop": 1794360550612,
+			"attachments": []
+		},
+		{
+			"name": "And o aluno possui mais de uma matrícula",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360550612,
+			"stop": 1794360550612,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno escolhe \"Atualizar E-mail\"",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360550612,
+			"stop": 1794360550612,
+			"attachments": []
+		},
+		{
+			"name": "Then a solicitação é criada com o e-mail digitado como destino",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360550612,
+			"stop": 1794360550612,
+			"attachments": []
+		},
+		{
+			"name": "And o e-mail do cadastro da pessoa passa a ser o digitado",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360550612,
+			"stop": 1794360550612,
+			"attachments": []
+		},
+		{
+			"name": "And o e-mail de todas as matrículas da pessoa passa a ser o digitado",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360550612,
+			"stop": 1794360550612,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

@@ -19,11 +19,49 @@ function read(root, relative) {
 	return readFileSync(path.join(root, relative));
 }
 
+/** Monta o arquivo de aprovações do card de teste. Tudo o que o QA marca fica neste único arquivo, só com marcas [x]. */
+function approvalsText({ approver = 'Maria QA', g1 = 'all', approvedScenarios = '', pendencies = 0, plan = false, publish = 'S01', redFirst = false, verifyExisting = false, reason = '', rows = [], g3 = false, runId = '' } = {}) {
+	const box = (on) => (on ? '[x]' : '[ ]');
+	const approved = approvedScenarios.match(/S\d{2}/g) ?? [];
+	const published = publish.match(/S\d{2}/g) ?? [];
+	const decisions = new Map(rows);
+	const ids = [...new Set([...rows.map(([id]) => id), ...approved, ...published])];
+	const blocks = ids.flatMap((id) => [
+		`### ${id} — descrição`, 'Sugestão do agente: ', `- ${box(approved.includes(id))} Aprovado no G1 (só vale na aprovação parcial)`, `- ${box(published.includes(id))} Publicar no Zephyr`,
+		...['automatizar', 'manter-manual', 'automatizar-depois', 'não-aplicável', 'bloqueado'].map((option) => `- ${box(decisions.get(id) === option)} ${option} — explicação`), 'Justificativa (opcional): motivo', '',
+	]);
+	return [
+		'# Aprovações — TEST-1',
+		'## Aprovador',
+		`- **Nome:** ${approver}`,
+		'## 1. G1 — BDD',
+		`- ${box(g1 === 'all')} Aprovar todos os cenários`,
+		`- ${box(g1 === 'partial')} Aprovar parcialmente`,
+		`- ${box(g1 === 'changes')} Solicitar ajustes`,
+		'<!-- sync:pendencias:start -->',
+		...Array.from({ length: pendencies }, (_, i) => `### P${i + 1} — decisão ${i + 1}\n- [x] Aceito a proposta do review\n- [ ] Não aceito (explique na observação)\nObservação: `),
+		'<!-- sync:pendencias:end -->',
+		'## 2. G2 — Plano do Zephyr',
+		`- ${box(plan)} Aprovo o plano do Zephyr`,
+		'## 3. Automação',
+		`- ${box(redFirst)} red-first`,
+		`- ${box(verifyExisting)} verify-existing`,
+		`Motivo (verify-existing): ${reason}`,
+		'<!-- sync:cenarios:start -->',
+		...blocks,
+		'<!-- sync:cenarios:end -->',
+		'## 4. G3 — Execução e entrega',
+		`Run-id: ${runId}`,
+		`- ${box(g3)} Aprovo a execução e a entrega`,
+		'',
+	].join('\n');
+}
 function workspace(stateName = 'AWAITING_G1') {
 	const root = mkdtempSync(path.join(tmpdir(), 'qa-flow-'));
 	write(root, '.agents/project/qa-project.yaml', `
 artifacts:
   bdd_review: qa/cards/{CARD}/bdd/{CARD}-review.md
+  approvals_file: qa/approvals/{CARD}/{CARD}-APROVACOES.md
   executions_dir: qa/approvals/{CARD}/executions/{runId}
 jira:
   project_keys: [TEST]
@@ -37,7 +75,7 @@ evidence:
   dir: evidence/{CARD}/{runId}
 ownership:
   zephyr:
-    automation_folder_suffix: '(Automação)'
+    automation_folder_suffix: 'AUT'
     team_cases: read-only
     owned_registry: qa/cards/{CARD}/zephyr/owned-cases.json
   automation:
@@ -71,13 +109,8 @@ Feature: Fluxo
     When o usuário age
     Then o resultado aparece
 `);
-	write(root, 'qa/cards/TEST-1/bdd/TEST-1-review.md', `
-# Revisão BDD — TEST-1
-## Decisão do QA (G1)
-- [x] Aprovar todos os cenários
-- [ ] Aprovar parcialmente
-- [ ] Solicitar ajustes
-`);
+	write(root, 'qa/cards/TEST-1/bdd/TEST-1-review.md', '# Revisão BDD — TEST-1\n');
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText());
 	write(root, 'qa/runs/TEST-1/state.json', {
 		card: 'TEST-1', state: stateName, gates: {},
 		discovery: { artifact: 'qa/cards/TEST-1/context/discovery.json', sha256: sha256(readFileSync(discoveryFile)), mode: 'without-code', recordedAt: '2026-01-01T00:00:00.000Z' },
@@ -117,12 +150,27 @@ test('G1 passa com manifesto íntegro, feature e aprovação', () => {
 	assert.equal(result.valid, true, failures(result));
 });
 
-test('G1 bloqueia ausência de decisão, solicitação de ajustes e aprovação parcial vazia', () => {
-	for (const decision of ['- [ ] Aprovar todos os cenários', '- [x] Solicitar ajustes', '- [x] Aprovar parcialmente']) {
+test('G1 bloqueia ausência de decisão, solicitação de ajustes, aprovação parcial vazia e falta de nome', () => {
+	for (const options of [{ g1: 'none' }, { g1: 'changes' }, { g1: 'partial' }, { approver: '' }]) {
 		const root = workspace();
-		write(root, 'qa/cards/TEST-1/bdd/TEST-1-review.md', `# Revisão\n${decision}\n`);
-		assert.equal(validateGate({ root, card: 'TEST-1', gate: 'G1' }).valid, false);
+		write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText(options));
+		assert.equal(validateGate({ root, card: 'TEST-1', gate: 'G1' }).valid, false, JSON.stringify(options));
 	}
+});
+
+test('G1 aceita aprovação parcial com cenários listados', () => {
+	const root = workspace();
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ g1: 'partial', approvedScenarios: 'S01, S02' }));
+	assert.equal(validateGate({ root, card: 'TEST-1', gate: 'G1' }).valid, true);
+});
+
+test('G1 exige o QA marcar todas as pendências do review', () => {
+	const root = workspace();
+	write(root, 'qa/cards/TEST-1/bdd/TEST-1-review.md', '# Revisão\n## Pontos para decidir antes do G1\n\n1. **Primeira.** texto\n2. **Segunda.** texto\n');
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ pendencies: 1 }));
+	assert.equal(validateGate({ root, card: 'TEST-1', gate: 'G1' }).checks.find((item) => item.id === 'G1.open-decisions')?.ok, false);
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ pendencies: 2 }));
+	assert.equal(validateGate({ root, card: 'TEST-1', gate: 'G1' }).valid, true);
 });
 
 test('G1 bloqueia manifesto alterado depois do alinhamento', () => {
@@ -147,9 +195,10 @@ test('G2 passa somente quando payload referencia G1 e feature atuais', () => {
 	write(root, 'qa/cards/TEST-1/zephyr/zephyr-sync-payload.json', {
 		mode: 'dry-run', published: false, status: 'approved-g1', card: 'TEST-1', projectKey: 'VPOS', warnings: [],
 		g1: { approved: true, ...g1 }, feature: { sha256: sha256(read(root, feature)) },
-		ownership: { teamCases: 'read-only', automationFolder: { name: 'TEST-1 - Card (Automação)' } },
+		ownership: { teamCases: 'read-only', automationFolder: { name: 'TEST-1 - Card - AUT' } },
 		items: [ownItem()],
 	});
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true }));
 	write(root, 'qa/cards/TEST-1/zephyr/zephyr-dry-run.json', { mode: 'dry-run', published: false });
 	const result = validateGate({ root, card: 'TEST-1', gate: 'G2' });
 	assert.equal(result.valid, true, failures(result));
@@ -166,21 +215,6 @@ test('G2 bloqueia hash antigo e payload autodeclarado', () => {
 	assert.equal(result.valid, false);
 	assert.equal(result.checks.find((item) => item.id === 'G1.hash')?.ok, false);
 	assert.equal(result.checks.find((item) => item.id === 'G2.g1-provenance')?.ok, false);
-});
-
-test('G1 não usa a lista de rejeitados para aprovar parcialmente', () => {
-	const root = workspace();
-	write(root, 'qa/cards/TEST-1/bdd/TEST-1-review.md', `
-# Revisão
-- [x] Aprovar parcialmente
-### Cenários aprovados
--
-### Cenários rejeitados ou ajustados
-- S01
-`);
-	const result = validateGate({ root, card: 'TEST-1', gate: 'G1' });
-	assert.equal(result.valid, false);
-	assert.equal(result.checks.find((item) => item.id === 'G1.partial-selection')?.ok, false);
 });
 
 test('discovery rejeita artefato de fonte ainda no template', () => {
@@ -248,7 +282,7 @@ function g3Workspace({ mode = 'red-first', stateOverrides = {}, redPatch = {}, g
 	state.atdd.green = { runId: 'run-1', at: T.greenEnd, manifestSha256: greenSha, result: 'passed', passed: true, specsSha256: hash };
 	Object.assign(state.atdd, stateOverrides);
 	write(root, 'qa/runs/TEST-1/state.json', state);
-	write(root, 'qa/approvals/TEST-1/automation-decision.md', '- **Status:** APROVADO\n| Cenário | Chave | Decisão |\n|---|---|---|\n| S01 | VPOS-T1 | automatizar |\n');
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, redFirst: mode === 'red-first', verifyExisting: mode === 'verify-existing', reason: mode === 'verify-existing' ? 'funcionalidade já entregue' : '', rows: [['S01', 'automatizar']], g3: true, runId: 'run-1' }));
 	write(root, 'qa/approvals/TEST-1/executions/run-1/execution.md', '- Resultado: passed\n- Typecheck: passed\n');
 	return root;
 }
@@ -363,13 +397,15 @@ test('G3 aceita mudança nos testes reconhecida pelo QA e rejeita ack inválido'
 	assert.equal(failed(g3(root), 'G3.atdd-specs-chain'), true);
 });
 
-test('G3 bloqueia decisão sem status, cenário FAIL, diretório como evidência e typecheck ausente', () => {
+test('G3 bloqueia falta de aprovação do QA, decisão incompleta e typecheck ausente', () => {
 	const root = g3Workspace({ greenPatch: { typecheck: 'failed' } });
-	write(root, 'qa/approvals/TEST-1/automation-decision.md', '# Decisão sem status\n');
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, redFirst: true, rows: [['S01', '']], g3: false, runId: '' }));
 	write(root, 'qa/approvals/TEST-1/executions/run-1/execution.md', '- Resultado: passed\n');
 	const result = g3(root);
 	assert.equal(result.valid, false);
-	assert.equal(failed(result, 'G3.automation-decision'), true);
+	assert.equal(failed(result, 'G3.human-approval'), true);
+	assert.equal(failed(result, 'G3.decision-coverage'), true);
+	assert.equal(failed(result, 'G3.automated-selection'), true);
 	assert.equal(failed(result, 'G3.typecheck'), true);
 	assert.equal(failed(result, 'G3.manifest-typecheck'), true);
 });
@@ -384,6 +420,7 @@ test('G3 bloqueia entrega que altera teste do time', () => {
 function ownItem(overrides = {}) {
 	return {
 		order: 1,
+		scenario: 'S01',
 		name: '[TEST-1][Web][Sucesso] Validar fluxo mínimo',
 		operation: 'criar',
 		key: null,
@@ -410,12 +447,23 @@ function g2Workspace(itemOverrides, ownershipOverrides = {}) {
 	write(root, 'qa/cards/TEST-1/zephyr/zephyr-sync-payload.json', {
 		mode: 'dry-run', published: false, status: 'approved-g1', card: 'TEST-1', projectKey: 'VPOS', warnings: [],
 		g1: { approved: true, ...g1 }, feature: { sha256: sha256(read(root, feature)) },
-		ownership: { teamCases: 'read-only', automationFolder: { name: 'TEST-1 - Card (Automação)' }, ...ownershipOverrides },
+		ownership: { teamCases: 'read-only', automationFolder: { name: 'TEST-1 - Card - AUT' }, ...ownershipOverrides },
 		items: [ownItem(itemOverrides)],
 	});
 	write(root, 'qa/cards/TEST-1/zephyr/zephyr-dry-run.json', { mode: 'dry-run', published: false });
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true }));
 	return root;
 }
+
+test('G2 exige o QA aprovar o plano do Zephyr no arquivo único', () => {
+	for (const options of [{ plan: false }, { plan: true, approver: '' }]) {
+		const root = g2Workspace();
+		write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText(options));
+		const result = validateGate({ root, card: 'TEST-1', gate: 'G2' });
+		assert.equal(result.valid, false, JSON.stringify(options));
+		assert.equal(result.checks.find((item) => item.id === 'G2.human-approval')?.ok, false);
+	}
+});
 
 test('G2 bloqueia atualizar caso do time', () => {
 	const root = g2Workspace({ operation: 'atualizar', key: 'VPOS-T1', owned: false, teamReference: null });
@@ -424,7 +472,7 @@ test('G2 bloqueia atualizar caso do time', () => {
 	assert.equal(result.checks.find((item) => item.id === 'G2.no-team-write')?.ok, false);
 });
 
-test('G2 bloqueia pasta do agente sem o sufixo (Automação)', () => {
+test('G2 bloqueia pasta do agente sem o sufixo AUT', () => {
 	const root = g2Workspace({}, { automationFolder: { name: 'TEST-1 - Card' } });
 	const result = validateGate({ root, card: 'TEST-1', gate: 'G2' });
 	assert.equal(result.valid, false);
@@ -457,3 +505,49 @@ test('propriedade da automação: só arquivos novos nos diretórios do agente',
 function failures(result) {
 	return result.checks.filter((item) => !item.ok).map((item) => `${item.id}: ${item.message}`).join('\n');
 }
+
+test('G2 exige o payload com exatamente os cenários listados para o Zephyr', () => {
+	const root = g2Workspace();
+	// Lista S01 e o payload tem S01: passa.
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, publish: 'S01' }));
+	assert.equal(validateGate({ root, card: 'TEST-1', gate: 'G2' }).valid, true);
+	// Lista outro cenário: o payload deixa de refletir o que o QA mandou publicar.
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, publish: 'S02' }));
+	assert.equal(validateGate({ root, card: 'TEST-1', gate: 'G2' }).checks.find((item) => item.id === 'G2.feature-parity')?.ok, false);
+	// Não listou nada para publicar: nada pode ir ao Zephyr.
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, publish: '' }));
+	assert.equal(validateGate({ root, card: 'TEST-1', gate: 'G2' }).checks.find((item) => item.id === 'G2.approved-scope')?.ok, false);
+});
+
+test('G2 não deixa publicar cenário que o G1 parcial não aprovou', () => {
+	const root = g2Workspace();
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, g1: 'partial', approvedScenarios: 'S02', publish: 'S01' }));
+	const result = validateGate({ root, card: 'TEST-1', gate: 'G2' });
+	assert.equal(result.checks.find((item) => item.id === 'G2.approved-scope')?.ok, false);
+});
+
+test('G2 bloqueia publicar um cenário fora do G1 escondido junto de um aprovado', () => {
+	// G1 parcial aprovou só S01, mas o QA listou S01 e S02 para publicar: S02 não pode ir junto.
+	const root = g2Workspace();
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, g1: 'partial', approvedScenarios: 'S01', publish: 'S01, S02' }));
+	const result = validateGate({ root, card: 'TEST-1', gate: 'G2' });
+	assert.equal(result.checks.find((item) => item.id === 'G2.approved-scope')?.ok, false);
+	assert.match(result.checks.find((item) => item.id === 'G2.approved-scope')?.message ?? '', /S02/);
+});
+
+test('G3 aceita automatizar mais cenários do que foram ao Zephyr, desde que aprovados no G1', () => {
+	const root = g3Workspace();
+	// O Zephyr só recebeu S01; o QA decidiu automatizar S01 e S02, e o G1 aprovou todos.
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, publish: 'S01', redFirst: true, rows: [['S01', 'automatizar'], ['S02', 'automatizar']], g3: true, runId: 'run-1' }));
+	const result = g3(root);
+	assert.equal(result.checks.find((item) => item.id === 'G3.automated-selection')?.ok, true);
+	assert.equal(result.checks.find((item) => item.id === 'G3.decision-coverage')?.ok, true);
+});
+
+test('G3 bloqueia automatizar cenário que o G1 parcial não aprovou e cobra decisão de todo aprovado', () => {
+	const root = g3Workspace();
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, g1: 'partial', approvedScenarios: 'S01', redFirst: true, rows: [['S01', 'automatizar'], ['S02', 'automatizar']], g3: true, runId: 'run-1' }));
+	assert.equal(failed(g3(root), 'G3.automated-selection'), true);
+	write(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsText({ plan: true, g1: 'all', redFirst: true, rows: [['S01', 'automatizar'], ['S02', '']], g3: true, runId: 'run-1' }));
+	assert.equal(failed(g3(root), 'G3.decision-coverage'), true);
+});

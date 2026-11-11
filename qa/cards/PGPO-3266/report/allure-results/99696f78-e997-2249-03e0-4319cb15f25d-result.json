@@ -1,0 +1,127 @@
+{
+	"uuid": "99696f78-e997-2249-03e0-4319cb15f25d",
+	"historyId": "c1db90be42afa7dbb6c52cc8ca4b28ee82a624ca",
+	"testCaseId": "ae9e1e99ae2c9c90df577b80eb8467fe",
+	"name": "S05 — Validar que o campo de e-mail vem preenchido com o e-mail do cadastro e pode ser editado",
+	"fullName": "PGPO-3266.S05",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360488566,
+	"stop": 1794360496993,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "normal"
+		},
+		{
+			"name": "tag",
+			"value": "S05"
+		},
+		{
+			"name": "tag",
+			"value": "Alta"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2101 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2101",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2101"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que o campo de e-mail vem preenchido com o e-mail do cadastro e pode ser editado\n  Given o aluno possui um e-mail cadastrado\n  When o aluno abre a tela de 2ª via de NFS-e\n  Then o campo de e-mail exibe o e-mail atual do cadastro\n  And o campo de e-mail permite edição</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno possui um e-mail cadastrado",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360488566,
+			"stop": 1794360490673,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno abre a tela de 2ª via de NFS-e",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360490673,
+			"stop": 1794360492780,
+			"attachments": []
+		},
+		{
+			"name": "Then o campo de e-mail exibe o e-mail atual do cadastro",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360492780,
+			"stop": 1794360494887,
+			"attachments": []
+		},
+		{
+			"name": "And o campo de e-mail permite edição",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360494886,
+			"stop": 1794360496993,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

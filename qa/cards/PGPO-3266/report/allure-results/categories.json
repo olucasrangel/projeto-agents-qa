@@ -1,0 +1,30 @@
+[
+	{
+		"name": "Fica para depois (falta massa ou acesso)",
+		"matchedStatuses": [
+			"skipped"
+		],
+		"messageRegex": ".*automatizar-depois.*"
+	},
+	{
+		"name": "Bloqueado (sem interface ou sem como forçar)",
+		"matchedStatuses": [
+			"skipped"
+		],
+		"messageRegex": ".*bloqueado.*"
+	},
+	{
+		"name": "Mantido como teste manual",
+		"matchedStatuses": [
+			"skipped"
+		],
+		"messageRegex": ".*manter-manual.*"
+	},
+	{
+		"name": "Falha de produto ou da automação",
+		"matchedStatuses": [
+			"failed",
+			"broken"
+		]
+	}
+]

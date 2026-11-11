@@ -1,0 +1,143 @@
+{
+	"uuid": "2c73ccf4-ff9e-b1a2-3088-9d9addf9315e",
+	"historyId": "4019c695630ae5a525e38fd0d0b76ae62df98bc7",
+	"testCaseId": "420bc850d209ee263e5d20c270ea0032",
+	"name": "S15 — Validar que a solicitação é gravada com a competência e o e-mail de destino",
+	"fullName": "PGPO-3266.S15",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360563455,
+	"stop": 1794360574011,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S15"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2111 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2111",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2111"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que a solicitação é gravada com a competência e o e-mail de destino\n  Given o aluno escolheu a competência 03/2026\n  And o aluno informou o e-mail &quot;nota@exemplo.com&quot;\n  When o aluno envia a solicitação\n  Then a solicitação é criada com a competência 03/2026\n  And a solicitação é criada com o e-mail de destino &quot;nota@exemplo.com&quot;\n  And a solicitação é criada com o status &quot;Em processamento&quot;</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno escolheu a competência 03/2026",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360563455,
+			"stop": 1794360565214,
+			"attachments": []
+		},
+		{
+			"name": "And o aluno informou o e-mail \"nota@exemplo.com\"",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360565214,
+			"stop": 1794360566973,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno envia a solicitação",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360566974,
+			"stop": 1794360568733,
+			"attachments": []
+		},
+		{
+			"name": "Then a solicitação é criada com a competência 03/2026",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360568733,
+			"stop": 1794360570492,
+			"attachments": []
+		},
+		{
+			"name": "And a solicitação é criada com o e-mail de destino \"nota@exemplo.com\"",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360570492,
+			"stop": 1794360572251,
+			"attachments": []
+		},
+		{
+			"name": "And a solicitação é criada com o status \"Em processamento\"",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360572252,
+			"stop": 1794360574011,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "card": "PGPO-3266",
+  "projectKey": "VPOS",
+  "folder": {
+    "id": 61718487,
+    "parentId": 59373744,
+    "name": "PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar-editar o e-mail de destino - AUT",
+    "createdBy": "agente",
+    "teamFolderUntouched": 59374840
+  },
+  "cases": [
+    {
+      "key": "VPOS-T2212",
+      "scenario": "S20",
+      "name": "[PGPO-3266][Web][Sucesso] Validar que o e-mail digitado com espaços nas pontas e maiúsculas é tratado como o e-mail do cadastro",
+      "id": 427198380,
+      "folderId": 61718487,
+      "status": "Draft",
+      "script": "bdd-anexado"
+    },
+    {
+      "key": "VPOS-T2213",
+      "scenario": "S21",
+      "name": "[PGPO-3266][Web][Sucesso] Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha",
+      "id": 427198384,
+      "folderId": 61718487,
+      "status": "Draft",
+      "script": "bdd-anexado"
+    }
+  ]
+}

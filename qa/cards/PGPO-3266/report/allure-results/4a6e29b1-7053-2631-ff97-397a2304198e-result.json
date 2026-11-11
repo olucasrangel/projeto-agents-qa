@@ -1,0 +1,127 @@
+{
+	"uuid": "4a6e29b1-7053-2631-ff97-397a2304198e",
+	"historyId": "6bb3f0f856860cfbb0219454941ba4e0cd08b25e",
+	"testCaseId": "59f98613a75f0b46a82e14b184415a89",
+	"name": "S04 — Validar que o envio é bloqueado sem competência selecionada",
+	"fullName": "PGPO-3266.S04",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360480741,
+	"stop": 1794360488566,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de falha"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S04"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2100 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2100",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2100"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Falha] Validar que o envio é bloqueado sem competência selecionada\n  Given o aluno está na tela de 2ª via de NFS-e sem competência selecionada\n  When o aluno clica em &quot;Enviar Solicitação&quot;\n  Then a solicitação não é criada\n  And o sistema exige a escolha de mês e ano de competência</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno está na tela de 2ª via de NFS-e sem competência selecionada",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360480741,
+			"stop": 1794360482697,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno clica em \"Enviar Solicitação\"",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360482697,
+			"stop": 1794360484653,
+			"attachments": []
+		},
+		{
+			"name": "Then a solicitação não é criada",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360484654,
+			"stop": 1794360486610,
+			"attachments": []
+		},
+		{
+			"name": "And o sistema exige a escolha de mês e ano de competência",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360486610,
+			"stop": 1794360488566,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

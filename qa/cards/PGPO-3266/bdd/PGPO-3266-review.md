@@ -47,17 +47,9 @@ Mapeamento de prioridade: High ↔ @critical, Normal ↔ @high, Low ↔ @medium 
 6. **Criticidade.** Pela regra de risco, 14 cenários ficaram como @critical. Se o QA achar excesso, pode rebaixar sem mudar os passos.
 7. **Ambiente de execução.** A massa (aluno com várias matrículas, tenant com serviço ligado e desligado, e competências) ainda não foi confirmada. Os cenários S11, S18, S19 e S21 dependem dela.
 
-## Resolução das pendências G1
+## Decisões e aprovações
 
-Marque cada item somente depois da decisão do QA e registre a decisão ao lado.
-
-- [x] P1 — Renomeação dos 19 casos: não haverá renomeação. Casos do time são somente leitura; o agente cria os próprios casos (regra de propriedade).
-- [x] P2 — Precondições dos casos existentes: os casos do time não são alterados; os casos do agente nascem com precondição (padrão do Confluence).
-- [x] P3 — Pasta dos casos S20 e S21: pasta nova com sufixo (Automação); os 21 casos do agente ficam nela.
-- [x] P4 — Nome definitivo da pasta: `PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar/editar o e-mail de destino (Automação)`, conforme o nome completo do card no Jira. A pasta do time não é tocada.
-- [x] P5 — Dialeto Gherkin: `Feature/Scenario/Given/When/Then`, com texto de negócio em pt-BR, confirmado pelo QA.
-- [x] P6 — Criticidades aprovadas:
-- [x] P7 — Massa e ambiente confirmados:
+Não se marca nada neste arquivo. Todas as decisões do QA (G1, G2, automação e G3) ficam em `qa/approvals/PGPO-3266/APROVACOES.md`.
 
 ## Cenários
 
@@ -209,7 +201,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     Then a nova solicitação é criada com o status "Em processamento"
 
   @PGPO-3266 @critical
-  Scenario: [PGPO-3266][Web][Sucesso] Validar que a comparação do e-mail ignora espaços nas pontas e diferença de maiúsculas
+  Scenario: [PGPO-3266][Web][Sucesso] Validar que o e-mail digitado com espaços nas pontas e maiúsculas é tratado como o e-mail do cadastro
     Given o e-mail atual do cadastro é "aluno@exemplo.com"
     And o campo de e-mail contém " Aluno@Exemplo.com "
     When o aluno clica em "Enviar Solicitação"
@@ -217,20 +209,8 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
     And a solicitação é criada sem alterar o cadastro
 
   @PGPO-3266 @critical
-  Scenario: [PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência cuja solicitação anterior falhou
+  Scenario: [PGPO-3266][Web][Sucesso] Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha
     Given existe uma solicitação com falha no processamento para a matrícula e a competência 03/2026
     When o aluno envia nova solicitação para a competência 03/2026
     Then a nova solicitação é criada com o status "Em processamento"
 ```
-
-## Decisão do QA (G1)
-
-- [ ] Aprovar todos os cenários
-- [ x] Aprovar parcialmente (listar os números abaixo)
-- [ ] Solicitar ajustes
-
-**Cenários aprovados:**
-S20 e S21
-**Cenários rejeitados ou ajustados:**
-
-**Respostas aos pontos 1 a 7 acima:**

@@ -1,0 +1,125 @@
+{
+	"uuid": "1b1452cf-daa7-c7e1-2c72-6aa4da508fe8",
+	"historyId": "2cc2085035389027a0bbb587744a347bad401bc2",
+	"testCaseId": "e9da1aeff21889e25e0cd31d234fc50e",
+	"name": "S01 — Validar que o autosserviço não aparece com o serviço desligado no tenant",
+	"fullName": "PGPO-3266.S01",
+	"status": "skipped",
+	"statusDetails": {
+		"message": "Fica para depois (falta massa ou acesso) (decisão do QA: automatizar-depois). precisa de aluno em tenant com o serviço desligado; os usuários do .env têm o serviço ligado",
+		"known": false,
+		"muted": false,
+		"flaky": false
+	},
+	"stage": "finished",
+	"start": 1794360471620,
+	"stop": 1794360471620,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Fica para depois (falta massa ou acesso)"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S01"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "automatizar-depois"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2097 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2097",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar-depois"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2097"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar-depois — precisa de aluno em tenant com o serviço desligado; os usuários do .env têm o serviço ligado</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que o autosserviço não aparece com o serviço desligado no tenant\n  Given o serviço de 2ª via de NFS-e está desligado no tenant do aluno\n  When o aluno acessa a lista de autosserviços\n  Then o autosserviço de 2ª via de NFS-e não é exibido</pre>",
+	"steps": [
+		{
+			"name": "Given o serviço de 2ª via de NFS-e está desligado no tenant do aluno",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360471620,
+			"stop": 1794360471620,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno acessa a lista de autosserviços",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360471620,
+			"stop": 1794360471620,
+			"attachments": []
+		},
+		{
+			"name": "Then o autosserviço de 2ª via de NFS-e não é exibido",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360471620,
+			"stop": 1794360471620,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

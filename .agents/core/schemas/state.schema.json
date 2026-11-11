@@ -22,7 +22,8 @@
 				"decidedAt": { "type": "string" },
 				"red": { "type": "object" },
 				"green": { "type": "object" },
-				"acknowledgements": { "type": "array", "items": { "type": "object" } }
+				"acknowledgements": { "type": "array", "items": { "type": "object" } },
+				"modeChanges": { "type": "array", "items": { "type": "object" } }
 			}
 		},
 		"discovery": {
@@ -54,6 +55,7 @@
 					"artifact": { "type": "string" },
 					"sha256": { "type": "string" },
 					"runId": { "type": "string" },
+					"acknowledgements": { "type": "array", "items": { "type": "object" } },
 					"validation": {
 						"type": "object",
 						"required": ["schemaVersion", "checksSha256"],

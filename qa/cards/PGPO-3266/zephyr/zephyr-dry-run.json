@@ -31,9 +31,9 @@
     },
     "newCasesFolder": {
       "parentId": 59373744,
-      "name": "PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar/editar o e-mail de destino (Automação)",
+      "name": "PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar/editar o e-mail de destino - AUT",
       "created": false,
-      "decision": "Decidido pelo QA: o agente sempre cria pasta própria com sufixo (Automação) e escreve somente nela."
+      "decision": "Decidido pelo QA: o agente sempre cria pasta própria com sufixo AUT e escreve somente nela."
     }
   },
   "testCycle": {
@@ -362,7 +362,7 @@
       "scenario": "S20",
       "operation": "criar",
       "key": null,
-      "proposedName": "[PGPO-3266][Web][Sucesso] Validar que a comparação do e-mail ignora espaços nas pontas e diferença de maiúsculas",
+      "proposedName": "[PGPO-3266][Web][Sucesso] Validar que o e-mail digitado com espaços nas pontas e maiúsculas é tratado como o e-mail do cadastro",
       "folder": "newCasesFolder",
       "priority": "High",
       "tag": "@critical",
@@ -374,7 +374,7 @@
       "scenario": "S21",
       "operation": "criar",
       "key": null,
-      "proposedName": "[PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência cuja solicitação anterior falhou",
+      "proposedName": "[PGPO-3266][Web][Sucesso] Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha",
       "folder": "newCasesFolder",
       "priority": "High",
       "tag": "@critical",
@@ -385,7 +385,7 @@
   ],
   "notes": [
     "Os casos VPOS-T2097 a VPOS-T2115 são do time e ficam somente leitura: nenhum é criado, atualizado, renomeado, movido ou apagado.",
-    "O agente cria os próprios casos na pasta com sufixo (Automação), seguindo o padrão do Confluence: nome [Chave][Aplicação][Sucesso|Falha] Validar ..., objetivo, precondição, BDD-Gherkin e status Draft.",
+    "O agente cria os próprios casos na pasta com sufixo AUT, seguindo o padrão do Confluence: nome [Chave][Aplicação][Sucesso|Falha] Validar ..., objetivo, precondição, BDD-Gherkin e status Draft.",
     "Reexecutar não duplica: casos do agente são identificados pelo registro owned-cases.json e atualizados somente por ele."
   ]
 }

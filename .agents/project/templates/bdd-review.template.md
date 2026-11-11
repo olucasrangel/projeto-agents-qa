@@ -37,16 +37,6 @@ Scenario: Validar {RESULTADO}
   Then {RESULTADO_OBSERVAVEL}
 ```
 
-## Decisão do QA — G1
+## Decisões e aprovações
 
-- [ ] Aprovar todos os cenários
-- [ ] Aprovar parcialmente
-- [ ] Solicitar ajustes
-
-### Cenários aprovados
-
--
-
-### Cenários rejeitados ou ajustados
-
--
+Não se marca nada neste arquivo. Todas as decisões do QA ficam em `qa/approvals/{CARD}/{CARD}-APROVACOES.md`.

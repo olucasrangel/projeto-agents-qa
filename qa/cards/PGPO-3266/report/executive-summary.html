@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Resumo executivo — PGPO-3266</title>
+<style>
+body{font:15px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;max-width:980px;margin:32px auto;padding:0 20px;color:#1c2330}
+h1{margin:0 0 4px}h2{margin-top:32px;border-bottom:1px solid #dde3ec;padding-bottom:6px}.muted{color:#6b7686}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:18px 0}
+.card{border:1px solid #dde3ec;border-radius:10px;padding:14px;background:#f8fafc}.card b{display:block;font-size:26px}
+table{border-collapse:collapse;width:100%;margin:10px 0}td,th{border-bottom:1px solid #e6ebf2;padding:7px 8px;text-align:left;vertical-align:top}
+th{background:#f1f5fa}.ok{color:#127a3d;font-weight:700}.bad{color:#b3261e;font-weight:700}.wait{color:#9a6a00;font-weight:700}
+.bar{background:#e6ebf2;border-radius:6px;height:10px;min-width:120px}.bar span{display:block;height:10px;border-radius:6px;background:#2f6fed}
+a{color:#2f6fed}code{background:#f1f5fa;padding:1px 5px;border-radius:4px}
+</style></head><body>
+<h1>PGPO-3266 — resumo executivo</h1>
+<p class="muted">[NFS-e] Solicitar a 2ª via e confirmar/editar o e-mail de destino · Autosserviço de 2ª via de NFS-e com e-mail de destino</p>
+<p><a href="https://cogna.atlassian.net/browse/PGPO-3266">Card no Jira</a> · <a href="index.html">Relatório detalhado (Allure)</a> · <a href="https://github.com/olucasrangel/projeto-agents-qa/tree/qa/PGPO-3266-automacao-nfse-2via">Branch no GitHub</a></p>
+
+<div class="cards">
+<div class="card"><b>15 de 21</b>cenários automatizados (71.4%)</div>
+<div class="card"><b>71.4% → 90.5%</b>cobertura hoje → com a massa pendente</div>
+<div class="card"><b>15/15</b>passando na execução oficial</div>
+<div class="card"><b>22 h 12 min</b>tempo de trabalho, sem as esperas dos gates (prazo do card: 6 d 4 h)</div>
+<div class="card"><b>12/12</b>gates de qualidade atendidos</div>
+</div>
+
+<h2>1. O que foi entregue</h2>
+<table>
+<tr><td>Cenários no BDD aprovado</td><td>21</td></tr>
+<tr><td>Automatizados com ATDD (teste escrito antes da funcionalidade)</td><td>0</td></tr>
+<tr><td>Automatizados sobre a funcionalidade que já estava pronta</td><td>15</td></tr>
+<tr><td>Ficam para depois (falta massa ou acesso)</td><td>4</td></tr>
+<tr><td>Bloqueados (sem interface)</td><td>2</td></tr>
+<tr><td>Mantidos como manual</td><td>0</td></tr>
+<tr><td>Modo ATDD do card</td><td>verify-existing, confirmado por Victor Lance</td></tr>
+</table>
+<p class="muted">Neste card a funcionalidade já estava entregue no hml, por isso o modo é <code>verify-existing</code>: os testes verificam o que existe e viram regressão. O modo <code>red-first</code> é usado quando o teste nasce antes da funcionalidade.</p>
+
+<h2>2. Cobertura da feature</h2>
+<p>Piso <b>71.4%</b> (automatizado hoje) e teto <b>90.5%</b> (somando o que depende só de massa ou acesso). Os 2 bloqueados não têm interface e ficam fora do teto.</p>
+<table><tr><th>Criticidade</th><th>Automatizados</th><th>%</th><th></th></tr><tr><td>Crítica</td><td>9 de 14</td><td>64.3%</td><td><div class="bar"><span style="width:64.3%"></span></div></td></tr><tr><td>Alta</td><td>6 de 7</td><td>85.7%</td><td><div class="bar"><span style="width:85.7%"></span></div></td></tr><tr><td>Média</td><td>0 de 0</td><td>0%</td><td><div class="bar"><span style="width:0%"></span></div></td></tr></table>
+<table><tr><th>Tipo</th><th>Automatizados</th><th>%</th><th></th></tr><tr><td>Sucesso</td><td>11 de 16</td><td>68.8%</td><td><div class="bar"><span style="width:68.8%"></span></div></td></tr><tr><td>Falha</td><td>4 de 5</td><td>80%</td><td><div class="bar"><span style="width:80%"></span></div></td></tr></table>
+
+<h2>3. Casos no Zephyr</h2>
+<p>Pasta do agente: <code>PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar-editar o e-mail de destino - AUT</code>. Casos do time referenciados (somente leitura): 19.</p>
+<table><tr><th>Caso criado</th><th>Cenário</th><th>Status</th><th>Nome</th></tr><tr><td><a href="https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2212">VPOS-T2212</a></td><td>S20</td><td>Draft</td><td>[PGPO-3266][Web][Sucesso] Validar que o e-mail digitado com espaços nas pontas e maiúsculas é tratado como o e-mail do cadastro</td></tr><tr><td><a href="https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2213">VPOS-T2213</a></td><td>S21</td><td>Draft</td><td>[PGPO-3266][Web][Sucesso] Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha</td></tr></table>
+
+<h2>4. Cenários que não foram automatizados</h2>
+<table><tr><th>Cenário</th><th>Descrição</th><th>Decisão do QA</th><th>Motivo</th></tr><tr><td>S01</td><td>Validar que o autosserviço não aparece com o serviço desligado no tenant</td><td>automatizar-depois</td><td>precisa de aluno em tenant com o serviço desligado; os usuários do .env têm o serviço ligado</td></tr><tr><td>S03</td><td>Validar que as competências exibidas são as faturadas do aluno, sem limite de histórico</td><td>automatizar-depois</td><td>não há como saber pela interface quais competências são faturadas, nem aluno com histórico faturado conhecido</td></tr><tr><td>S11</td><td>Validar que atualizar o e-mail propaga o novo e-mail para a pessoa e todas as matrículas</td><td>automatizar-depois</td><td>altera o e-mail do cadastro de um usuário compartilhado e exige aluno com várias matrículas e conferência por API</td></tr><tr><td>S21</td><td>Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha</td><td>automatizar-depois</td><td>nenhum usuário do .env tem solicitação com falha; sem massa nem como forçar a falha</td></tr><tr><td>S13</td><td>Validar que o cadastro não muda quando a solicitação não é criada</td><td>bloqueado</td><td>sem UI: exige forçar falha na fila; ficaria fora de qualquer modo ATDD</td></tr><tr><td>S16</td><td>Validar que o envio publica a solicitação na fila de processamento</td><td>bloqueado</td><td>sem UI: linha na outbox não é observável pela interface</td></tr></table>
+
+<h2>5. Tempo</h2>
+<table>
+<tr><td>Prazo total do card no fluxo</td><td>6 d 4 h</td></tr>
+<tr><td>Tempo de trabalho (prazo menos as esperas dos gates)</td><td>22 h 12 min</td></tr>
+<tr><td>Espera pelas decisões do QA nos gates</td><td>5 d 6 h</td></tr>
+<tr><td>Da liberação da automação até o relatório</td><td>2 h 04 min</td></tr>
+<tr><td>Duração da execução oficial</td><td>3 min</td></tr>
+</table>
+<table><tr><th>Fase</th><th>Duração</th></tr><tr><td>DISCOVERY</td><td>20 h 06 min</td></tr><tr><td>AWAITING_G1</td><td>5 d 6 h</td></tr><tr><td>ZEPHYR</td><td>8 s</td></tr><tr><td>AWAITING_G2</td><td>8 s</td></tr><tr><td>AUTOMATION_DECISION</td><td>5 min</td></tr><tr><td>AUTOMATION</td><td>1 h 34 min</td></tr><tr><td>RUN</td><td>3 min</td></tr><tr><td>REPORT</td><td>17 min</td></tr><tr><td>RUN</td><td>11 min</td></tr><tr><td>REPORT</td><td>11 h 21 min</td></tr><tr><td>AWAITING_G3</td><td>3 min</td></tr><tr><td>DELIVERY</td><td>4 min</td></tr></table>
+<p class="muted">Para estimar a economia de horas manuais, informe <code>report.manual_minutes_per_scenario</code> no <code>qa-project.yaml</code>.</p>
+
+<h2>6. Gates de qualidade</h2>
+<table><tr><th></th><th>Gate</th><th>Detalhe</th></tr><tr><td><span class="ok">✔</span></td><td>BDD aprovado pelo QA (G1)</td><td>por Victor Lance</td></tr><tr><td><span class="ok">✔</span></td><td>Plano do Zephyr aprovado pelo QA (G2)</td><td>por Victor Lance</td></tr><tr><td><span class="ok">✔</span></td><td>Typecheck verde</td><td>typecheck passed</td></tr><tr><td><span class="ok">✔</span></td><td>Execução oficial verde sobre os testes atuais</td><td>execução run-2026-11-11-03: passed</td></tr><tr><td><span class="ok">✔</span></td><td>Todos os cenários automatizados passam</td><td>15 de 15</td></tr><tr><td><span class="ok">✔</span></td><td>Sem retentativas (sem instabilidade escondida)</td><td>retries = 0</td></tr><tr><td><span class="ok">✔</span></td><td>Cada cenário automatizado ligado a um caso do Zephyr</td><td>15 de 15</td></tr><tr><td><span class="ok">✔</span></td><td>Evidência (print) em todos os passos</td><td>um print por passo, registrado no manifesto</td></tr><tr><td><span class="ok">✔</span></td><td>A entrega só altera o que o agente criou</td><td>testes e casos do time intactos</td></tr><tr><td><span class="ok">✔</span></td><td>Todo cenário aprovado tem decisão do QA</td><td>21 de 21</td></tr><tr><td><span class="ok">✔</span></td><td>Execuções oficiais aprovadas</td><td>2 de 3 execuções oficiais passaram</td></tr><tr><td><span class="ok">✔</span></td><td>Execução e entrega aprovadas pelo QA (G3)</td><td>por Victor Lance</td></tr></table>
+<p class="muted">✔ atendido · ✘ falhou · … aguarda a decisão do QA.</p>
+<h3>Execuções oficiais</h3>
+<table><tr><th>Run</th><th>Resultado</th><th>Duração</th></tr><tr><td>run-2026-11-11-01</td><td><span class="ok">passou</span></td><td>3 min</td></tr><tr><td>run-2026-11-11-02</td><td><span class="bad">falhou</span></td><td>4 min</td></tr><tr><td>run-2026-11-11-03</td><td><span class="ok">passou</span></td><td>3 min</td></tr></table>
+
+<h2>7. Entrega</h2>
+<table>
+<tr><td>Branch</td><td><code>qa/PGPO-3266-automacao-nfse-2via</code> (<a href="https://github.com/olucasrangel/projeto-agents-qa/tree/qa/PGPO-3266-automacao-nfse-2via">abrir</a>)</td></tr>
+<tr><td>Commit</td><td><code>ecc1765</code> <span class="wait">com alterações ainda não commitadas</span></td></tr>
+<tr><td>Abrir a PR</td><td><a href="https://github.com/olucasrangel/projeto-agents-qa/pull/new/qa/PGPO-3266-automacao-nfse-2via">https://github.com/olucasrangel/projeto-agents-qa/pull/new/qa/PGPO-3266-automacao-nfse-2via</a></td></tr>
+<tr><td>Relatório gerado em</td><td>11/11/2026, 09:59:10</td></tr>
+</table>
+<p class="muted">Gerado por <code>npm run qa:report -- generate PGPO-3266</code> a partir do BDD aprovado, do estado do fluxo, do manifesto de evidências e do Git. Os prints ficam fora do Git (contêm dados dos alunos de teste).</p>
+</body></html>

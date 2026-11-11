@@ -1,0 +1,135 @@
+{
+	"uuid": "5bdfc476-717a-dcd6-fed5-0b17aa4632b6",
+	"historyId": "4a2745506569025a3856fe7ebd827176fca4f6f7",
+	"testCaseId": "c083be0e3394fe8456f3ac5044b0ad07",
+	"name": "S08 — Validar que o envio com o e-mail do cadastro cria a solicitação sem abrir o modal",
+	"fullName": "PGPO-3266.S08",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360516849,
+	"stop": 1794360529605,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S08"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2104 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2104",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2104"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que o envio com o e-mail do cadastro cria a solicitação sem abrir o modal\n  Given o aluno informou uma competência\n  And o e-mail do campo é igual ao e-mail atual do cadastro\n  When o aluno clica em &quot;Enviar Solicitação&quot;\n  Then a solicitação é criada sem exibir o modal de atualização\n  And o cadastro do aluno não é alterado</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno informou uma competência",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360516849,
+			"stop": 1794360519400,
+			"attachments": []
+		},
+		{
+			"name": "And o e-mail do campo é igual ao e-mail atual do cadastro",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360519400,
+			"stop": 1794360521951,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno clica em \"Enviar Solicitação\"",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360521951,
+			"stop": 1794360524502,
+			"attachments": []
+		},
+		{
+			"name": "Then a solicitação é criada sem exibir o modal de atualização",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360524503,
+			"stop": 1794360527054,
+			"attachments": []
+		},
+		{
+			"name": "And o cadastro do aluno não é alterado",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360527054,
+			"stop": 1794360529605,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

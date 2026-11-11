@@ -1,0 +1,125 @@
+{
+	"uuid": "acb2e334-bc48-6a96-d632-af6011afc196",
+	"historyId": "a628c425cc7d1f376293bab058cf82b531ce63e2",
+	"testCaseId": "1b1545d4543988791b4d3520fee61050",
+	"name": "S21 — Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha",
+	"fullName": "PGPO-3266.S21",
+	"status": "skipped",
+	"statusDetails": {
+		"message": "Fica para depois (falta massa ou acesso) (decisão do QA: automatizar-depois). nenhum usuário do .env tem solicitação com falha; sem massa nem como forçar a falha",
+		"known": false,
+		"muted": false,
+		"flaky": false
+	},
+	"stage": "finished",
+	"start": 1794360662677,
+	"stop": 1794360662677,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Fica para depois (falta massa ou acesso)"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S21"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "automatizar-depois"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2213 (caso criado pelo agente)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2213",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar-depois"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2213"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar-depois — nenhum usuário do .env tem solicitação com falha; sem massa nem como forçar a falha</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha\n  Given existe uma solicitação com falha no processamento para a matrícula e a competência 03/2026\n  When o aluno envia nova solicitação para a competência 03/2026\n  Then a nova solicitação é criada com o status &quot;Em processamento&quot;</pre>",
+	"steps": [
+		{
+			"name": "Given existe uma solicitação com falha no processamento para a matrícula e a competência 03/2026",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360662677,
+			"stop": 1794360662677,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno envia nova solicitação para a competência 03/2026",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360662677,
+			"stop": 1794360662677,
+			"attachments": []
+		},
+		{
+			"name": "Then a nova solicitação é criada com o status \"Em processamento\"",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360662677,
+			"stop": 1794360662677,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

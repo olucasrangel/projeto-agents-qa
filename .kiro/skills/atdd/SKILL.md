@@ -20,12 +20,12 @@ Antes do G1, compartilhe o pacote de revisão com o PO e com quem vai desenvolve
 
 ## Escolha do modo (decisão explícita, nunca padrão)
 
-Ao entrar em `AUTOMATION`, informe `--atdd-mode` e `--by` (o QA que confirmou o modo; o G3 exibe quem foi):
+O modo é marcado pelo QA no `APROVACOES.md` (seção Automação), junto do nome do aprovador; o G3 exibe quem foi:
 
 - **`red-first`**: a funcionalidade ainda não foi entregue ou está em desenvolvimento (subtarefas de front ou back abertas). É o modo normal e o que dá valor ao dev.
-- **`verify-existing`**: a funcionalidade já está entregue e em stage. Exige `--reason` com o motivo e dispensa a prova vermelha. Não use para fugir do vermelho quando o card ainda está em desenvolvimento.
+- **`verify-existing`**: a funcionalidade já está entregue e em stage. Exige o Motivo no `APROVACOES.md` e dispensa a prova vermelha. Não use para fugir do vermelho quando o card ainda está em desenvolvimento.
 
-Proponha o modo ao QA com a evidência (status do card e das subtarefas) e peça confirmação. O agente nunca escolhe `verify-existing` sozinho: o `--by` é o QA que confirmou.
+Proponha o modo ao QA com a evidência (status do card e das subtarefas) e peça confirmação. O agente nunca escolhe `verify-existing` sozinho: quem marcou é o aprovador do arquivo.
 
 ## Como escrever o teste de aceite
 

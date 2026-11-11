@@ -16,7 +16,8 @@
 4. Classifique o discovery: `complete` (tela e código), `without-code` (tela sem código) ou `documental` (sem tela/código completos).
 5. Gere revisão e `.feature`; no dry-run, gere somente payload local com `published: false`.
 6. Depois do G2, registre decisão cenário a cenário: automatizar, manter-manual, automatizar-depois, não-aplicável ou bloqueado.
-7. Respeite a propriedade: casos do time são somente leitura; crie sempre uma pasta própria com `(Automação)` e grave só nela, seguindo o padrão do Confluence.
+7. Depois que o BDD existir, rode `npm run qa:approvals -- sync <CARD>` e peça ao QA que decida **somente** em `qa/approvals/<CARD>/<CARD>-APROVACOES.md`.
+8. Respeite a propriedade: casos do time são somente leitura; crie sempre uma pasta própria com `(Automação)` e grave só nela, seguindo o padrão do Confluence.
 
 ## Saída
 

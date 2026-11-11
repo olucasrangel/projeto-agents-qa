@@ -1,0 +1,119 @@
+{
+	"uuid": "f73f5634-5a5d-476d-d15e-8b7044635f8b",
+	"historyId": "1d1dbe498320b164430c665959751666b8fc78d3",
+	"testCaseId": "eff3a9ce571e576c3b80309b6d3e7621",
+	"name": "S02 — Validar que o autosserviço aparece com o serviço ligado no tenant",
+	"fullName": "PGPO-3266.S02",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360471620,
+	"stop": 1794360480741,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "normal"
+		},
+		{
+			"name": "tag",
+			"value": "S02"
+		},
+		{
+			"name": "tag",
+			"value": "Alta"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2098 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2098",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2098"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que o autosserviço aparece com o serviço ligado no tenant\n  Given o serviço de 2ª via de NFS-e está ligado no tenant do aluno\n  When o aluno acessa a lista de autosserviços\n  Then o autosserviço de 2ª via de NFS-e é exibido</pre>",
+	"steps": [
+		{
+			"name": "Given o serviço de 2ª via de NFS-e está ligado no tenant do aluno",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360471620,
+			"stop": 1794360474660,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno acessa a lista de autosserviços",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360474660,
+			"stop": 1794360477700,
+			"attachments": []
+		},
+		{
+			"name": "Then o autosserviço de 2ª via de NFS-e é exibido",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360477701,
+			"stop": 1794360480741,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

@@ -1,0 +1,127 @@
+{
+	"uuid": "1acaec1c-f7dc-c8dc-e36f-38d0786d6515",
+	"historyId": "ed8a24a9ea66da81724744e344a1ba1b56255ecb",
+	"testCaseId": "2234915c5553335db7db307793265bbc",
+	"name": "S18 — Validar que a segunda solicitação em processamento para a mesma competência é bloqueada",
+	"fullName": "PGPO-3266.S18",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360583055,
+	"stop": 1794360593182,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de falha"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S18"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/PGPO-3266-automacao-nfse-2via"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2114 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2114",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2114"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Falha] Validar que a segunda solicitação em processamento para a mesma competência é bloqueada\n  Given existe uma solicitação &quot;Em processamento&quot; para a matrícula e a competência 03/2026\n  When o aluno tenta enviar nova solicitação para a competência 03/2026\n  Then nenhuma nova solicitação é criada\n  And a tela informa que já existe uma solicitação em andamento</pre>",
+	"steps": [
+		{
+			"name": "Given existe uma solicitação \"Em processamento\" para a matrícula e a competência 03/2026",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360583055,
+			"stop": 1794360585587,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno tenta enviar nova solicitação para a competência 03/2026",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360585587,
+			"stop": 1794360588119,
+			"attachments": []
+		},
+		{
+			"name": "Then nenhuma nova solicitação é criada",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360588119,
+			"stop": 1794360590651,
+			"attachments": []
+		},
+		{
+			"name": "And a tela informa que já existe uma solicitação em andamento",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360590650,
+			"stop": 1794360593182,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}
