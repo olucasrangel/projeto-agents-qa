@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { parseApprovals, selectedScenarioIds } from './approvals.mjs';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
@@ -24,14 +25,9 @@ function metadataCheck(id, entries) {
 	return check(id, problems.length === 0, problems.length ? `tags inválidas nos testes: ${problems.join('; ')}` : 'tags dos testes válidas');
 }
 
-/** Ids dos cenários marcados como `automatizar` na decisão de automação (primeira coluna: S01, S02...). */
-export function automatedScenarios(decisionText) {
-	return decisionText
-		.split(/\r?\n/)
-		.filter((line) => line.startsWith('|'))
-		.map((line) => line.split('|').map((cell) => cell.trim()))
-		.filter((cells) => /^S\d{2}$/.test(cells[1] ?? '') && cells[3]?.toLowerCase() === 'automatizar')
-		.map((cells) => cells[1]);
+/** Ids dos cenários marcados como `automatizar` no arquivo único de aprovações. */
+export function automatedScenarios(approvalsText) {
+	return selectedScenarioIds(parseApprovals(approvalsText));
 }
 
 /**

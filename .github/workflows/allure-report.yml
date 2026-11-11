@@ -1,0 +1,68 @@
+name: Relatório Allure
+# Publica o relatório final de cada card (qa/cards/<CARD>/report), gerado pelo agente com `npm run qa:report`.
+# Os resultados versionados não contêm prints nem dados pessoais: só cenários, status, Zephyr, métricas e gates.
+on:
+  push:
+    branches: ['qa/**']
+    paths: ['qa/cards/*/report/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: allure-report
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Gerar o relatório de cada card
+        run: |
+          mkdir -p site
+          {
+            echo '<!doctype html><meta charset="utf-8"><title>Relatórios de QA</title>'
+            echo '<h1>Relatórios de QA</h1><ul>'
+          } > site/index.html
+          for results in qa/cards/*/report/allure-results; do
+            [ -d "$results" ] || continue
+            card=$(basename "$(dirname "$(dirname "$results")")")
+            node .agents/core/scripts/qa-report.mjs executor "$card" --results "$results"
+            npx allure generate "$results" --output "site/$card" --clean
+            cp "qa/cards/$card/report/executive-summary.html" "site/$card/"
+            cp "qa/cards/$card/report/metrics.json" "site/$card/"
+            echo "<li><b>$card</b>: <a href=\"$card/executive-summary.html\">resumo executivo</a> · <a href=\"$card/index.html\">relatório Allure</a> · <a href=\"$card/metrics.json\">métricas</a></li>" >> site/index.html
+          done
+          echo '</ul>' >> site/index.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: allure-site
+          path: site
+      - uses: actions/upload-pages-artifact@v3
+        if: vars.ALLURE_PAGES == 'true'
+        with:
+          path: site
+
+  deploy:
+    # Só publica no GitHub Pages quando a variável do repositório ALLURE_PAGES for 'true'
+    # (Settings > Secrets and variables > Actions > Variables) e o Pages estiver em "GitHub Actions".
+    if: vars.ALLURE_PAGES == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

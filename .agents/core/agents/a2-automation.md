@@ -13,8 +13,8 @@ Escreva o teste de aceite antes da funcionalidade, prove que ele falha pelo moti
 ## Ações
 
 1. Confirme a elegibilidade: caso aprovado, rota, massa, código necessário e ambiente disponíveis.
-2. Proponha o modo ATDD com a evidência do status do card e peça confirmação ao QA. `red-first` quando a funcionalidade não foi entregue; `verify-existing` só com motivo.
-3. Entre em `AUTOMATION`: `qa:state advance <CARD> AUTOMATION --atdd-mode <modo> --by "QA que confirmou" [--reason ...]`.
+2. Proponha o modo ATDD com a evidência do status do card e peça ao QA que o marque em `<CARD>-APROVACOES.md`. `red-first` quando a funcionalidade não foi entregue; `verify-existing` só com motivo.
+3. Com o modo, o aprovador e as decisões por cenário marcados no `<CARD>-APROVACOES.md`, entre em `AUTOMATION`: `qa:state advance <CARD> AUTOMATION`.
 4. Gere o esqueleto (`qa:atdd skeleton`) e ligue cada passo importando Page Objects, flows, fixtures e APIs existentes. Nunca edite arquivo do time; crie só em `ownership.automation.owned_paths`.
 5. Escreva `Then` como `expect` do comportamento do critério. Use `evidenceStep` em cada passo. Rode o typecheck.
 6. `red-first`: avance para `RED` e rode `qa:atdd run --phase red`. Vermelho inválido volta a `AUTOMATION` (conta no limite de 3 ciclos).

@@ -47,7 +47,7 @@
       }
     },
     "security": { "type": "object", "required": ["allowed_hosts"], "properties": { "allowed_hosts": { "type": "object", "required": ["atlassian", "zephyr"], "properties": { "atlassian": { "type": "array", "items": { "type": "string" }, "minItems": 1 }, "zephyr": { "type": "array", "items": { "type": "string" }, "minItems": 1 } } } } },
-    "artifacts": { "type": "object", "required": ["card_dir", "context_dir", "discovery_manifest", "bdd_review", "zephyr_dry_run", "zephyr_sync", "automation_plan", "pr_description", "approvals_dir", "executions_dir"], "additionalProperties": { "type": "string" } },
+    "artifacts": { "type": "object", "required": ["card_dir", "context_dir", "discovery_manifest", "bdd_review", "zephyr_dry_run", "zephyr_sync", "automation_plan", "pr_description", "approvals_dir", "approvals_file", "executions_dir"], "additionalProperties": { "type": "string" } },
     "jira": { "type": "object", "required": ["project_keys"], "properties": { "project_keys": { "type": "array", "items": { "type": "string" }, "minItems": 1 } } },
     "confluence": { "type": "object" },
     "zephyr": { "type": "object", "required": ["edition", "project_key", "mode"], "properties": { "edition": { "enum": ["scale"] }, "project_key": { "type": "string" }, "folder": { "type": "string" }, "token_env": { "type": "string" }, "token_env_aliases": { "type": "array", "items": { "type": "string" } }, "mode": { "enum": ["dry-run", "real"] }, "priorities": { "type": "object", "additionalProperties": { "type": "string" } } } },

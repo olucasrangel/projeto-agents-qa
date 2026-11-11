@@ -25,6 +25,7 @@ import {
 } from 'node:fs';
 import path from 'node:path';
 import { parse } from 'yaml';
+import { approvedScope, inScope, publishScope, readApprovals } from '../../core/scripts/lib/approvals.mjs';
 import { ownershipOf } from '../../core/scripts/lib/ownership.mjs';
 
 const PROJECT_ROOT = process.cwd();
@@ -224,7 +225,7 @@ const criticalityTags = Object.keys(priorities).map((level) => `@${level}`);
 const names = new Map();
 const keysSeen = new Map();
 
-const items = scenarios.map((scenario, index) => {
+const allItems = scenarios.map((scenario, index) => {
 	const label = `cenário ${index + 1} (linha ${scenario.lineNo})`;
 	const cardTag = `@${card}`;
 	if (!scenario.tags.includes(cardTag)) errors.push(`${label}: falta a tag ${cardTag}.`);
@@ -285,6 +286,7 @@ const items = scenarios.map((scenario, index) => {
 
 	return {
 		order: index + 1,
+		scenario: `S${String(index + 1).padStart(2, '0')}`,
 		name: scenario.title,
 		operation,
 		key,
@@ -300,6 +302,23 @@ const items = scenarios.map((scenario, index) => {
 		gherkin: [`Scenario: ${scenario.title}`, ...scenario.steps.map((s) => `  ${s.keyword} ${s.text}`)],
 	};
 });
+
+// Escopo do Zephyr: só os cenários que o QA listou em "Cenários a publicar no Zephyr" e que estão aprovados no G1.
+// A automação é um escopo diferente (todos os aprovados no G1) e não depende do que vai ao Zephyr.
+const approvalsFile = readApprovals(PROJECT_ROOT, projectConfig, card);
+const g1Scope = approvalsFile ? approvedScope(approvalsFile.data) : [];
+const published = approvalsFile ? publishScope(approvalsFile.data) : [];
+const g1Pending = Array.isArray(g1Scope) && g1Scope.length === 0;
+if (g1Pending && !preview) errors.push('o QA ainda não aprovou cenários no G1 (marque em <CARD>-APROVACOES.md).');
+if (!published.length && !preview) errors.push('o QA não marcou "Publicar no Zephyr" em nenhum cenário aprovado no G1 (arquivo de aprovações).');
+const unknown = published.filter((id) => !allItems.some((item) => item.scenario === id));
+if (unknown.length) errors.push(`<CARD>-APROVACOES.md manda publicar cenários que não existem no .feature: ${unknown.join(', ')}.`);
+const requested = approvalsFile ? approvalsFile.data.g2.publish : [];
+const outsideG1 = requested.filter((id) => !inScope(g1Scope, id));
+if (outsideG1.length) errors.push(`cenário(s) a publicar sem aprovação no G1: ${outsideG1.join(', ')}.`);
+// Em preview sem nenhuma escolha, mostra todos para o QA decidir.
+const items = published.length || !preview ? allItems.filter((item) => published.includes(item.scenario)) : allItems;
+const scope = published.length ? published : null;
 
 function buildSteps(steps) {
 	const result = [];
@@ -404,6 +423,7 @@ const payload = {
 		description: feature.description,
 	},
 	g1: approval,
+	approval: { g1: g1Scope === null ? 'todos' : (g1Pending ? 'pendente' : 'parcial'), publish: items.map((item) => item.scenario), automation: approvalsFile ? approvalsFile.data.scenarios.filter((row) => row.decision === 'automatizar').map((row) => row.id) : [] },
 	priorities,
 	ownership: {
 		teamCases: ownership.zephyr.team_cases,

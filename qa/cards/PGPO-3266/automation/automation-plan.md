@@ -11,5 +11,5 @@
 ## Decisão para automação
 
 A seleção cenário a cenário é registrada em
-`qa/approvals/PGPO-3266/automation-decision.md` depois do G2. A automação só começa
+`qa/approvals/PGPO-3266/APROVACOES.md` (seção Automação) depois do G2. A automação só começa
 após decisão explícita do QA para cada cenário.

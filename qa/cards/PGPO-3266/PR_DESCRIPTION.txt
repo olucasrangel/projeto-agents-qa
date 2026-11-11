@@ -1,58 +1,46 @@
-Título sugerido: feat(agente-qa): ATDD no agente de automação, propriedade do time e gates executáveis
-
+Título sugerido: test(autosservico): automação da 2ª via de NFS-e no AVA e arquivo único de aprovações (PGPO-3266)
 Objetivo
-Transformar regras documentais do agente de QA em validações executáveis, aplicar ATDD na automação (teste de aceite antes da funcionalidade, guiando o desenvolvimento) e garantir que o agente só escreva o que ele mesmo criou.
-
+Automatizar em Playwright os cenários da 2ª via de NFS-e com e-mail de destino (PGPO-3266) contra o AVA em hml e centralizar as aprovações do QA em um único arquivo por card.
 Rastreabilidade
-- Card usado na validação: PGPO-3266
-- Projeto Zephyr: VPOS
-- Aprovações: G1 pendente | G2 pendente | decisão de automação pendente | G3 pendente
-- Escopo desta PR: infraestrutura do agente e dry-run, sem aprovação ou publicação externa
-
-Funcionalidades
-- ATDD: skill atdd, A2 como especialista, novos estados RED e AWAITING_DEV, modos red-first e verify-existing (confirmados pelo QA)
-- qa:atdd com skeleton, run e guide; guia de desenvolvimento para quem implementa a funcionalidade
-- Prova vermelha só vale por expect() num passo Then do BDD aprovado; passo não ligado, seletor, login, ambiente ou falha em Given/When são recusados
-- Prova amarrada ao que rodou: runner oficial, hash de todos os arquivos do agente, ordem no tempo, evidência em disco e manifestos íntegros; execuções dev-* nunca são oficiais
-- qa:state atdd-ack: mudança deliberada nos testes depois do vermelho, só pelo QA, com cadeia de custódia no G3
-- Propriedade: casos do time no Zephyr e testes do time são somente leitura; casos do agente ficam em pasta própria com sufixo (Automação) e seguem o padrão do Confluence; o G3 bloqueia entrega que altere arquivo do time
-- zephyr-sync deixa de atualizar caso do time (21 criar, 19 referências somente leitura no PGPO-3266)
-- BDD usa sempre Feature/Scenario/Given/When/Then em inglês, com texto de negócio em pt-BR
-- qa:doctor, qa:validate e discovery em três modos (complete, without-code, documental)
-- Reporter registra cenário (@Sxx), tipo e passo da falha, fase ATDD, runner e hash dos testes
-- núcleo atualizado para 0.4.0
-
+- Card: PGPO-3266
+- Projeto Zephyr: VPOS. Pasta do agente com sufixo AUT (id 61718487), casos VPOS-T2212 (S20) e VPOS-T2213 (S21), em Draft
+- Casos do time VPOS-T2097 a T2115: somente leitura, não alterados
+- Aprovações: G1 e G2 por Victor Lance; G3 pendente
+- Execução oficial: run-2026-11-11-03, modo ATDD verify-existing
+Cenários implementados (15 de 21, todos passando)
+- S02, S04, S05, S06, S07, S09, S12: somente leitura
+- S08, S10, S14, S15, S17, S19, S20: criam solicitação real no hml (aluno de teste _3)
+- S02 a S19 levam a tag @VPOS-T… do caso do time (só referência para a evidência)
+- S18: bloqueio por solicitação em processamento (HTTP 409, aluno _2)
+Fora desta PR
+- S01, S03, S11, S21: automatizar-depois (precisam de massa)
+- S13, S16: bloqueados (sem interface)
+Funcionalidades do agente
+- <CARD>-APROVACOES.md único por card, qa:approvals (sync e status) e escopos separados para automação e publicação no Zephyr
+- qa:state atdd-remode (modo e cenários) e gate-ack (QA reconhece mudança de artefato depois do gate)
+- Sufixo AUT para pastas do agente no Zephyr
+- núcleo atualizado para 0.5.0
+- qa:report (A4): relatório final com Allure, resumo executivo e métricas (cobertura piso e teto, ATDD x funcionalidade pronta, tempo, gates de qualidade) e workflow Relatório Allure
+- dependência nova: allure (devDependency)
 Arquivos principais
-- .agents/core/skills/atdd/SKILL.md
-- .agents/core/agents/ (A1 a A4 e orquestrador)
-- .agents/core/scripts/qa-atdd.mjs, qa-state.mjs, qa-doctor.mjs, qa-validate.mjs
-- .agents/core/scripts/lib/ (atdd, atdd-feature, ownership, gate-validation)
-- .agents/core/scripts/tests/ (qa-flow e atdd)
-- .agents/project/qa-project.yaml e .agents/project/scripts/zephyr-sync.mjs
-- shared/evidence-reporter.ts e shared/failure-kind.ts
-- AGENTS.md
-
+- projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts
+- projects/erp-academico/pages/agent/AvaNfsePage.ts
+- qa/approvals/PGPO-3266/APROVACOES.md
+- qa/cards/PGPO-3266/ (BDD, Zephyr, plano de automação, RELATORIO.md)
+- .agents/core/scripts/ (qa-state, qa-approvals, lib/approvals) e .agents/project/qa-project.yaml
 Validação
-- npm run agents:check: passou
-- npm run qa:test: 53 de 53 passaram
 - npm run typecheck: passou
-- npm run qa:doctor -- --card PGPO-3266: apto, 0 erros e 4 avisos conhecidos
-- Ciclo ATDD completo com Playwright real em card temporário (removido): esqueleto, vermelho recusado por passo não ligado e por falha em Given, vermelho válido por expect() em Then, guia, verde oficial e G3 conferindo os manifestos
-- Atalhos barrados na prática: teste afrouxado sem o QA, run-id dev-local e DEV-local, execução fora do runner oficial
-- Teste de mutação: quebrar duas regras de propósito faz os testes falharem
-
+- npm run qa:test: 65 de 65 passaram
+- npm run agents:check: passou
+- Execução em hml: 15 passaram, 0 falharam
+- Evidências: evidence/PGPO-3266/run-2026-11-11-03 (fora do Git)
 Riscos e limitações
-- Os controles pegam atalho e erro, não adulteração deliberada por quem tem escrita no repositório; a defesa final é o G3 humano e um CI que rode o card com o runner oficial
-- shared/ (reporter, evidence-step, failure-kind) é do time: precisa de aprovação do time antes de qualquer card usar ATDD, e um card nunca deve incluí-los
-- O PGPO-3266 continua com o G1 pendente e ainda não usa ATDD; a funcionalidade depende dos repositórios de frontend e service, sem acesso
-- A suíte completa contra stage não foi repetida nesta alteração, e a falha conhecida de area_conhecimento permanece fora deste escopo
-- Nenhuma escrita foi feita no Jira, Confluence ou Zephyr
-
+- Cada execução cria 8 solicitações reais para o aluno _3 em hml
+- S18 usa uma solicitação do aluno _2 que está em processamento há dias
+- S17 não encontra botão de cancelar na tela; o critério precisa ser confirmado
+- remote_test_execution passou a true, restrito ao AVA em hml
+- O G3 só passa depois do ack do QA no G2 (artefato mudou com a renomeação dos casos S20 e S21) e da marcação do G3
 Checklist de revisão
-- [ ] Revisar a skill atdd e o contrato do A2
-- [ ] Revisar os critérios do G3 (prova vermelha, runner oficial, hash, ack do QA)
-- [ ] Revisar a política de propriedade e os diretórios do agente
-- [ ] Aprovar as mudanças em shared/ pelo time
-- [ ] Confirmar que nenhuma assertion foi relaxada
-- [ ] Confirmar que nenhum segredo ou dado pessoal está no diff
-- [ ] Resolver separadamente as pendências do G1 do PGPO-3266
+- [ ] Cenários batem com o BDD aprovado (G1)
+- [ ] Nenhuma assertion relaxada
+- [ ] Nenhum segredo ou dado pessoal no diff

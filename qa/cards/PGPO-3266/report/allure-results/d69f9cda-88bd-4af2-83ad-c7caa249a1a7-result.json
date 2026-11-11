@@ -1,0 +1,119 @@
+{
+	"uuid": "d69f9cda-88bd-4af2-83ad-c7caa249a1a7",
+	"historyId": "47eacf1ba0773161fcb5dacfea787914f35f655f",
+	"testCaseId": "e4ec88acbf67b97943c5c93bf32349c3",
+	"name": "S06 — Validar que a tela informa para qual e-mail a nota será enviada",
+	"fullName": "PGPO-3266.S06",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360496993,
+	"stop": 1794360504639,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "normal"
+		},
+		{
+			"name": "tag",
+			"value": "S06"
+		},
+		{
+			"name": "tag",
+			"value": "Alta"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/aprovacoes-centralizadas"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2102 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2102",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2102"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que a tela informa para qual e-mail a nota será enviada\n  Given o aluno está na tela de 2ª via de NFS-e com um e-mail no campo\n  When o aluno visualiza o formulário\n  Then a tela informa que a nota será enviada para o e-mail do campo</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno está na tela de 2ª via de NFS-e com um e-mail no campo",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360496993,
+			"stop": 1794360499542,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno visualiza o formulário",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360499542,
+			"stop": 1794360502091,
+			"attachments": []
+		},
+		{
+			"name": "Then a tela informa que a nota será enviada para o e-mail do campo",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360502090,
+			"stop": 1794360504639,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

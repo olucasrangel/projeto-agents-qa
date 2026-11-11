@@ -1,0 +1,764 @@
+{
+  "schemaVersion": 1,
+  "runId": "run-2026-11-11-03",
+  "card": "PGPO-3266",
+  "project": "erp-academico",
+  "environment": "https://infoprod.stage.platosedu.io/erp-academico",
+  "zephyrProjectKey": "VPOS",
+  "testCycle": {
+    "required": true,
+    "key": null,
+    "created": false
+  },
+  "uploadMode": "dry-run",
+  "typecheck": "passed",
+  "atddPhase": "green",
+  "runner": "qa-atdd",
+  "specsSha256": "3ff47f01fed61471f77fdfa80a1a021ee2c16d0737e22455b041c050f08ba486",
+  "startedAt": "2026-11-11T01:27:51.620Z",
+  "finishedAt": "2026-11-11T01:31:03.556Z",
+  "result": "passed",
+  "entries": [
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2098",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que o autosserviço aparece com o serviço ligado no tenant",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 9121,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2098__pgpo-3266-web-sucesso-validar-que-o-autosservico-aparece-com-o-servico-ligado-no__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o serviço de 2ª via de NFS-e está ligado no tenant do aluno",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2098__pgpo-3266-web-sucesso-validar-que-o-autosservico-aparece-com-o-servico-ligado-no__r0__01-given-o-servico-de-2-via-de-nfs-e-esta-ligado-no-tenant-do-aluno.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno acessa a lista de autosserviços",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2098__pgpo-3266-web-sucesso-validar-que-o-autosservico-aparece-com-o-servico-ligado-no__r0__02-when-o-aluno-acessa-a-lista-de-autosservicos.png"
+        },
+        {
+          "order": 3,
+          "title": "Then o autosserviço de 2ª via de NFS-e é exibido",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2098__pgpo-3266-web-sucesso-validar-que-o-autosservico-aparece-com-o-servico-ligado-no__r0__03-then-o-autosservico-de-2-via-de-nfs-e-e-exibido.png"
+        }
+      ],
+      "scenario": "S02",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2100",
+      "title": "[PGPO-3266][Web][Falha] Validar que o envio é bloqueado sem competência selecionada",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 7825,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2100__pgpo-3266-web-falha-validar-que-o-envio-e-bloqueado-sem-competencia-selecionada__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o aluno está na tela de 2ª via de NFS-e sem competência selecionada",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2100__pgpo-3266-web-falha-validar-que-o-envio-e-bloqueado-sem-competencia-selecionada__r0__01-given-o-aluno-esta-na-tela-de-2-via-de-nfs-e-sem-competencia-selecionada.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno clica em \"Enviar Solicitação\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2100__pgpo-3266-web-falha-validar-que-o-envio-e-bloqueado-sem-competencia-selecionada__r0__02-when-o-aluno-clica-em-enviar-solicitacao.png"
+        },
+        {
+          "order": 3,
+          "title": "Then a solicitação não é criada",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2100__pgpo-3266-web-falha-validar-que-o-envio-e-bloqueado-sem-competencia-selecionada__r0__03-then-a-solicitacao-nao-e-criada.png"
+        },
+        {
+          "order": 4,
+          "title": "And o sistema exige a escolha de mês e ano de competência",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2100__pgpo-3266-web-falha-validar-que-o-envio-e-bloqueado-sem-competencia-selecionada__r0__04-and-o-sistema-exige-a-escolha-de-mes-e-ano-de-competencia.png"
+        }
+      ],
+      "scenario": "S04",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2101",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que o campo de e-mail vem preenchido com o e-mail do cadastro e pode ser editado",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 8427,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2101__pgpo-3266-web-sucesso-validar-que-o-campo-de-e-mail-vem-preenchido-com-o-e-mail-__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o aluno possui um e-mail cadastrado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2101__pgpo-3266-web-sucesso-validar-que-o-campo-de-e-mail-vem-preenchido-com-o-e-mail-__r0__01-given-o-aluno-possui-um-e-mail-cadastrado.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno abre a tela de 2ª via de NFS-e",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2101__pgpo-3266-web-sucesso-validar-que-o-campo-de-e-mail-vem-preenchido-com-o-e-mail-__r0__02-when-o-aluno-abre-a-tela-de-2-via-de-nfs-e.png"
+        },
+        {
+          "order": 3,
+          "title": "Then o campo de e-mail exibe o e-mail atual do cadastro",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2101__pgpo-3266-web-sucesso-validar-que-o-campo-de-e-mail-vem-preenchido-com-o-e-mail-__r0__03-then-o-campo-de-e-mail-exibe-o-e-mail-atual-do-cadastro.png"
+        },
+        {
+          "order": 4,
+          "title": "And o campo de e-mail permite edição",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2101__pgpo-3266-web-sucesso-validar-que-o-campo-de-e-mail-vem-preenchido-com-o-e-mail-__r0__04-and-o-campo-de-e-mail-permite-edicao.png"
+        }
+      ],
+      "scenario": "S05",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2102",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que a tela informa para qual e-mail a nota será enviada",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 7646,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2102__pgpo-3266-web-sucesso-validar-que-a-tela-informa-para-qual-e-mail-a-nota-sera-en__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o aluno está na tela de 2ª via de NFS-e com um e-mail no campo",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2102__pgpo-3266-web-sucesso-validar-que-a-tela-informa-para-qual-e-mail-a-nota-sera-en__r0__01-given-o-aluno-esta-na-tela-de-2-via-de-nfs-e-com-um-e-mail-no-campo.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno visualiza o formulário",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2102__pgpo-3266-web-sucesso-validar-que-a-tela-informa-para-qual-e-mail-a-nota-sera-en__r0__02-when-o-aluno-visualiza-o-formulario.png"
+        },
+        {
+          "order": 3,
+          "title": "Then a tela informa que a nota será enviada para o e-mail do campo",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2102__pgpo-3266-web-sucesso-validar-que-a-tela-informa-para-qual-e-mail-a-nota-sera-en__r0__03-then-a-tela-informa-que-a-nota-sera-enviada-para-o-e-mail-do-campo.png"
+        }
+      ],
+      "scenario": "S06",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2103",
+      "title": "[PGPO-3266][Web][Falha] Validar que e-mail em formato inválido bloqueia o envio sem abrir o modal",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 12210,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2103__pgpo-3266-web-falha-validar-que-e-mail-em-formato-invalido-bloqueia-o-envio-sem-__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o aluno informou uma competência",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2103__pgpo-3266-web-falha-validar-que-e-mail-em-formato-invalido-bloqueia-o-envio-sem-__r0__01-given-o-aluno-informou-uma-competencia.png"
+        },
+        {
+          "order": 2,
+          "title": "And o aluno informou um e-mail em formato inválido",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2103__pgpo-3266-web-falha-validar-que-e-mail-em-formato-invalido-bloqueia-o-envio-sem-__r0__02-and-o-aluno-informou-um-e-mail-em-formato-invalido.png"
+        },
+        {
+          "order": 3,
+          "title": "When o aluno clica em \"Enviar Solicitação\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2103__pgpo-3266-web-falha-validar-que-e-mail-em-formato-invalido-bloqueia-o-envio-sem-__r0__03-when-o-aluno-clica-em-enviar-solicitacao.png"
+        },
+        {
+          "order": 4,
+          "title": "Then o modal de atualização de e-mail não é exibido",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2103__pgpo-3266-web-falha-validar-que-e-mail-em-formato-invalido-bloqueia-o-envio-sem-__r0__04-then-o-modal-de-atualizacao-de-e-mail-nao-e-exibido.png"
+        },
+        {
+          "order": 5,
+          "title": "And nenhuma solicitação é criada",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2103__pgpo-3266-web-falha-validar-que-e-mail-em-formato-invalido-bloqueia-o-envio-sem-__r0__05-and-nenhuma-solicitacao-e-criada.png"
+        },
+        {
+          "order": 6,
+          "title": "And o cadastro do aluno não é alterado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2103__pgpo-3266-web-falha-validar-que-e-mail-em-formato-invalido-bloqueia-o-envio-sem-__r0__06-and-o-cadastro-do-aluno-nao-e-alterado.png"
+        }
+      ],
+      "scenario": "S07",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2104",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que o envio com o e-mail do cadastro cria a solicitação sem abrir o modal",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 12756,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2104__pgpo-3266-web-sucesso-validar-que-o-envio-com-o-e-mail-do-cadastro-cria-a-solici__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o aluno informou uma competência",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2104__pgpo-3266-web-sucesso-validar-que-o-envio-com-o-e-mail-do-cadastro-cria-a-solici__r0__01-given-o-aluno-informou-uma-competencia.png"
+        },
+        {
+          "order": 2,
+          "title": "And o e-mail do campo é igual ao e-mail atual do cadastro",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2104__pgpo-3266-web-sucesso-validar-que-o-envio-com-o-e-mail-do-cadastro-cria-a-solici__r0__02-and-o-e-mail-do-campo-e-igual-ao-e-mail-atual-do-cadastro.png"
+        },
+        {
+          "order": 3,
+          "title": "When o aluno clica em \"Enviar Solicitação\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2104__pgpo-3266-web-sucesso-validar-que-o-envio-com-o-e-mail-do-cadastro-cria-a-solici__r0__03-when-o-aluno-clica-em-enviar-solicitacao.png"
+        },
+        {
+          "order": 4,
+          "title": "Then a solicitação é criada sem exibir o modal de atualização",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2104__pgpo-3266-web-sucesso-validar-que-o-envio-com-o-e-mail-do-cadastro-cria-a-solici__r0__04-then-a-solicitacao-e-criada-sem-exibir-o-modal-de-atualizacao.png"
+        },
+        {
+          "order": 5,
+          "title": "And o cadastro do aluno não é alterado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2104__pgpo-3266-web-sucesso-validar-que-o-envio-com-o-e-mail-do-cadastro-cria-a-solici__r0__05-and-o-cadastro-do-aluno-nao-e-alterado.png"
+        }
+      ],
+      "scenario": "S08",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2105",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que alterar o e-mail abre o modal de atualização com o e-mail digitado",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 8002,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2105__pgpo-3266-web-sucesso-validar-que-alterar-o-e-mail-abre-o-modal-de-atualizacao-c__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o aluno informou uma competência",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2105__pgpo-3266-web-sucesso-validar-que-alterar-o-e-mail-abre-o-modal-de-atualizacao-c__r0__01-given-o-aluno-informou-uma-competencia.png"
+        },
+        {
+          "order": 2,
+          "title": "And o e-mail do campo é diferente do e-mail atual do cadastro",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2105__pgpo-3266-web-sucesso-validar-que-alterar-o-e-mail-abre-o-modal-de-atualizacao-c__r0__02-and-o-e-mail-do-campo-e-diferente-do-e-mail-atual-do-cadastro.png"
+        },
+        {
+          "order": 3,
+          "title": "When o aluno clica em \"Enviar Solicitação\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2105__pgpo-3266-web-sucesso-validar-que-alterar-o-e-mail-abre-o-modal-de-atualizacao-c__r0__03-when-o-aluno-clica-em-enviar-solicitacao.png"
+        },
+        {
+          "order": 4,
+          "title": "Then o modal \"Você deseja atualizar seu e-mail?\" é exibido",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2105__pgpo-3266-web-sucesso-validar-que-alterar-o-e-mail-abre-o-modal-de-atualizacao-c__r0__04-then-o-modal-voce-deseja-atualizar-seu-e-mail-e-exibido.png"
+        },
+        {
+          "order": 5,
+          "title": "And o modal mostra o e-mail digitado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2105__pgpo-3266-web-sucesso-validar-que-alterar-o-e-mail-abre-o-modal-de-atualizacao-c__r0__05-and-o-modal-mostra-o-e-mail-digitado.png"
+        }
+      ],
+      "scenario": "S09",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2106",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que manter o e-mail antigo cria a solicitação sem alterar o cadastro",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 13005,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2106__pgpo-3266-web-sucesso-validar-que-manter-o-e-mail-antigo-cria-a-solicitacao-sem-__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o modal de atualização está aberto com um e-mail diferente do cadastro",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2106__pgpo-3266-web-sucesso-validar-que-manter-o-e-mail-antigo-cria-a-solicitacao-sem-__r0__01-given-o-modal-de-atualizacao-esta-aberto-com-um-e-mail-diferente-do-cadastro.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno escolhe \"Manter e-mail antigo\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2106__pgpo-3266-web-sucesso-validar-que-manter-o-e-mail-antigo-cria-a-solicitacao-sem-__r0__02-when-o-aluno-escolhe-manter-e-mail-antigo.png"
+        },
+        {
+          "order": 3,
+          "title": "Then a solicitação é criada com o e-mail digitado como destino",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2106__pgpo-3266-web-sucesso-validar-que-manter-o-e-mail-antigo-cria-a-solicitacao-sem-__r0__03-then-a-solicitacao-e-criada-com-o-e-mail-digitado-como-destino.png"
+        },
+        {
+          "order": 4,
+          "title": "And o e-mail do cadastro da pessoa não é alterado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2106__pgpo-3266-web-sucesso-validar-que-manter-o-e-mail-antigo-cria-a-solicitacao-sem-__r0__04-and-o-e-mail-do-cadastro-da-pessoa-nao-e-alterado.png"
+        },
+        {
+          "order": 5,
+          "title": "And o e-mail das matrículas não é alterado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2106__pgpo-3266-web-sucesso-validar-que-manter-o-e-mail-antigo-cria-a-solicitacao-sem-__r0__05-and-o-e-mail-das-matriculas-nao-e-alterado.png"
+        }
+      ],
+      "scenario": "S10",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2108",
+      "title": "[PGPO-3266][Web][Falha] Validar que fechar o modal sem escolher uma opção cancela o envio",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 7899,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2108__pgpo-3266-web-falha-validar-que-fechar-o-modal-sem-escolher-uma-opcao-cancela-o-__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o modal de atualização de e-mail está aberto",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2108__pgpo-3266-web-falha-validar-que-fechar-o-modal-sem-escolher-uma-opcao-cancela-o-__r0__01-given-o-modal-de-atualizacao-de-e-mail-esta-aberto.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno fecha o modal sem escolher uma opção",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2108__pgpo-3266-web-falha-validar-que-fechar-o-modal-sem-escolher-uma-opcao-cancela-o-__r0__02-when-o-aluno-fecha-o-modal-sem-escolher-uma-opcao.png"
+        },
+        {
+          "order": 3,
+          "title": "Then nenhuma solicitação é criada",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2108__pgpo-3266-web-falha-validar-que-fechar-o-modal-sem-escolher-uma-opcao-cancela-o-__r0__03-then-nenhuma-solicitacao-e-criada.png"
+        },
+        {
+          "order": 4,
+          "title": "And o cadastro do aluno não é alterado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2108__pgpo-3266-web-falha-validar-que-fechar-o-modal-sem-escolher-uma-opcao-cancela-o-__r0__04-and-o-cadastro-do-aluno-nao-e-alterado.png"
+        },
+        {
+          "order": 5,
+          "title": "And o aluno permanece na tela de 2ª via com os dados preenchidos",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2108__pgpo-3266-web-falha-validar-que-fechar-o-modal-sem-escolher-uma-opcao-cancela-o-__r0__05-and-o-aluno-permanece-na-tela-de-2-via-com-os-dados-preenchidos.png"
+        }
+      ],
+      "scenario": "S12",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2110",
+      "title": "[PGPO-3266][Web][Sucesso] Validar a confirmação \"Solicitação enviada\" após o envio",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 4944,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2110__pgpo-3266-web-sucesso-validar-a-confirmacao-solicitacao-enviada-apos-o-envio__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given a solicitação foi criada com sucesso",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2110__pgpo-3266-web-sucesso-validar-a-confirmacao-solicitacao-enviada-apos-o-envio__r0__01-given-a-solicitacao-foi-criada-com-sucesso.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno conclui o envio",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2110__pgpo-3266-web-sucesso-validar-a-confirmacao-solicitacao-enviada-apos-o-envio__r0__02-when-o-aluno-conclui-o-envio.png"
+        },
+        {
+          "order": 3,
+          "title": "Then a tela exibe a mensagem \"Solicitação enviada\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2110__pgpo-3266-web-sucesso-validar-a-confirmacao-solicitacao-enviada-apos-o-envio__r0__03-then-a-tela-exibe-a-mensagem-solicitacao-enviada.png"
+        },
+        {
+          "order": 4,
+          "title": "And a tela não exibe erro de processamento",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2110__pgpo-3266-web-sucesso-validar-a-confirmacao-solicitacao-enviada-apos-o-envio__r0__04-and-a-tela-nao-exibe-erro-de-processamento.png"
+        }
+      ],
+      "scenario": "S14",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2111",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que a solicitação é gravada com a competência e o e-mail de destino",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 10556,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2111__pgpo-3266-web-sucesso-validar-que-a-solicitacao-e-gravada-com-a-competencia-e-o-__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o aluno escolheu a competência 03/2026",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2111__pgpo-3266-web-sucesso-validar-que-a-solicitacao-e-gravada-com-a-competencia-e-o-__r0__01-given-o-aluno-escolheu-a-competencia-03-2026.png"
+        },
+        {
+          "order": 2,
+          "title": "And o aluno informou o e-mail \"nota@exemplo.com\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2111__pgpo-3266-web-sucesso-validar-que-a-solicitacao-e-gravada-com-a-competencia-e-o-__r0__02-and-o-aluno-informou-o-e-mail-nota-com.png"
+        },
+        {
+          "order": 3,
+          "title": "When o aluno envia a solicitação",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2111__pgpo-3266-web-sucesso-validar-que-a-solicitacao-e-gravada-com-a-competencia-e-o-__r0__03-when-o-aluno-envia-a-solicitacao.png"
+        },
+        {
+          "order": 4,
+          "title": "Then a solicitação é criada com a competência 03/2026",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2111__pgpo-3266-web-sucesso-validar-que-a-solicitacao-e-gravada-com-a-competencia-e-o-__r0__04-then-a-solicitacao-e-criada-com-a-competencia-03-2026.png"
+        },
+        {
+          "order": 5,
+          "title": "And a solicitação é criada com o e-mail de destino \"nota@exemplo.com\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2111__pgpo-3266-web-sucesso-validar-que-a-solicitacao-e-gravada-com-a-competencia-e-o-__r0__05-and-a-solicitacao-e-criada-com-o-e-mail-de-destino-nota-com.png"
+        },
+        {
+          "order": 6,
+          "title": "And a solicitação é criada com o status \"Em processamento\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2111__pgpo-3266-web-sucesso-validar-que-a-solicitacao-e-gravada-com-a-competencia-e-o-__r0__06-and-a-solicitacao-e-criada-com-o-status-em-processamento.png"
+        }
+      ],
+      "scenario": "S15",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2113",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que os botões ficam desabilitados durante o envio",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 9044,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2113__pgpo-3266-web-sucesso-validar-que-os-botoes-ficam-desabilitados-durante-o-envio__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o aluno clicou em \"Enviar Solicitação\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2113__pgpo-3266-web-sucesso-validar-que-os-botoes-ficam-desabilitados-durante-o-envio__r0__01-given-o-aluno-clicou-em-enviar-solicitacao.png"
+        },
+        {
+          "order": 2,
+          "title": "When a solicitação está sendo processada",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2113__pgpo-3266-web-sucesso-validar-que-os-botoes-ficam-desabilitados-durante-o-envio__r0__02-when-a-solicitacao-esta-sendo-processada.png"
+        },
+        {
+          "order": 3,
+          "title": "Then o botão \"Enviar Solicitação\" fica desabilitado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2113__pgpo-3266-web-sucesso-validar-que-os-botoes-ficam-desabilitados-durante-o-envio__r0__03-then-o-botao-enviar-solicitacao-fica-desabilitado.png"
+        },
+        {
+          "order": 4,
+          "title": "And o botão de cancelamento fica desabilitado",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2113__pgpo-3266-web-sucesso-validar-que-os-botoes-ficam-desabilitados-durante-o-envio__r0__04-and-o-botao-de-cancelamento-fica-desabilitado.png"
+        }
+      ],
+      "scenario": "S17",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2114",
+      "title": "[PGPO-3266][Web][Falha] Validar que a segunda solicitação em processamento para a mesma competência é bloqueada",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 10127,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2114__pgpo-3266-web-falha-validar-que-a-segunda-solicitacao-em-processamento-para-a-me__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given existe uma solicitação \"Em processamento\" para a matrícula e a competência 03/2026",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2114__pgpo-3266-web-falha-validar-que-a-segunda-solicitacao-em-processamento-para-a-me__r0__01-given-existe-uma-solicitacao-em-processamento-para-a-matricula-e-a-competencia-0.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno tenta enviar nova solicitação para a competência 03/2026",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2114__pgpo-3266-web-falha-validar-que-a-segunda-solicitacao-em-processamento-para-a-me__r0__02-when-o-aluno-tenta-enviar-nova-solicitacao-para-a-competencia-03-2026.png"
+        },
+        {
+          "order": 3,
+          "title": "Then nenhuma nova solicitação é criada",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2114__pgpo-3266-web-falha-validar-que-a-segunda-solicitacao-em-processamento-para-a-me__r0__03-then-nenhuma-nova-solicitacao-e-criada.png"
+        },
+        {
+          "order": 4,
+          "title": "And a tela informa que já existe uma solicitação em andamento",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2114__pgpo-3266-web-falha-validar-que-a-segunda-solicitacao-em-processamento-para-a-me__r0__04-and-a-tela-informa-que-ja-existe-uma-solicitacao-em-andamento.png"
+        }
+      ],
+      "scenario": "S18",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2115",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência já concluída com sucesso",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 59781,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2115__pgpo-3266-web-sucesso-validar-que-nova-solicitacao-e-permitida-para-competencia-__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given existe uma solicitação concluída com sucesso para a matrícula e a competência 03/2026",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2115__pgpo-3266-web-sucesso-validar-que-nova-solicitacao-e-permitida-para-competencia-__r0__01-given-existe-uma-solicitacao-concluida-com-sucesso-para-a-matricula-e-a-competen.png"
+        },
+        {
+          "order": 2,
+          "title": "When o aluno envia nova solicitação para a competência 03/2026",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2115__pgpo-3266-web-sucesso-validar-que-nova-solicitacao-e-permitida-para-competencia-__r0__02-when-o-aluno-envia-nova-solicitacao-para-a-competencia-03-2026.png"
+        },
+        {
+          "order": 3,
+          "title": "Then a nova solicitação é criada com o status \"Em processamento\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2115__pgpo-3266-web-sucesso-validar-que-nova-solicitacao-e-permitida-para-competencia-__r0__03-then-a-nova-solicitacao-e-criada-com-o-status-em-processamento.png"
+        }
+      ],
+      "scenario": "S19",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    },
+    {
+      "card": "PGPO-3266",
+      "zephyrKey": "VPOS-T2212",
+      "title": "[PGPO-3266][Web][Sucesso] Validar que o e-mail digitado com espaços nas pontas e maiúsculas é tratado como o e-mail do cadastro",
+      "spec": "projects/erp-academico/tests/agent/PGPO-3266/PGPO-3266.spec.ts",
+      "status": "PASS",
+      "playwrightStatus": "passed",
+      "expectedStatus": "passed",
+      "durationMs": 9714,
+      "retry": 0,
+      "screenshot": "PASS/VPOS-T2212__pgpo-3266-web-sucesso-validar-que-o-e-mail-digitado-com-espacos-nas-pontas-e-mai__r0.png",
+      "steps": [
+        {
+          "order": 1,
+          "title": "Given o e-mail atual do cadastro é \"aluno@exemplo.com\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2212__pgpo-3266-web-sucesso-validar-que-o-e-mail-digitado-com-espacos-nas-pontas-e-mai__r0__01-given-o-e-mail-atual-do-cadastro-e-aluno-com.png"
+        },
+        {
+          "order": 2,
+          "title": "And o campo de e-mail contém \" Aluno@Exemplo.com \"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2212__pgpo-3266-web-sucesso-validar-que-o-e-mail-digitado-com-espacos-nas-pontas-e-mai__r0__02-and-o-campo-de-e-mail-contem-aluno-com.png"
+        },
+        {
+          "order": 3,
+          "title": "When o aluno clica em \"Enviar Solicitação\"",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2212__pgpo-3266-web-sucesso-validar-que-o-e-mail-digitado-com-espacos-nas-pontas-e-mai__r0__03-when-o-aluno-clica-em-enviar-solicitacao.png"
+        },
+        {
+          "order": 4,
+          "title": "Then o modal de atualização de e-mail não é exibido",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2212__pgpo-3266-web-sucesso-validar-que-o-e-mail-digitado-com-espacos-nas-pontas-e-mai__r0__04-then-o-modal-de-atualizacao-de-e-mail-nao-e-exibido.png"
+        },
+        {
+          "order": 5,
+          "title": "And a solicitação é criada sem alterar o cadastro",
+          "status": "PASS",
+          "screenshot": "PASS/VPOS-T2212__pgpo-3266-web-sucesso-validar-que-o-e-mail-digitado-com-espacos-nas-pontas-e-mai__r0__05-and-a-solicitacao-e-criada-sem-alterar-o-cadastro.png"
+        }
+      ],
+      "scenario": "S20",
+      "failureKind": null,
+      "failedStep": null,
+      "captureError": null,
+      "metadataError": null,
+      "upload": {
+        "target": "test-execution",
+        "status": "dry-run"
+      }
+    }
+  ]
+}

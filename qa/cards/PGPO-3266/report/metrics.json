@@ -1,0 +1,353 @@
+{
+	"schemaVersion": 1,
+	"card": "PGPO-3266",
+	"generatedAt": "2026-11-11T12:45:12.317Z",
+	"scenarios": {
+		"total": 21,
+		"byType": {
+			"Sucesso": {
+				"total": 16,
+				"automated": 11,
+				"pct": 68.8
+			},
+			"Falha": {
+				"total": 5,
+				"automated": 4,
+				"pct": 80
+			}
+		},
+		"byPriority": {
+			"critical": {
+				"label": "Crítica",
+				"total": 14,
+				"automated": 9,
+				"pct": 64.3
+			},
+			"high": {
+				"label": "Alta",
+				"total": 7,
+				"automated": 6,
+				"pct": 85.7
+			},
+			"medium": {
+				"label": "Média",
+				"total": 0,
+				"automated": 0,
+				"pct": 0
+			}
+		}
+	},
+	"decisions": {
+		"automatizar": 15,
+		"manter-manual": 0,
+		"automatizar-depois": 4,
+		"não-aplicável": 0,
+		"bloqueado": 2,
+		"sem-decisao": 0
+	},
+	"automation": {
+		"mode": "verify-existing",
+		"modeConfirmedBy": "Victor Lance",
+		"automated": 15,
+		"atdd": 0,
+		"existingFeature": 15,
+		"passed": 15,
+		"failed": 0,
+		"ids": [
+			"S02",
+			"S04",
+			"S05",
+			"S06",
+			"S07",
+			"S08",
+			"S09",
+			"S10",
+			"S12",
+			"S14",
+			"S15",
+			"S17",
+			"S18",
+			"S19",
+			"S20"
+		]
+	},
+	"coverage": {
+		"automatedPct": 71.4,
+		"ceilingPct": 90.5,
+		"deferred": 4,
+		"blocked": 2,
+		"note": "O piso é o que está automatizado hoje; o teto soma o que ficou para depois e só depende de massa ou acesso."
+	},
+	"execution": {
+		"runId": "run-2026-11-11-03",
+		"result": "passed",
+		"durationMs": 191936,
+		"retries": 0,
+		"steps": 66,
+		"stepsWithEvidencePct": 100,
+		"officialRuns": 3,
+		"officialRunsPassed": 2,
+		"runs": [
+			{
+				"runId": "run-2026-11-11-01",
+				"result": "passed",
+				"startedAt": "2026-11-11T01:01:03.689Z",
+				"finishedAt": "2026-11-11T01:03:33.808Z"
+			},
+			{
+				"runId": "run-2026-11-11-02",
+				"result": "failed",
+				"startedAt": "2026-11-11T01:20:38.112Z",
+				"finishedAt": "2026-11-11T01:24:59.351Z"
+			},
+			{
+				"runId": "run-2026-11-11-03",
+				"result": "passed",
+				"startedAt": "2026-11-11T01:27:51.620Z",
+				"finishedAt": "2026-11-11T01:31:03.556Z"
+			}
+		],
+		"automationCycles": 1
+	},
+	"time": {
+		"leadTimeMs": 536342948,
+		"agentMs": 80139071,
+		"qaWaitMs": 456203877,
+		"automationMs": 7445550,
+		"phases": [
+			{
+				"state": "DISCOVERY",
+				"durationMs": 72358292
+			},
+			{
+				"state": "ALIGNMENT",
+				"durationMs": 151
+			},
+			{
+				"state": "BDD",
+				"durationMs": 151
+			},
+			{
+				"state": "AWAITING_G1",
+				"durationMs": 456195510
+			},
+			{
+				"state": "ZEPHYR",
+				"durationMs": 7612
+			},
+			{
+				"state": "AWAITING_G2",
+				"durationMs": 8367
+			},
+			{
+				"state": "AUTOMATION_DECISION",
+				"durationMs": 327315
+			},
+			{
+				"state": "AUTOMATION",
+				"durationMs": 5626602
+			},
+			{
+				"state": "RUN",
+				"durationMs": 180564
+			},
+			{
+				"state": "REPORT",
+				"durationMs": 995809
+			},
+			{
+				"state": "AUTOMATION",
+				"durationMs": 227
+			},
+			{
+				"state": "RUN",
+				"durationMs": 642348
+			},
+			{
+				"state": "REPORT",
+				"durationMs": 40440910
+			}
+		]
+	},
+	"zephyr": {
+		"folder": {
+			"id": 61718487,
+			"name": "PGPO-3266 - [NFS-e] Solicitar a 2ª via e confirmar-editar o e-mail de destino - AUT"
+		},
+		"created": [
+			{
+				"key": "VPOS-T2212",
+				"scenario": "S20",
+				"status": "Draft",
+				"name": "[PGPO-3266][Web][Sucesso] Validar que o e-mail digitado com espaços nas pontas e maiúsculas é tratado como o e-mail do cadastro"
+			},
+			{
+				"key": "VPOS-T2213",
+				"scenario": "S21",
+				"status": "Draft",
+				"name": "[PGPO-3266][Web][Sucesso] Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha"
+			}
+		],
+		"teamReferences": [
+			{
+				"scenario": "S01",
+				"key": "VPOS-T2097"
+			},
+			{
+				"scenario": "S02",
+				"key": "VPOS-T2098"
+			},
+			{
+				"scenario": "S03",
+				"key": "VPOS-T2099"
+			},
+			{
+				"scenario": "S04",
+				"key": "VPOS-T2100"
+			},
+			{
+				"scenario": "S05",
+				"key": "VPOS-T2101"
+			},
+			{
+				"scenario": "S06",
+				"key": "VPOS-T2102"
+			},
+			{
+				"scenario": "S07",
+				"key": "VPOS-T2103"
+			},
+			{
+				"scenario": "S08",
+				"key": "VPOS-T2104"
+			},
+			{
+				"scenario": "S09",
+				"key": "VPOS-T2105"
+			},
+			{
+				"scenario": "S10",
+				"key": "VPOS-T2106"
+			},
+			{
+				"scenario": "S11",
+				"key": "VPOS-T2107"
+			},
+			{
+				"scenario": "S12",
+				"key": "VPOS-T2108"
+			},
+			{
+				"scenario": "S13",
+				"key": "VPOS-T2109"
+			},
+			{
+				"scenario": "S14",
+				"key": "VPOS-T2110"
+			},
+			{
+				"scenario": "S15",
+				"key": "VPOS-T2111"
+			},
+			{
+				"scenario": "S16",
+				"key": "VPOS-T2112"
+			},
+			{
+				"scenario": "S17",
+				"key": "VPOS-T2113"
+			},
+			{
+				"scenario": "S18",
+				"key": "VPOS-T2114"
+			},
+			{
+				"scenario": "S19",
+				"key": "VPOS-T2115"
+			}
+		]
+	},
+	"qualityGates": [
+		{
+			"id": "G1",
+			"label": "BDD aprovado pelo QA (G1)",
+			"status": "pass",
+			"detail": "por Victor Lance"
+		},
+		{
+			"id": "G2",
+			"label": "Plano do Zephyr aprovado pelo QA (G2)",
+			"status": "pass",
+			"detail": "por Victor Lance"
+		},
+		{
+			"id": "typecheck",
+			"label": "Typecheck verde",
+			"status": "pass",
+			"detail": "typecheck passed"
+		},
+		{
+			"id": "run-official",
+			"label": "Execução oficial verde sobre os testes atuais",
+			"status": "pass",
+			"detail": "execução run-2026-11-11-03: passed"
+		},
+		{
+			"id": "all-green",
+			"label": "Todos os cenários automatizados passam",
+			"status": "pass",
+			"detail": "15 de 15"
+		},
+		{
+			"id": "no-retries",
+			"label": "Sem retentativas (sem instabilidade escondida)",
+			"status": "pass",
+			"detail": "retries = 0"
+		},
+		{
+			"id": "traceability",
+			"label": "Cada cenário automatizado ligado a um caso do Zephyr",
+			"status": "pass",
+			"detail": "15 de 15"
+		},
+		{
+			"id": "evidence",
+			"label": "Evidência (print) em todos os passos",
+			"status": "pass",
+			"detail": "um print por passo, registrado no manifesto"
+		},
+		{
+			"id": "ownership",
+			"label": "A entrega só altera o que o agente criou",
+			"status": "pass",
+			"detail": "testes e casos do time intactos"
+		},
+		{
+			"id": "decisions",
+			"label": "Todo cenário aprovado tem decisão do QA",
+			"status": "pass",
+			"detail": "21 de 21"
+		},
+		{
+			"id": "first-pass",
+			"label": "Execuções oficiais aprovadas",
+			"status": "pass",
+			"detail": "2 de 3 execuções oficiais passaram"
+		},
+		{
+			"id": "G3",
+			"label": "Execução e entrega aprovadas pelo QA (G3)",
+			"status": "pending",
+			"detail": "aguardando o QA"
+		}
+	],
+	"savings": null,
+	"git": {
+		"branch": "qa/aprovacoes-centralizadas",
+		"commit": "b797eb6",
+		"dirty": true,
+		"remote": "https://github.com/olucasrangel/projeto-agents-qa",
+		"branchUrl": "https://github.com/olucasrangel/projeto-agents-qa/tree/qa/aprovacoes-centralizadas",
+		"prUrl": "https://github.com/olucasrangel/projeto-agents-qa/pull/new/qa/aprovacoes-centralizadas"
+	}
+}

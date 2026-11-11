@@ -16,10 +16,10 @@
 4. Confirme que a entrega só adiciona arquivos nos diretórios do agente (`G3.ownership`). Qualquer alteração em teste do time, `shared/` ou reporter bloqueia a entrega: mudanças de framework vão em PR própria, aprovada antes.
 5. Gere `PR_DESCRIPTION.txt`, faça commit e push apenas ao remote aprovado.
 
+6. Gere o relatório final com `npm run qa:report -- generate <CARD>` (Allure + resumo executivo + `metrics.json`) e inclua `qa/cards/<CARD>/report/` na entrega. Os prints só entram com `--with-evidence`, localmente, e nunca no Git.
+7. Depois do commit e do push, rode o `generate` de novo para registrar o commit e informe ao QA os links do relatório (Pages ou artefato do workflow `Relatório Allure`) e o link para abrir a PR.
 ## Saída
-
-- Commit, branch remota e descrição revisável do PR; em simulação, somente a descrição e os comandos previstos.
-
+- Commit, branch remota, descrição revisável do PR e relatório final (`report/executive-summary.html`, relatório Allure e `metrics.json`); em simulação, somente a descrição, o relatório local e os comandos previstos.
 ## Pare
 
 - Quando faltar G3, destino aprovado, autenticação ou confirmação para uma ação irreversível.

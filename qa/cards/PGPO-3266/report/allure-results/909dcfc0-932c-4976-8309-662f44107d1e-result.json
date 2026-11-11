@@ -1,0 +1,127 @@
+{
+	"uuid": "909dcfc0-932c-4976-8309-662f44107d1e",
+	"historyId": "1bf43165fdb13b6494d953c7fa6ecdfd1dea1871",
+	"testCaseId": "4645927e5c1a8ff193050309157d8c5c",
+	"name": "S17 — Validar que os botões ficam desabilitados durante o envio",
+	"fullName": "PGPO-3266.S17",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360574011,
+	"stop": 1794360583055,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "normal"
+		},
+		{
+			"name": "tag",
+			"value": "S17"
+		},
+		{
+			"name": "tag",
+			"value": "Alta"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/aprovacoes-centralizadas"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2113 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2113",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2113"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que os botões ficam desabilitados durante o envio\n  Given o aluno clicou em &quot;Enviar Solicitação&quot;\n  When a solicitação está sendo processada\n  Then o botão &quot;Enviar Solicitação&quot; fica desabilitado\n  And o botão de cancelamento fica desabilitado</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno clicou em \"Enviar Solicitação\"",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360574011,
+			"stop": 1794360576272,
+			"attachments": []
+		},
+		{
+			"name": "When a solicitação está sendo processada",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360576272,
+			"stop": 1794360578533,
+			"attachments": []
+		},
+		{
+			"name": "Then o botão \"Enviar Solicitação\" fica desabilitado",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360578533,
+			"stop": 1794360580794,
+			"attachments": []
+		},
+		{
+			"name": "And o botão de cancelamento fica desabilitado",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360580794,
+			"stop": 1794360583055,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

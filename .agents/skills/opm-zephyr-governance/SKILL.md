@@ -68,8 +68,7 @@ mexe na pasta dele.
 - G2 aprova o plano/payload Zephyr e seu hash.
 - G3 aprova o relatório, as evidências e a entrega depois da execução.
 
-A seleção cenário a cenário para automação é registrada separadamente em
-`qa/approvals/{CARD}/automation-decision.md`. Os registros de gate ficam em `qa/approvals/{CARD}`. Execuções ficam abaixo de
+Toda decisão do QA (G1, G2, modo ATDD, seleção de automação cenário a cenário e G3) é registrada em um único arquivo, `qa/approvals/{CARD}/APROVACOES.md`. O agente monta as listas com `npm run qa:approvals -- sync <CARD>` e nunca marca por você. Execuções ficam abaixo de
 `qa/approvals/{CARD}/executions/{runId}`.
 
 ## Dry-run

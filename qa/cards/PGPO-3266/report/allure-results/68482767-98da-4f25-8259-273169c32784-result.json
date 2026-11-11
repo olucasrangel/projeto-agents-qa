@@ -1,0 +1,135 @@
+{
+	"uuid": "68482767-98da-4f25-8259-273169c32784",
+	"historyId": "d86b40bdd925f98d13aaba4eaa4bc9d19af6e319",
+	"testCaseId": "6ca8dedd02627b54e18d608d99c589ce",
+	"name": "S12 — Validar que fechar o modal sem escolher uma opção cancela o envio",
+	"fullName": "PGPO-3266.S12",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360550612,
+	"stop": 1794360558511,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de falha"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "normal"
+		},
+		{
+			"name": "tag",
+			"value": "S12"
+		},
+		{
+			"name": "tag",
+			"value": "Alta"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/aprovacoes-centralizadas"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2108 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2108",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2108"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Falha] Validar que fechar o modal sem escolher uma opção cancela o envio\n  Given o modal de atualização de e-mail está aberto\n  When o aluno fecha o modal sem escolher uma opção\n  Then nenhuma solicitação é criada\n  And o cadastro do aluno não é alterado\n  And o aluno permanece na tela de 2ª via com os dados preenchidos</pre>",
+	"steps": [
+		{
+			"name": "Given o modal de atualização de e-mail está aberto",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360550612,
+			"stop": 1794360552192,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno fecha o modal sem escolher uma opção",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360552192,
+			"stop": 1794360553772,
+			"attachments": []
+		},
+		{
+			"name": "Then nenhuma solicitação é criada",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360553772,
+			"stop": 1794360555352,
+			"attachments": []
+		},
+		{
+			"name": "And o cadastro do aluno não é alterado",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360555351,
+			"stop": 1794360556931,
+			"attachments": []
+		},
+		{
+			"name": "And o aluno permanece na tela de 2ª via com os dados preenchidos",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360556931,
+			"stop": 1794360558511,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

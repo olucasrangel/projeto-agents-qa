@@ -26,7 +26,7 @@ RED → AWAITING_DEV → RUN → REPORT → G3 → DELIVERY → DONE (ATDD: test
 - **G2**: o QA aprova o plano de casos no Zephyr e decide se o caso será automatizado.
 - **G3**: o QA aprova a execução, as evidências e a entrega.
 
-Gate só é registrado com aprovação explícita do QA, com `npm run qa:state -- gate <CARD> <G1|G2|G3> --by "Nome"`.
+O QA aprova em **um único arquivo**, `qa/approvals/<CARD>/<CARD>-APROVACOES.md` (aprovador, G1, G2, modo ATDD, decisão por cenário e G3). Toda decisão do QA é um `[x]` na opção escolhida; só o nome do aprovador e as observações são texto. O agente nunca marca nada ali. Com as caixas marcadas, o agente valida e registra o gate com `npm run qa:state -- gate <CARD> <G1|G2|G3>`; o nome e o run-id vêm do próprio arquivo.
 
 ## Comandos
 
@@ -35,7 +35,9 @@ Gate só é registrado com aprovação explícita do QA, com `npm run qa:state -
 | `npm run qa:doctor -- --card <CARD>` | Verifica ambiente, credenciais por presença, browser, MCP, Git e repositórios opcionais |
 | `npm run qa:validate -- <CARD> G1|G2|G3` | Verifica a prontidão do gate sem aprová-lo |
 | `npm run qa:test` | Executa os testes dos scripts do agente |
-| `npm run qa:card:init -- <CARD>` | Cria a estrutura de artefatos do card |
+| `npm run qa:card:init -- <CARD>` | Cria a estrutura de artefatos do card, incluindo `<CARD>-APROVACOES.md` |
+| `npm run qa:approvals -- sync <CARD>` | Monta as pendências e um bloco por cenário (todas as opções com `[ ]`) no `<CARD>-APROVACOES.md`, preservando o que o QA marcou |
+| `npm run qa:approvals -- status <CARD>` | Mostra o que falta o QA marcar agora e o que é do agente |
 | `npm run qa:state -- record-discovery <CARD>` | Valida e grava modo/hash do discovery; alteração posterior força novo alinhamento |
 | `npm run qa:state -- status <CARD>` | Mostra o estado e os gates do card |
 | `npm run qa:atdd -- skeleton <CARD>` | Cria o esqueleto dos testes de aceite (ATDD) dos cenários marcados como automatizar |
@@ -43,6 +45,8 @@ Gate só é registrado com aprovação explícita do QA, com `npm run qa:state -
 | `npm run qa:atdd -- guide <CARD> --run-id <id>` | Guia para quem desenvolve: critérios, estado de cada teste e comando por cenário |
 | `npm run qa:state -- atdd-ack <CARD> --by "QA" --reason ...` | Só o QA: registra mudança deliberada nos testes de aceite depois da prova vermelha |
 | `npm run zephyr:sync -- <CARD> --preview` | Gera o payload de publicação no Zephyr a partir do `.feature` (dry-run, sem escrita) |
+| `npm run qa:report -- generate <CARD>` | Gera o relatório final em `qa/cards/<CARD>/report/` (Allure, resumo executivo e métricas) e o relatório local em `qa/runs/<CARD>/allure-report`. `--with-evidence` anexa os prints, só localmente |
+| `npm run qa:report -- open <CARD>` | Abre o relatório Allure local |
 | `npm run typecheck` | Verifica os tipos da suíte |
 | `npx playwright test --grep @<CARD>` | Roda os testes de um card |
 | `npm run test:e2e` | Roda a suíte completa contra stage |

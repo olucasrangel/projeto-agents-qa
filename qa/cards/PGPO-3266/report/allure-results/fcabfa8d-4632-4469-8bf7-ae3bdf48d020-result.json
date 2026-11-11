@@ -1,0 +1,143 @@
+{
+	"uuid": "fcabfa8d-4632-4469-8bf7-ae3bdf48d020",
+	"historyId": "e0f0f2047d6b71c7bd7897b85ac03fd2d62f23fa",
+	"testCaseId": "ff727decb52fa9eec7cb405735725f16",
+	"name": "S07 — Validar que e-mail em formato inválido bloqueia o envio sem abrir o modal",
+	"fullName": "PGPO-3266.S07",
+	"status": "passed",
+	"stage": "finished",
+	"start": 1794360504639,
+	"stop": 1794360516849,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de falha"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Automatizado sobre a funcionalidade já entregue"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S07"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "feature-já-pronta"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/aprovacoes-centralizadas"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2103 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2103",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2103"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar</p><pre>Scenario: [PGPO-3266][Web][Falha] Validar que e-mail em formato inválido bloqueia o envio sem abrir o modal\n  Given o aluno informou uma competência\n  And o aluno informou um e-mail em formato inválido\n  When o aluno clica em &quot;Enviar Solicitação&quot;\n  Then o modal de atualização de e-mail não é exibido\n  And nenhuma solicitação é criada\n  And o cadastro do aluno não é alterado</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno informou uma competência",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360504639,
+			"stop": 1794360506674,
+			"attachments": []
+		},
+		{
+			"name": "And o aluno informou um e-mail em formato inválido",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360506674,
+			"stop": 1794360508709,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno clica em \"Enviar Solicitação\"",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360508709,
+			"stop": 1794360510744,
+			"attachments": []
+		},
+		{
+			"name": "Then o modal de atualização de e-mail não é exibido",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360510744,
+			"stop": 1794360512779,
+			"attachments": []
+		},
+		{
+			"name": "And nenhuma solicitação é criada",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360512779,
+			"stop": 1794360514814,
+			"attachments": []
+		},
+		{
+			"name": "And o cadastro do aluno não é alterado",
+			"status": "passed",
+			"stage": "finished",
+			"start": 1794360514814,
+			"stop": 1794360516849,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

@@ -15,6 +15,8 @@
 		"qa:doctor": "node .agents/core/scripts/qa-doctor.mjs",
 		"qa:validate": "node .agents/core/scripts/qa-validate.mjs",
 		"qa:atdd": "node .agents/core/scripts/qa-atdd.mjs",
+		"qa:approvals": "node .agents/core/scripts/qa-approvals.mjs",
+		"qa:report": "node .agents/core/scripts/qa-report.mjs",
 		"qa:test": "node --test .agents/core/scripts/tests/*.test.mjs",
 		"qa:card:init": "node .agents/project/scripts/init-card-artifacts.mjs",
 		"zephyr:sync": "node .agents/project/scripts/zephyr-sync.mjs",
@@ -24,6 +26,7 @@
 	"devDependencies": {
 		"@playwright/test": "1.62.1",
 		"@types/node": "20.19.9",
+		"allure": "^3.33.0",
 		"dotenv": "^18.0.6",
 		"typescript": "5.8.3",
 		"yaml": "^2.9.1"

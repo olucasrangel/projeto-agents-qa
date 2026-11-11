@@ -1,3 +1,4 @@
+import { parseApprovals } from '../lib/approvals.mjs';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -62,8 +63,8 @@ test('execução verde exige fase green, tudo PASS e os mesmos cenários', () =>
 	assert.equal(validateGreenRun(manifest('red', [entry('S01', 'PASS')], 'passed'), ['S01']).every((item) => item.ok), false);
 });
 
-test('lê cenários marcados como automatizar na decisão', () => {
-	const text = '| Cenário | Chave | Decisão | Justificativa |\n|---|---|---|---|\n| S01 | VPOS-T1 | automatizar | ok |\n| S02 | | manter-manual | x |\n| S03 | | Automatizar | x |\n| livre | | automatizar | x |\n';
+test('lê cenários marcados como automatizar no arquivo único', () => {
+	const text = approvalsFor({ rows: [['S01', 'automatizar'], ['S02', 'manter-manual'], ['S03', 'automatizar'], ['S04', '']] });
 	assert.deepEqual(automatedScenarios(text), ['S01', 'S03']);
 });
 
@@ -156,6 +157,22 @@ test('evidência ausente é detectada no vermelho', () => {
 
 // ---------------------------------------------------------------- CLI ----
 
+const APPROVER = 'Maria QA';
+/** Arquivo de aprovações do card de teste: tudo o que o QA marca fica neste arquivo, só com marcas [x]. */
+function approvalsFor({ approver = APPROVER, g1 = 'all', approvedScenarios = '', redFirst = false, verifyExisting = false, reason = '', rows = [['S01', 'automatizar'], ['S02', 'manter-manual']] } = {}) {
+	const box = (on) => (on ? '[x]' : '[ ]');
+	const approved = approvedScenarios.match(/S\d{2}/g) ?? [];
+	const blocks = rows.flatMap(([id, decision]) => [
+		`### ${id} — descrição`, 'Sugestão do agente: ', `- ${box(approved.includes(id))} Aprovado no G1 (só vale na aprovação parcial)`, '- [ ] Publicar no Zephyr',
+		...['automatizar', 'manter-manual', 'automatizar-depois', 'não-aplicável', 'bloqueado'].map((option) => `- ${box(decision === option)} ${option} — explicação`), 'Justificativa (opcional): motivo', '',
+	]);
+	return [
+		'# Aprovações — TEST-1', '- **Nome:** ' + approver,
+		`- ${box(g1 === 'all')} Aprovar todos os cenários`, `- ${box(g1 === 'partial')} Aprovar parcialmente`,
+		`- ${box(redFirst)} red-first`, `- ${box(verifyExisting)} verify-existing`, `Motivo (verify-existing): ${reason}`,
+		'<!-- sync:cenarios:start -->', ...blocks, '<!-- sync:cenarios:end -->', 'Run-id: ', '- [ ] Aprovo a execução e a entrega', '',
+	].join('\n');
+}
 function cliWorkspace() {
 	const root = mkdtempSync(path.join(tmpdir(), 'atdd-cli-'));
 	const put = (relative, content) => {
@@ -175,11 +192,13 @@ zephyr:
     medium: Low
 artifacts:
   executions_dir: qa/approvals/{CARD}/executions/{runId}
+  approvals_file: qa/approvals/{CARD}/{CARD}-APROVACOES.md
+  bdd_review: qa/cards/{CARD}/bdd/{CARD}-review.md
 evidence:
   dir: evidence/{CARD}/{runId}
 ownership:
   zephyr:
-    automation_folder_suffix: '(Automação)'
+    automation_folder_suffix: 'AUT'
     team_cases: read-only
     owned_registry: qa/cards/{CARD}/zephyr/owned-cases.json
   automation:
@@ -193,7 +212,7 @@ atdd:
     run_card: 'npm run qa:atdd -- run {CARD} --phase {PHASE} --run-id {RUN_ID}'
 `);
 	put('qa/runs/TEST-1/state.json', { card: 'TEST-1', state: 'AUTOMATION_DECISION', createdAt: 'x', updatedAt: 'x', automationCycles: 0, history: [], gates: {} });
-	put('qa/approvals/TEST-1/automation-decision.md', '- **Status:** APROVADO\n| Cenário | Chave | Decisão | Justificativa |\n|---|---|---|---|\n| S01 | | automatizar | crítico |\n| S02 | | manter-manual | visual |\n');
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor());
 	put('qa/cards/TEST-1/bdd/modulo/TEST-1.feature', `# language: en
 @TEST-1
 Feature: Fluxo de teste
@@ -251,17 +270,23 @@ function official(root, put, runId, phase, { status = 'PASS', failureKind = null
 	});
 }
 
-const enterAutomation = (qa, ...extra) => qa('advance', 'TEST-1', 'AUTOMATION', '--atdd-mode', 'red-first', '--by', 'Maria QA', ...extra);
+const enterAutomation = (qa, put) => {
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ redFirst: true }));
+	return qa('advance', 'TEST-1', 'AUTOMATION');
+};
 
 test('CLI: ciclo red-first completo com bloqueios em cada passo', () => {
 	const { root, put } = cliWorkspace();
 	const qa = (...args) => run('qa-state.mjs', root, ...args);
 
 	// Entrar em AUTOMATION exige modo, confirmação do QA e cenários selecionados.
-	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /--atdd-mode/);
-	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION', '--atdd-mode', 'red-first')), /--by/);
-	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION', '--atdd-mode', 'verify-existing', '--by', 'Maria QA')), /--reason/);
-	assert.equal(enterAutomation(qa).status, 0);
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /marque exatamente um modo ATDD/);
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ approver: '', redFirst: true }));
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /Nome do aprovador/);
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ verifyExisting: true }));
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /Motivo/);
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ redFirst: true }));
+	assert.equal(qa('advance', 'TEST-1', 'AUTOMATION').status, 0);
 	assert.deepEqual(state(root).atdd.scenarios, ['S01']);
 	assert.equal(state(root).atdd.confirmedBy, 'Maria QA');
 
@@ -323,7 +348,8 @@ test('CLI: ciclo red-first completo com bloqueios em cada passo', () => {
 test('CLI: verify-existing exige motivo e confirmação, e pula a prova vermelha', () => {
 	const { root, put } = cliWorkspace();
 	const qa = (...args) => run('qa-state.mjs', root, ...args);
-	assert.equal(qa('advance', 'TEST-1', 'AUTOMATION', '--atdd-mode', 'verify-existing', '--by', 'Maria QA', '--reason', 'funcionalidade entregue na sprint anterior').status, 0);
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ verifyExisting: true, reason: 'funcionalidade entregue na sprint anterior' }));
+	assert.equal(qa('advance', 'TEST-1', 'AUTOMATION').status, 0);
 	put(SPEC_FILE, SPEC_V1);
 	assert.match(out(qa('advance', 'TEST-1', 'RED')), /só existe no modo red-first/);
 	assert.equal(qa('advance', 'TEST-1', 'RUN').status, 0);
@@ -338,7 +364,7 @@ test('CLI: verify-existing exige motivo e confirmação, e pula a prova vermelha
 test('CLI: atdd-ack só vale com mudança real, motivo e responsável, e invalida a execução final', () => {
 	const { root, put } = cliWorkspace();
 	const qa = (...args) => run('qa-state.mjs', root, ...args);
-	enterAutomation(qa);
+	enterAutomation(qa, put);
 	put(SPEC_FILE, SPEC_V1);
 	qa('advance', 'TEST-1', 'RED');
 	official(root, put, 'red-1', 'red', { status: 'FAIL', failureKind: 'assertion', failedStep: THEN });
@@ -375,4 +401,110 @@ test('CLI: guia mostra critérios, estado de cada cenário e comando para o dev'
 	assert.match(text, /Given existe uma condição/);
 	assert.doesNotMatch(text, /### S02/);
 	assert.equal(existsSync(path.join(root, 'qa/cards/TEST-1/automation/atdd-dev-guide.md')), true);
+});
+
+test('CLI: modo, aprovador e cenários vêm só do arquivo único, sem nenhuma flag', () => {
+	const { root, put } = cliWorkspace();
+	const qa = (...args) => run('qa-state.mjs', root, ...args);
+	// Sem modo marcado, não avança.
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /marque exatamente um modo ATDD/);
+	// Modo marcado mas sem nome do aprovador.
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ redFirst: true, approver: '' }));
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /Nome do aprovador/);
+	// Dois modos marcados ao mesmo tempo.
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ redFirst: true, verifyExisting: true }));
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /marque exatamente um modo ATDD/);
+	// verify-existing sem motivo.
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ verifyExisting: true }));
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /Motivo/);
+	// Nenhum cenário "automatizar".
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ redFirst: true, rows: [['S01', 'manter-manual']] }));
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /nenhum cenário com decisão "automatizar"/);
+	// Flag que contradiz o arquivo.
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ redFirst: true }));
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION', '--atdd-mode', 'verify-existing', '--reason', 'x')), /contradiz/);
+	// Tudo marcado no arquivo: avança sem flags.
+	assert.equal(qa('advance', 'TEST-1', 'AUTOMATION').status, 0);
+	assert.deepEqual({ mode: state(root).atdd.mode, by: state(root).atdd.confirmedBy, scenarios: state(root).atdd.scenarios }, { mode: 'red-first', by: APPROVER, scenarios: ['S01'] });
+});
+
+test('qa:approvals sync monta pendências e cenários preservando o que o QA marcou e escreveu', () => {
+	const { root, put } = cliWorkspace();
+	put('.agents/project/templates/aprovacoes.template.md', readFileSync(path.join(SCRIPTS, '../../project/templates/aprovacoes.template.md'), 'utf-8'));
+	put('.agents/project/qa-project.yaml', `${readFileSync(path.join(root, '.agents/project/qa-project.yaml'), 'utf-8')}\n`);
+	put('qa/cards/TEST-1/bdd/TEST-1-review.md', '# Revisão\n## Pontos para decidir antes do G1\n\n1. **Primeira decisão.** texto\n2. **Segunda decisão.** texto\n');
+	const file = path.join(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md');
+	rmSync(file);
+
+	const first = run('qa-approvals.mjs', root, 'sync', 'TEST-1');
+	assert.equal(first.status, 0, out(first));
+	let text = readFileSync(file, 'utf-8');
+	assert.match(text, /### P1 — Primeira decisão/);
+	assert.match(text, /### P2 — Segunda decisão/);
+	assert.match(text, /### S01 — Validar o primeiro fluxo/);
+	assert.match(text, /### S02 — Validar o segundo fluxo/);
+	// Cada cenário traz todas as opções de decisão, desmarcadas, para o QA só marcar o X.
+	for (const option of ['automatizar', 'manter-manual', 'automatizar-depois', 'não-aplicável', 'bloqueado']) assert.match(text, new RegExp(`- \\[ \\] ${option} — `));
+
+	// O QA marca e escreve; um novo sync não pode apagar nada disso.
+	const mark = (source, heading, option) => source.replace(new RegExp(`(### ${heading} — [^\\n]*\\n(?:(?!### )[^\\n]*\\n)*?)- \\[ \\] ${option}`), '$1- [x] ' + option);
+	text = mark(mark(text, 'P1', 'Aceito a proposta do review'), 'S01', 'automatizar').replace('Justificativa (opcional): ', 'Justificativa (opcional): crítico');
+	writeFileSync(file, text);
+	assert.equal(run('qa-approvals.mjs', root, 'sync', 'TEST-1').status, 0);
+	const after = readFileSync(file, 'utf-8');
+	const parsed = parseApprovals(after);
+	assert.equal(parsed.g1.pendencies.find((item) => item.id === 'P1').done, true);
+	assert.equal(parsed.g1.pendencies.find((item) => item.id === 'P2').done, false);
+	assert.deepEqual(parsed.scenarios.map((row) => [row.id, row.decision]), [['S01', 'automatizar'], ['S02', '']]);
+	assert.equal(parsed.scenarios[0].justification, 'crítico');
+	assert.equal((after.match(/<!-- sync:/g) ?? []).length, 4);
+});
+
+test('qa:approvals status diz o que falta o QA marcar e o que é do agente', () => {
+	const { root } = cliWorkspace();
+	writeFileSync(path.join(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md'), approvalsFor({ rows: [['S01', ''], ['S02', 'manter-manual']] }));
+	let result = run('qa-approvals.mjs', root, 'status', 'TEST-1');
+	assert.equal(result.status, 0, out(result));
+	assert.match(out(result), /Falta VOCÊ preencher/);
+	assert.match(out(result), /Modo ATDD/);
+	assert.match(out(result), /Decisão em 1 cenário\(s\): S01/);
+
+	writeFileSync(path.join(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md'), approvalsFor({ redFirst: true }));
+	result = run('qa-approvals.mjs', root, 'status', 'TEST-1');
+	assert.match(out(result), /Tudo pronto/);
+	assert.match(out(result), /S01/);
+});
+
+test('CLI: não inicia automação de cenário que o G1 não aprovou', () => {
+	const { root, put } = cliWorkspace();
+	const qa = (...args) => run('qa-state.mjs', root, ...args);
+	// G1 parcial aprovou só S02, mas o QA marcou S01 para automatizar.
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ g1: 'partial', approvedScenarios: 'S02', redFirst: true, rows: [['S01', 'automatizar'], ['S02', 'manter-manual']] }));
+	assert.match(out(qa('advance', 'TEST-1', 'AUTOMATION')), /sem aprovação no G1: S01/);
+	// Corrigindo a seleção para o que foi aprovado, avança.
+	put('qa/approvals/TEST-1/TEST-1-APROVACOES.md', approvalsFor({ g1: 'partial', approvedScenarios: 'S02', redFirst: true, rows: [['S01', 'manter-manual'], ['S02', 'automatizar']] }));
+	assert.equal(qa('advance', 'TEST-1', 'AUTOMATION').status, 0);
+	assert.deepEqual(state(root).atdd.scenarios, ['S02']);
+});
+
+test('qa:approvals status só cobra decisão dos cenários aprovados no G1', () => {
+	const { root } = cliWorkspace();
+	writeFileSync(path.join(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md'), approvalsFor({ g1: 'partial', approvedScenarios: 'S02', rows: [['S01', ''], ['S02', '']] }));
+	const text = out(run('qa-approvals.mjs', root, 'status', 'TEST-1'));
+	assert.match(text, /Decisão em 1 cenário\(s\): S02/);
+	assert.doesNotMatch(text, /S01/);
+	writeFileSync(path.join(root, 'qa/approvals/TEST-1/TEST-1-APROVACOES.md'), approvalsFor({ g1: 'none', rows: [['S01', ''], ['S02', '']] }));
+	assert.match(out(run('qa-approvals.mjs', root, 'status', 'TEST-1')), /G1: aprove todos os cenários ou marque "Aprovado no G1"/);
+});
+test('arquivo de aprovações: duas opções marcadas no mesmo cenário não valem como decisão', () => {
+	const block = (id, marks) => [`### ${id} — descrição`, ...['automatizar', 'manter-manual', 'automatizar-depois', 'não-aplicável', 'bloqueado'].map((option) => `- [${marks.includes(option) ? 'x' : ' '}] ${option} — explicação`), ''].join('\n');
+	const parsed = parseApprovals(['<!-- sync:cenarios:start -->', block('S01', ['automatizar', 'bloqueado']), block('S02', ['automatizar-depois']), block('S03', ['automatizar']), '<!-- sync:cenarios:end -->'].join('\n'));
+	assert.deepEqual(parsed.scenarios.map((row) => row.decision), ['múltiplas marcas', 'automatizar-depois', 'automatizar']);
+	assert.deepEqual(automatedScenarios(['### S01 — a', '- [x] automatizar-depois — x', '- [ ] automatizar — x'].join('\n')), []);
+});
+test('arquivo de aprovações: pendência aceita, rejeitada ou sem marca', () => {
+	const item = (id, accept, reject) => [`### ${id} — título`, `- [${accept ? 'x' : ' '}] Aceito a proposta do review`, `- [${reject ? 'x' : ' '}] Não aceito (explique na observação)`, 'Observação: nota', ''].join('\n');
+	const { g1 } = parseApprovals([item('P1', true, false), item('P2', false, true), item('P3', false, false)].join('\n'));
+	assert.deepEqual(g1.pendencies.map((p) => [p.id, p.done, p.rejected]), [['P1', true, false], ['P2', false, true], ['P3', false, false]]);
+	assert.equal(g1.pendencies[0].note, 'nota');
 });

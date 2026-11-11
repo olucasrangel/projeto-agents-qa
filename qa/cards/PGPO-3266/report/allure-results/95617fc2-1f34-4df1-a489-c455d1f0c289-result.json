@@ -1,0 +1,133 @@
+{
+	"uuid": "95617fc2-1f34-4df1-a489-c455d1f0c289",
+	"historyId": "43b950f359135ef1b83fe5728a8b677deaaf6267",
+	"testCaseId": "cb8459d222267eb995cf3d4444c5d814",
+	"name": "S16 — Validar que o envio publica a solicitação na fila de processamento",
+	"fullName": "PGPO-3266.S16",
+	"status": "skipped",
+	"statusDetails": {
+		"message": "Bloqueado (sem interface ou sem como forçar) (decisão do QA: bloqueado). sem UI: linha na outbox não é observável pela interface",
+		"known": false,
+		"muted": false,
+		"flaky": false
+	},
+	"stage": "finished",
+	"start": 1794360574011,
+	"stop": 1794360574011,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Bloqueado (sem interface ou sem como forçar)"
+		},
+		{
+			"name": "severity",
+			"value": "critical"
+		},
+		{
+			"name": "tag",
+			"value": "S16"
+		},
+		{
+			"name": "tag",
+			"value": "Crítica"
+		},
+		{
+			"name": "tag",
+			"value": "bloqueado"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/aprovacoes-centralizadas"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2112 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2112",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "bloqueado"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2112"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> bloqueado — sem UI: linha na outbox não é observável pela interface</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que o envio publica a solicitação na fila de processamento\n  Given o aluno escolheu uma competência e informou um e-mail de destino\n  When o aluno envia a solicitação\n  Then a solicitação é publicada na fila de processamento na mesma transação de criação\n  And a mensagem publicada contém a competência e o identificador da solicitação</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno escolheu uma competência e informou um e-mail de destino",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360574011,
+			"stop": 1794360574011,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno envia a solicitação",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360574011,
+			"stop": 1794360574011,
+			"attachments": []
+		},
+		{
+			"name": "Then a solicitação é publicada na fila de processamento na mesma transação de criação",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360574011,
+			"stop": 1794360574011,
+			"attachments": []
+		},
+		{
+			"name": "And a mensagem publicada contém a competência e o identificador da solicitação",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360574011,
+			"stop": 1794360574011,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}

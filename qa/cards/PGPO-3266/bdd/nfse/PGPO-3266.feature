@@ -172,7 +172,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
 
   # NOVO: sem caso equivalente do time
   @PGPO-3266 @critical
-  Scenario: [PGPO-3266][Web][Sucesso] Validar que a comparação do e-mail ignora espaços nas pontas e diferença de maiúsculas
+  Scenario: [PGPO-3266][Web][Sucesso] Validar que o e-mail digitado com espaços nas pontas e maiúsculas é tratado como o e-mail do cadastro
     Given o e-mail atual do cadastro é "aluno@exemplo.com"
     And o campo de e-mail contém " Aluno@Exemplo.com "
     When o aluno clica em "Enviar Solicitação"
@@ -181,7 +181,7 @@ Feature: Autosserviço de 2ª via de NFS-e com e-mail de destino
 
   # NOVO: sem caso equivalente do time
   @PGPO-3266 @critical
-  Scenario: [PGPO-3266][Web][Sucesso] Validar que nova solicitação é permitida para competência cuja solicitação anterior falhou
+  Scenario: [PGPO-3266][Web][Sucesso] Validar que é possível solicitar novamente a competência cuja solicitação anterior terminou com falha
     Given existe uma solicitação com falha no processamento para a matrícula e a competência 03/2026
     When o aluno envia nova solicitação para a competência 03/2026
     Then a nova solicitação é criada com o status "Em processamento"

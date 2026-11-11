@@ -2,7 +2,7 @@
 # Contrato: .agents/core/schemas/qa-project.schema.json
 # Depois de editar, rode `npm run agents:sync` para atualizar .kiro/ e .agents/skills/.
 
-core_version: 0.4.0
+core_version: 0.6.0
 
 project:
   name: opm-qa-automation
@@ -38,7 +38,7 @@ environments:
 ownership:
   zephyr:
     # Casos do agente ficam sempre em pasta própria com este sufixo, conforme o padrão do Confluence.
-    automation_folder_suffix: '(Automação)'
+    automation_folder_suffix: 'AUT'
     # Casos existentes do time nunca são criados, atualizados, renomeados, movidos ou apagados.
     team_cases: read-only
     # Atualização só é permitida para chaves registradas em qa/cards/{CARD}/zephyr/owned-cases.json.
@@ -64,7 +64,8 @@ features_dir: qa/cards/{CARD}/bdd
 workflow:
   mode: dry-run
   external_writes: false
-  remote_test_execution: false
+  # Autorizado pelo QA (Victor Lance) para o AVA em hml, com os usuários de teste do .env. Produção segue proibida.
+  remote_test_execution: true
   git_delivery: simulation
   require_explicit_approval: true
 
@@ -78,9 +79,11 @@ artifacts:
   automation_plan: qa/cards/{CARD}/automation/automation-plan.md
   pr_description: qa/cards/{CARD}/PR_DESCRIPTION.txt
   approvals_dir: qa/approvals/{CARD}
+  approvals_file: qa/approvals/{CARD}/{CARD}-APROVACOES.md
   executions_dir: qa/approvals/{CARD}/executions/{runId}
 
 jira:
+  base_url: https://cogna.atlassian.net
   project_keys: [PGPO]
   discovery:
     current_card: true
@@ -107,7 +110,7 @@ confluence:
 zephyr:
   edition: scale
   project_key: VPOS
-  folder: /{year}/PI {pi}/SP {sprint}/{CARD} - {summary} (Automação)
+  folder: /{year}/PI {pi}/SP {sprint}/{CARD} - {summary} - AUT
   token_env: ZEPHYR_API_TOKEN
   token_env_aliases: [ZEPHYR_SCALE_API_TOKEN]
   mode: dry-run
@@ -196,3 +199,7 @@ extensions:
   before_delivery: []
 
 mcp: .agents/project/integrations/mcp.json
+# Relatório final (A4): `npm run qa:report -- generate <CARD>`.
+report:
+  # Minutos que o time gasta para executar 1 cenário à mão. Sem esse número o relatório não estima economia de horas.
+  manual_minutes_per_scenario: null

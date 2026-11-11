@@ -76,23 +76,8 @@ const files = [
 		path.join(approvalRoot, 'executions', 'README.md'),
 	],
 	[
-		'approval.template.md',
-		path.join(approvalRoot, 'G1-bdd-approval.md'),
-		{ GATE: 'G1 — Aprovação dos BDDs', ARTEFATO: `qa/cards/${card}/bdd/${card}-review.md` },
-	],
-	[
-		'approval.template.md',
-		path.join(approvalRoot, 'G2-zephyr-approval.md'),
-		{ GATE: 'G2 — Aprovação do plano Zephyr', ARTEFATO: `qa/cards/${card}/zephyr/zephyr-dry-run.json` },
-	],
-	[
-		'automation-decision.template.md',
-		path.join(approvalRoot, 'automation-decision.md'),
-	],
-	[
-		'approval.template.md',
-		path.join(approvalRoot, 'G3-execution-delivery-approval.md'),
-		{ GATE: 'G3 — Aprovação da execução e entrega', ARTEFATO: `qa/approvals/${card}/executions/<runId>/execution.md` },
+		'aprovacoes.template.md',
+		path.join(approvalRoot, `${card}-APROVACOES.md`),
 	],
 ];
 

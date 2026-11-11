@@ -11,7 +11,6 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
 import {
-	automatedScenarios,
 	isLocalRunId,
 	missingEvidence,
 	readRunManifest,
@@ -20,6 +19,7 @@ import {
 	validateGreenRun,
 	validateRedRun,
 } from './lib/atdd.mjs';
+import { readApprovals, selectedScenarioIds } from './lib/approvals.mjs';
 import { loadFeatureScenarios, stepKindsOf } from './lib/atdd-feature.mjs';
 import { ownershipOf } from './lib/ownership.mjs';
 
@@ -57,8 +57,8 @@ function loadFeature() {
 
 function selectedScenarios() {
 	if (state?.atdd?.scenarios?.length) return state.atdd.scenarios;
-	const decision = path.join(ROOT, 'qa', 'approvals', card, 'automation-decision.md');
-	return existsSync(decision) ? automatedScenarios(readFileSync(decision, 'utf-8')) : [];
+	const approvals = readApprovals(ROOT, config, card);
+	return approvals ? selectedScenarioIds(approvals.data) : [];
 }
 
 const escape = (value) => value.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
@@ -66,7 +66,7 @@ const escape = (value) => value.replaceAll('\\', '\\\\').replaceAll("'", "\\'");
 switch (command) {
 	case 'skeleton': {
 		const selected = selectedScenarios();
-		if (selected.length === 0) fail('nenhum cenário marcado como "automatizar" em automation-decision.md.');
+		if (selected.length === 0) fail('nenhum cenário com decisão "automatizar" em <CARD>-APROVACOES.md.');
 		const { featureName, items } = loadFeature();
 		const target = path.join(ROOT, specsDir, `${card}.spec.ts`);
 		const allowed = ownership.automation.owned_paths.some((owned) => specsDir.startsWith(`${owned}/`));
@@ -117,7 +117,7 @@ ${tests.join('\n\n')}
 		const runId = option('run-id');
 		if (!['red', 'green'].includes(phase)) fail('informe --phase red|green.');
 		if (!runId || !/^[A-Za-z0-9._-]+$/.test(runId) || isLocalRunId(runId)) fail('informe --run-id oficial (sem prefixo dev-).');
-		if (!state?.atdd) fail('modo ATDD não definido. Entre em AUTOMATION com qa:state advance --atdd-mode.');
+		if (!state?.atdd) fail('modo ATDD não definido. Entre em AUTOMATION: qa:state advance <CARD> AUTOMATION.');
 		const expectedState = phase === 'red' ? 'RED' : 'RUN';
 		if (state.state !== expectedState) fail(`a fase ${phase} só roda no estado ${expectedState} (atual: ${state.state}).`);
 		if (phase === 'red' && state.atdd.mode !== 'red-first') fail('fase red só existe no modo red-first.');
@@ -168,7 +168,7 @@ ${tests.join('\n\n')}
 	case 'guide': {
 		const runId = option('run-id');
 		const selected = selectedScenarios();
-		if (selected.length === 0) fail('nenhum cenário marcado como "automatizar" em automation-decision.md.');
+		if (selected.length === 0) fail('nenhum cenário com decisão "automatizar" em <CARD>-APROVACOES.md.');
 		const loaded = runId ? readRunManifest(ROOT, config, card, runId) : { manifest: null };
 		if (loaded.error) fail(loaded.error);
 		const { featureName, items } = loadFeature();

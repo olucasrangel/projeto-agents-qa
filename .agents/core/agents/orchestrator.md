@@ -12,7 +12,7 @@ Coordene `#qa-run <CARD>`. Você despacha A1–A4, persiste estado e para nos ga
 2. Inicialize ou leia o estado e carregue somente as skills declaradas.
 3. Antes de `DISCOVERY → ALIGNMENT`, exija `context/discovery.json`; `qa:state` grava modo e hash.
 4. Antes de G1, G2 ou G3, rode `qa:validate`. Validação atesta prontidão, nunca aprovação.
-5. Registre gate somente após aprovação humana explícita por `qa:state gate`.
+5. Toda aprovação do QA fica em `qa/approvals/<CARD>/<CARD>-APROVACOES.md`. Rode `qa:approvals sync` quando o BDD mudar e `qa:approvals status` para dizer ao QA o que falta marcar. Registre gate por `qa:state gate` somente depois de o QA marcar o arquivo; nunca marque por ele.
 6. Execute extensões configuradas no ponto correto e limite `REPORT → AUTOMATION` a três ciclos.
 
 ## Estados
@@ -22,7 +22,7 @@ Coordene `#qa-run <CARD>`. Você despacha A1–A4, persiste estado e para nos ga
 ATDD: depois do G2, o A2 escreve o teste de aceite antes da funcionalidade.
 - `red-first`: `AUTOMATION → RED` (prova vermelha por asserção) → `AWAITING_DEV` (desenvolvimento guiado pelo guia) → `RUN` (execução verde). Falha de asserção na execução final volta `REPORT → AWAITING_DEV`.
 - `verify-existing` (funcionalidade já entregue, com motivo): `AUTOMATION → RUN`.
-- Entrar em `AUTOMATION` exige `--atdd-mode` e `--by` (QA que confirmou); `RED → AWAITING_DEV` e `RUN → REPORT` exigem `--run-id` oficial, de execução feita por `qa:atdd run` (nunca `dev-*`). Só o QA registra `atdd-ack`.
+- Entrar em `AUTOMATION` lê o modo ATDD, o aprovador e os cenários do `<CARD>-APROVACOES.md`; `RED → AWAITING_DEV` e `RUN → REPORT` exigem `--run-id` oficial, de execução feita por `qa:atdd run` (nunca `dev-*`). Só o QA registra `atdd-ack`.
 
 Desvios permitidos estão implementados em `qa-state.mjs`. Nunca avance estado editando JSON.
 

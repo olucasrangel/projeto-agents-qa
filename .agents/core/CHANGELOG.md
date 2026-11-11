@@ -1,5 +1,20 @@
 # Changelog do núcleo do agente de QA
 
+## 0.6.0
+- O arquivo de aprovações passa a se chamar `<CARD>-APROVACOES.md` (ex.: `PGPO-3266-APROVACOES.md`).
+- Toda decisão do QA é uma marca `[x]`: cada cenário traz um bloco com todas as opções (`automatizar`, `manter-manual`, `automatizar-depois`, `não-aplicável`, `bloqueado`), "Aprovado no G1" e "Publicar no Zephyr"; cada pendência do review traz "Aceito a proposta do review" e "Não aceito". Só o nome do aprovador e as observações são texto.
+- Duas opções marcadas no mesmo cenário não valem como decisão; pendência "Não aceito" bloqueia o G1.
+- `qa:approvals sync` informa o Run-id da execução verde mais recente (a marca de aprovação continua do QA).
+- `qa:report` (A4): relatório final com Allure (resultado por cenário, links do Jira e do Zephyr, categorias de deixados para depois e bloqueados), resumo executivo em HTML e `metrics.json` com cobertura (piso e teto), modo ATDD, tempo, execuções oficiais e gates de qualidade. Workflow `Relatório Allure` publica o resultado como artefato e, se `ALLURE_PAGES=true`, no GitHub Pages.
+- `qa:state atdd-remode` (modo e cenários do ATDD antes de qualquer execução) e `qa:state gate-ack` (QA reconhece mudança no artefato de um gate).
+
+## 0.5.0
+
+- Aprovações centralizadas: um único arquivo por card, `qa/approvals/<CARD>/<CARD>-APROVACOES.md`, onde o QA marca aprovador, G1, G2, modo ATDD, decisão por cenário e G3.
+- `qa:approvals sync` monta pendências e cenários preservando as marcas do QA; `qa:approvals status` mostra o que falta marcar.
+- G1, G2 e G3 leem do arquivo único; `qa:state gate` e `advance AUTOMATION` pegam nome, run-id, modo e cenários dele (as flags viraram opcionais).
+- Removidos `G1/G2/G3-*-approval.md`, `automation-decision.md` e as seções de decisão do review.
+
 ## 0.4.0
 
 - ATDD no agente de automação: skill `atdd`, A2 reescrito como especialista e A3 com leitura de `failureKind`.

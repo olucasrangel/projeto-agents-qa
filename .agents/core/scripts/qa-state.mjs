@@ -26,6 +26,7 @@ import {
 	validateRedRun,
 } from './lib/atdd.mjs';
 import { loadFeatureScenarios, stepKindsOf } from './lib/atdd-feature.mjs';
+import { approvedScope, atddModeOf, inScope, readApprovals, selectedScenarioIds } from './lib/approvals.mjs';
 import {
 	canonicalArtifact,
 	formatValidation,
@@ -133,23 +134,29 @@ function advanceAtdd(state, target, args) {
 	const currentSpecs = () => specsHash(PROJECT_ROOT, ownedPaths, state.card).sha256;
 
 	if (from === 'AUTOMATION_DECISION' && target === 'AUTOMATION') {
-		const mode = option(args, 'atdd-mode');
+		const approvals = readApprovals(PROJECT_ROOT, config, state.card);
+		if (!approvals) fail(`arquivo de aprovações ausente. Rode: npm run qa:approvals -- sync ${state.card}`);
+		// Tudo vem do arquivo único; as flags só existem como atalho e não podem contradizê-lo.
+		const mode = option(args, 'atdd-mode') ?? atddModeOf(approvals.data);
 		if (!ATDD_MODES.includes(mode)) {
-			fail(`informe --atdd-mode ${ATDD_MODES.join(' | ')}. red-first: testes de aceite escritos antes da funcionalidade; verify-existing: funcionalidade já entregue.`);
+			fail(`marque exatamente um modo ATDD (${ATDD_MODES.join(' ou ')}) em <CARD>-APROVACOES.md. red-first: testes de aceite escritos antes da funcionalidade; verify-existing: funcionalidade já entregue.`);
 		}
-		const confirmedBy = option(args, 'by')?.trim();
-		if (!confirmedBy) fail('informe --by "Nome do QA" que confirmou o modo ATDD.');
-		const reason = option(args, 'reason')?.trim();
-		if (mode === 'verify-existing' && !reason) fail('verify-existing exige --reason explicando por que a funcionalidade já existe.');
-		const decisionPath = path.join(PROJECT_ROOT, 'qa', 'approvals', state.card, 'automation-decision.md');
-		const scenarios = existsSync(decisionPath) ? automatedScenarios(readFileSync(decisionPath, 'utf-8')) : [];
-		if (scenarios.length === 0) fail('nenhum cenário marcado como "automatizar" em automation-decision.md (use S01, S02... na primeira coluna).');
+		const fileMode = atddModeOf(approvals.data);
+		if (fileMode && fileMode !== mode) fail(`--atdd-mode ${mode} contradiz o modo marcado em <CARD>-APROVACOES.md (${fileMode}).`);
+		const confirmedBy = (option(args, 'by') ?? approvals.data.approver)?.trim();
+		if (!confirmedBy) fail('preencha o Nome do aprovador em <CARD>-APROVACOES.md: é o QA que confirma o modo ATDD.');
+		const reason = (option(args, 'reason') ?? approvals.data.atdd.reason)?.trim();
+		if (mode === 'verify-existing' && !reason) fail('verify-existing exige o Motivo em <CARD>-APROVACOES.md explicando por que a funcionalidade já existe.');
+		const scenarios = selectedScenarioIds(approvals.data);
+		if (scenarios.length === 0) fail('nenhum cenário com decisão "automatizar" em <CARD>-APROVACOES.md.');
+		const outOfScope = scenarios.filter((id) => !inScope(approvedScope(approvals.data), id));
+		if (outOfScope.length) fail(`cenário(s) marcado(s) para automatizar sem aprovação no G1: ${outOfScope.join(', ')}.`);
 		state.atdd = { mode, confirmedBy, ...(reason ? { reason } : {}), scenarios, decidedAt: now };
 		return;
 	}
 
 	if (from === 'AUTOMATION' && (target === 'RED' || target === 'RUN')) {
-		if (!state.atdd) fail('modo ATDD não definido. Entre em AUTOMATION com --atdd-mode.');
+		if (!state.atdd) fail('modo ATDD não definido. Marque o modo em <CARD>-APROVACOES.md e entre em AUTOMATION.');
 		if (target === 'RED' && state.atdd.mode !== 'red-first') fail('RED só existe no modo red-first.');
 		if (target === 'RUN' && state.atdd.mode === 'red-first') {
 			if (!state.atdd.red) fail('no modo red-first a prova vermelha oficial (RED) precisa existir antes da execução final.');
@@ -285,6 +292,57 @@ switch (command) {
 		print(state);
 		break;
 	}
+	case 'atdd-remode': {
+		// Atualiza modo e cenários do ATDD antes de qualquer execução registrada, a partir do que o QA marcou em <CARD>-APROVACOES.md.
+		const state = load(card);
+		if (state.state !== 'AUTOMATION') fail(`atdd-remode só vale em AUTOMATION (estado atual: ${state.state}).`);
+		if (!state.atdd) fail('modo ATDD não definido.');
+		if (state.atdd.red || state.atdd.green) fail('já existe execução ATDD registrada; trocar o modo agora invalidaria a prova.');
+		const config = projectConfig();
+		const approvals = readApprovals(PROJECT_ROOT, config, card);
+		if (!approvals) fail('arquivo de aprovações ausente.');
+		const mode = atddModeOf(approvals.data);
+		if (!ATDD_MODES.includes(mode)) fail('marque exatamente um modo ATDD em <CARD>-APROVACOES.md.');
+		const by = (option(rest, 'by') ?? approvals.data.approver)?.trim();
+		if (!by) fail('informe --by "Nome do QA" ou preencha o Nome do aprovador em <CARD>-APROVACOES.md.');
+		const reason = approvals.data.atdd.reason?.trim();
+		if (mode === 'verify-existing' && !reason) fail('verify-existing exige o Motivo em <CARD>-APROVACOES.md.');
+		const scenarios = selectedScenarioIds(approvals.data);
+		if (scenarios.length === 0) fail('nenhum cenário com decisão "automatizar" em <CARD>-APROVACOES.md.');
+		const outOfScope = scenarios.filter((id) => !inScope(approvedScope(approvals.data), id));
+		if (outOfScope.length) fail(`cenário(s) marcado(s) para automatizar sem aprovação no G1: ${outOfScope.join(', ')}.`);
+		if (mode === state.atdd.mode && scenarios.join() === state.atdd.scenarios.join()) fail('modo e cenários já estão como em <CARD>-APROVACOES.md; nada a atualizar.');
+		state.atdd = {
+			mode,
+			confirmedBy: by,
+			...(reason ? { reason } : {}),
+			scenarios,
+			decidedAt: new Date().toISOString(),
+			modeChanges: [...(state.atdd.modeChanges ?? []), { from: state.atdd.mode, to: mode, scenariosFrom: state.atdd.scenarios, scenariosTo: scenarios, by, at: new Date().toISOString() }],
+		};
+		save(state);
+		print(state);
+		break;
+	}
+	case 'gate-ack': {
+		// O artefato de um gate mudou depois da aprovação (ex.: renomeação de casos). Só o QA reconhece a mudança; o G3 lista cada ack.
+		const state = load(card);
+		const gate = rest[0];
+		const by = option(rest, 'by')?.trim();
+		const reason = option(rest, 'reason')?.trim();
+		const record = state.gates?.[gate];
+		if (!record) fail(`${gate ?? '(gate)'} não está registrado em ${card}.`);
+		if (!['AUTOMATION', 'RUN', 'REPORT', 'AWAITING_G3'].includes(state.state)) fail(`gate-ack só vale entre AUTOMATION e AWAITING_G3 (estado atual: ${state.state}).`);
+		if (!by || !reason) fail('informe --by "Nome do QA" e --reason "o que mudou no artefato e por quê". O agente não executa este comando pelo QA.');
+		const artifact = path.resolve(PROJECT_ROOT, record.artifact);
+		const current = sha256(readFileSync(artifact));
+		if (current === record.sha256) fail('o artefato não mudou desde a aprovação; não há o que reconhecer.');
+		record.acknowledgements = [...(record.acknowledgements ?? []), { by, reason, at: new Date().toISOString(), from: record.sha256, to: current }];
+		record.sha256 = current;
+		save(state);
+		print(state);
+		break;
+	}
 	case 'status':
 		print(load(card));
 		break;
@@ -350,13 +408,14 @@ switch (command) {
 	case 'gate': {
 		const state = load(card);
 		const gate = rest[0];
-		const by = option(rest, 'by');
-		const runId = option(rest, 'run-id');
+		const approvalsFile = readApprovals(PROJECT_ROOT, projectConfig(), card);
+		const by = option(rest, 'by') ?? approvalsFile?.data.approver;
+		const runId = option(rest, 'run-id') ?? (gate === 'G3' ? approvalsFile?.data.g3.runId || undefined : undefined);
 		if (!GATE_STATES[gate]) fail(`gate inválido: ${gate}. Use G1, G2 ou G3.`);
 		if (state.state !== GATE_STATES[gate]) {
 			fail(`${gate} só pode ser registrado em ${GATE_STATES[gate]} (estado atual: ${state.state}).`);
 		}
-		if (!by?.trim()) fail('informe quem aprovou: --by "Nome"');
+		if (!by?.trim()) fail('preencha o Nome do aprovador em <CARD>-APROVACOES.md (ou use --by "Nome").');
 
 		const validation = validateGate({ root: PROJECT_ROOT, card, gate, runId, state });
 		if (!validation.valid) fail(`gate bloqueado pela validação:\n${formatValidation(validation)}`);

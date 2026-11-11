@@ -1,0 +1,133 @@
+{
+	"uuid": "5d72015e-7f0c-4bea-9bc4-320921e1fd87",
+	"historyId": "a5a5295e6b739caa278439bd5d7406ac7bf9d9f1",
+	"testCaseId": "2b15e0bc87d066a427c678dc14b2d3bb",
+	"name": "S03 — Validar que as competências exibidas são as faturadas do aluno, sem limite de histórico",
+	"fullName": "PGPO-3266.S03",
+	"status": "skipped",
+	"statusDetails": {
+		"message": "Fica para depois (falta massa ou acesso) (decisão do QA: automatizar-depois). não há como saber pela interface quais competências são faturadas, nem aluno com histórico faturado conhecido",
+		"known": false,
+		"muted": false,
+		"flaky": false
+	},
+	"stage": "finished",
+	"start": 1794360480741,
+	"stop": 1794360480741,
+	"labels": [
+		{
+			"name": "parentSuite",
+			"value": "PGPO-3266"
+		},
+		{
+			"name": "suite",
+			"value": "Cenários de sucesso"
+		},
+		{
+			"name": "epic",
+			"value": "PGPO-3284"
+		},
+		{
+			"name": "feature",
+			"value": "Autosserviço de 2ª via de NFS-e com e-mail de destino"
+		},
+		{
+			"name": "story",
+			"value": "Fica para depois (falta massa ou acesso)"
+		},
+		{
+			"name": "severity",
+			"value": "normal"
+		},
+		{
+			"name": "tag",
+			"value": "S03"
+		},
+		{
+			"name": "tag",
+			"value": "Alta"
+		},
+		{
+			"name": "tag",
+			"value": "automatizar-depois"
+		},
+		{
+			"name": "owner",
+			"value": "Victor Lance"
+		},
+		{
+			"name": "framework",
+			"value": "playwright"
+		},
+		{
+			"name": "language",
+			"value": "typescript"
+		},
+		{
+			"name": "host",
+			"value": "qa/aprovacoes-centralizadas"
+		}
+	],
+	"links": [
+		{
+			"name": "PGPO-3266",
+			"url": "https://cogna.atlassian.net/browse/PGPO-3266",
+			"type": "issue"
+		},
+		{
+			"name": "VPOS-T2099 (caso do time, referência)",
+			"url": "https://cogna.atlassian.net/projects/VPOS?selectedItem=com.atlassian.plugins.atlassian-connect-plugin:com.kanoah.test-manager__main-project-page#!/v2/testCase/VPOS-T2099",
+			"type": "tms"
+		}
+	],
+	"parameters": [
+		{
+			"name": "Modo ATDD",
+			"value": "verify-existing"
+		},
+		{
+			"name": "Decisão do QA",
+			"value": "automatizar-depois"
+		},
+		{
+			"name": "Caso Zephyr",
+			"value": "VPOS-T2099"
+		}
+	],
+	"descriptionHtml": "<p><b>Decisão do QA:</b> automatizar-depois — não há como saber pela interface quais competências são faturadas, nem aluno com histórico faturado conhecido</p><pre>Scenario: [PGPO-3266][Web][Sucesso] Validar que as competências exibidas são as faturadas do aluno, sem limite de histórico\n  Given o aluno possui competências faturadas em anos anteriores\n  When o aluno abre o seletor de competência\n  Then todas as competências faturadas do aluno são listadas\n  And nenhuma competência não faturada é listada</pre>",
+	"steps": [
+		{
+			"name": "Given o aluno possui competências faturadas em anos anteriores",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360480741,
+			"stop": 1794360480741,
+			"attachments": []
+		},
+		{
+			"name": "When o aluno abre o seletor de competência",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360480741,
+			"stop": 1794360480741,
+			"attachments": []
+		},
+		{
+			"name": "Then todas as competências faturadas do aluno são listadas",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360480741,
+			"stop": 1794360480741,
+			"attachments": []
+		},
+		{
+			"name": "And nenhuma competência não faturada é listada",
+			"status": "skipped",
+			"stage": "finished",
+			"start": 1794360480741,
+			"stop": 1794360480741,
+			"attachments": []
+		}
+	],
+	"attachments": []
+}
